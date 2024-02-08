@@ -1,5 +1,9 @@
 # see https://docs.searxng.org/admin/settings/settings.html#settings-use-default-settings
 use_default_settings: true
+
+general:
+  instance_name: "comboom.sucht"
+
 server:
   # base_url is defined in the SEARXNG_BASE_URL environment variable, see .env and docker-compose.yml
   secret_key: "f5d817c17939446ea1bbd875d6b65b6aebff9cd1640fcc646d04def498495240afa0e75662570d758320af00e7e4250847567b3448181cf5bb5be4459680e7783b1f31f40a6cdfc96c72eef75d03628a0f661d449c7ecae84fbd6e589851ee57787d96f016f3c527abf0d8e181d7c7a37884d5f487494506df3e2d1c308efb67"  # change this!

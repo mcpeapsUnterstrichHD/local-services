@@ -40,6 +40,8 @@ services:
       - "3066:8080"
     volumes:
       - searxng-data:/etc/searxng:rw
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:rw
+      - ./searxng/limiter.yml:/etc/searxng/limiter.yml:rw
     environment:
       - SEARXNG_BASE_URL=http://localhost:3066/
       - INSTANCE_NAME=comboom.sucht
