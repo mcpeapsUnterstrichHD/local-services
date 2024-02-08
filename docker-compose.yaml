@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  redis:
+    container_name: redis-comboom.sucht
+    image: docker.io/library/redis:alpine
+    command: redis-server --save 30 1 --loglevel warning
+    networks:
+      - searxng
+    volumes:
+      - redis-data:/data
+    cap_drop:
+      - ALL
+    cap_add:
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
+    restart: always
+  searxng:
+    container_name: searxng-comboom.sucht
+    image: searxng/searxng:latest
+    networks:
+      - searxng
+    ports:
+      - "3066:8080"
+    volumes:
+      - searxng-data:/etc/searxng:rw
+    environment:
+      - SEARXNG_BASE_URL=http://localhost:3066/
+      - INSTANCE_NAME=comboom.sucht
+    restart: always
+networks:
+  searxng:
+    ipam:
+      driver: default
+volumes:
+  redis-data:
+  searxng-data:
