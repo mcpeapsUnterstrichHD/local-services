@@ -1,5 +1,20 @@
 version: "3.7"
 services:
+  caddy:
+      container_name: caddy-comboom.sucht
+      image: caddy:2-alpine
+      network_mode: host
+      volumes:
+        - ./Caddyfile:/etc/caddy/Caddyfile:ro
+        - caddy-data:/data:rw
+        - caddy-config:/config:rw
+      environment:
+        - SEARXNG_HOSTNAME=http://localhost:80
+        - SEARXNG_TLS=${LETSENCRYPT_EMAIL:-internal}
+      cap_drop:
+        - ALL
+      cap_add:
+        - NET_BIND_SERVICE
   redis:
     container_name: redis-comboom.sucht
     image: docker.io/library/redis:alpine
@@ -33,5 +48,7 @@ networks:
     ipam:
       driver: default
 volumes:
+  caddy-data:
+  caddy-config:
   redis-data:
   searxng-data:
