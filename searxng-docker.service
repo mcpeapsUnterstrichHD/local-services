@@ -8,7 +8,7 @@ Restart=on-failure
 
 Environment=SEARXNG_DOCKERCOMPOSEFILE=docker-compose.yaml
 
-WorkingDirectory=/usr/local/searxng-docker
+WorkingDirectory=/Users/mahd/DEV/searxng/
 ExecStart=/opt/homebrew/bin/docker-compose -fd ${SEARXNG_DOCKERCOMPOSEFILE} up --remove-orphans
 ExecStop=/opt/homebrew/bin/docker-compose -fd ${SEARXNG_DOCKERCOMPOSEFILE} down
 
