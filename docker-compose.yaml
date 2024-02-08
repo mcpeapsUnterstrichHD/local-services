@@ -9,7 +9,7 @@ services:
       - caddy-data:/data:rw
       - caddy-config:/config:rw
     environment:
-      - SEARXNG_HOSTNAME=http://localhost:3066
+      - SEARXNG_HOSTNAME=http://localhost:80
       - SEARXNG_TLS=internal
     cap_drop:
       - ALL
