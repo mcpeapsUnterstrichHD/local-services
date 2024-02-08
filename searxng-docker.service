@@ -9,8 +9,8 @@ Restart=on-failure
 Environment=SEARXNG_DOCKERCOMPOSEFILE=docker-compose.yaml
 
 WorkingDirectory=/Users/mahd/DEV/searxng/
-ExecStart=/opt/homebrew/bin/docker-compose -fd ${SEARXNG_DOCKERCOMPOSEFILE} up --remove-orphans
-ExecStop=/opt/homebrew/bin/docker-compose -fd ${SEARXNG_DOCKERCOMPOSEFILE} down
+ExecStart=/opt/homebrew/bin/docker-compose -f ${SEARXNG_DOCKERCOMPOSEFILE} up -d --remove-orphans
+ExecStop=/opt/homebrew/bin/docker-compose -f ${SEARXNG_DOCKERCOMPOSEFILE} down
 
 [Install]
 WantedBy=multi-user.target
