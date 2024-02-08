@@ -1,0 +1,16 @@
+[Unit]
+Description=SearXNG service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=on-failure
+
+Environment=SEARXNG_DOCKERCOMPOSEFILE=docker-compose.yaml
+
+WorkingDirectory=/usr/local/searxng-docker
+ExecStart=/opt/homebrew/bin/docker-compose -fd ${SEARXNG_DOCKERCOMPOSEFILE} up --remove-orphans
+ExecStop=/opt/homebrew/bin/docker-compose -fd ${SEARXNG_DOCKERCOMPOSEFILE} down
+
+[Install]
+WantedBy=multi-user.target

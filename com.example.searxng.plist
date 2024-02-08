@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.example.searxng</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/docker-compose</string>
+        <string>-fd</string>
+        <string>docker-compose.yaml</string>
+        <string>up</string>
+        <string>--remove-orphans</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>SEARXNG_DOCKERCOMPOSEFILE</key>
+        <string>/Users/mahd/DEV/searxng/docker-compose.yaml</string>
+    </dict>
+    <key>WorkingDirectory</key>
+    <string>/Users/mahd/DEV/searxng</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/var/log/searxng.log</string>
+    <key>StandardErrorPath</key>
+    <string>/var/log/searxng-error.log</string>
+</dict>
+</plist>
