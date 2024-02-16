@@ -5,7 +5,7 @@ cd /Users/mahd/DEV/searxng/
 
 echo "Ich befinde mich im Verzeichnis"
 
-podman compose down
+docker compose down
 
 echo "Der Container läuft nicht mehr"
 

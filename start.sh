@@ -5,7 +5,7 @@ cd /Users/mahd/DEV/searxng/
 
 echo "Ich befinde mich im Verzeichnis"
 
-podman compose up -d --remove-orphans
+docker compose up -d --remove-orphans
 
 echo "Der Container läuft"
 
