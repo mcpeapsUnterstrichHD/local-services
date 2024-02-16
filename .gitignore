@@ -3,3 +3,4 @@ caddy
 srv
 searxng/uwsgi.ini
 .env
+.DS_Store
