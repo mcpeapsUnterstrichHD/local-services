@@ -1,11 +1,10 @@
-version: "3.7"
 services:
   caddy:
     container_name: caddy-comboom.sucht
     image: caddy:2-alpine
     network_mode: host
     volumes:
-      - /Users/mahd/DEV/searxng/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data:rw
       - caddy-config:/config:rw
     environment:
@@ -37,13 +36,13 @@ services:
     networks:
       - searxng
     ports:
-      - "3066:8080"
+      - "8080:8080"
     volumes:
       - searxng-data:/etc/searxng:rw
       - ./searxng/settings.yml:/etc/searxng/settings.yml:rw
       - ./searxng/limiter.toml:/etc/searxng/limiter.toml:rw
     environment:
-      - SEARXNG_BASE_URL=http://localhost:3066/
+      - SEARXNG_BASE_URL=http://localhost
       - INSTANCE_NAME=comboom.sucht
     restart: always
 networks:
