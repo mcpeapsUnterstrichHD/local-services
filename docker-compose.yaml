@@ -8,10 +8,12 @@ services:
       - caddy-data:/data:rw
       - caddy-config:/config:rw
     environment:
-      - SEARXNG_HOSTNAME=http://search.localhost:80
+      - SEARXNG_HOSTNAME=search.localhost
       - SEARXNG_TLS=internal
-      - IT_TOOLS_HOSTNAME=http://it-tools.localhost:80
+      - IT_TOOLS_HOSTNAME=it-tools.localhost
       - IT_TOOLS_TLS=internal
+      - STIRLING_PDF_HOSTNAME=stirling-pdf.localhost
+      - STIRLING_PDF_TLS=internal
     cap_drop:
       - ALL
     cap_add:
@@ -44,7 +46,7 @@ services:
       - ./searxng/settings.yml:/etc/searxng/settings.yml:rw
       - ./searxng/limiter.toml:/etc/searxng/limiter.toml:rw
     environment:
-      - SEARXNG_BASE_URL=http://search.localhost
+      - SEARXNG_BASE_URL=https://search.localhost
       - INSTANCE_NAME=comboom.sucht
     restart: always
   it-tools:
@@ -54,6 +56,27 @@ services:
       - "8081:80"
     networks:
       - local-services
+    restart: always
+  stirling-pdf:
+    container_name: stirling-pdf-comboom.sucht
+    image: stirlingtools/stirling-pdf:latest-fat
+    ports:
+      - '8082:8080'
+    volumes:
+      - ./pdf/trainingData:/usr/share/tessdata #Required for extra OCR languages
+      - ./pdf/extraConfigs:/configs
+      - ./pdf/customFiles:/customFiles/
+      - ./pdf/logs:/logs/
+    environment:
+      - DOCKER_ENABLE_SECURITY=true
+      - SECURITY_ENABLELOGIN=true
+      - LANGS=de_DE
+      - UI_APP_NAME=comboom.sucht
+      - UI_HOME_DESCRIPTION=comboom.sucht | Stirling PDF
+      - UI_APP_NAVBAR_NAME=comboom.sucht | Stirling PDF
+    networks:
+      - local-services
+    restart: always
 
 networks:
   local-services:
