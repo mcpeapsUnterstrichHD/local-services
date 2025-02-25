@@ -1,0 +1,16 @@
+[Unit]
+Description=Local-Services
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=on-failure
+
+Environment=LOCAL_SERVICES_DOCKERCOMPOSEFILE=docker-compose.yaml
+
+WorkingDirectory=/Users/mahd/DEV/Local-Services/
+ExecStart=/opt/homebrew/bin/docker-compose -f ${LOCAL_SERVICES_DOCKERCOMPOSEFILE} up -d --remove-orphans
+ExecStop=/opt/homebrew/bin/docker-compose -f ${LOCAL_SERVICES_DOCKERCOMPOSEFILE} down
+
+[Install]
+WantedBy=multi-user.target
