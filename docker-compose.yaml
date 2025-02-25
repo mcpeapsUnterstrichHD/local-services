@@ -68,12 +68,7 @@ services:
       - ./pdf/customFiles:/customFiles/
       - ./pdf/logs:/logs/
     environment:
-      - DOCKER_ENABLE_SECURITY=true
-      - SECURITY_ENABLELOGIN=true
-      - LANGS=de_DE
-      - UI_APP_NAME=comboom.sucht
-      - UI_HOME_DESCRIPTION=comboom.sucht | Stirling PDF
-      - UI_APP_NAVBAR_NAME=comboom.sucht | Stirling PDF
+      - DOCKER_ENABLE_SECURITY=false
     networks:
       - local-services
     restart: always

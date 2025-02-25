@@ -5,4 +5,5 @@ searxng/uwsgi.ini
 .env
 .DS_Store
 pdf/logs
-pdf/db
+pdf/extraConfigs/db
+pdf/extraConfigs/stirling-pdf-DB-2.3.232.mv.db
