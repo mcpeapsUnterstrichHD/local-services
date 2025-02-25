@@ -18,6 +18,11 @@ services:
       - ALL
     cap_add:
       - NET_BIND_SERVICE
+    deploy:
+      resources:
+        limits:
+          memory: 8g
+          cpus: '4.0'
     restart: always
   redis:
     container_name: redis-comboom.sucht
@@ -33,6 +38,11 @@ services:
       - SETGID
       - SETUID
       - DAC_OVERRIDE
+    deploy:
+      resources:
+        limits:
+          memory: 8g
+          cpus: '4.0'
     restart: always
   searxng:
     container_name: searxng-comboom.sucht
@@ -40,7 +50,7 @@ services:
     networks:
       - local-services
     ports:
-      - "8080:8080"
+      - "8082:8080"
     volumes:
       - searxng-data:/etc/searxng:rw
       - ./searxng/settings.yml:/etc/searxng/settings.yml:rw
@@ -48,6 +58,11 @@ services:
     environment:
       - SEARXNG_BASE_URL=https://search.localhost
       - INSTANCE_NAME=comboom.sucht
+    deploy:
+      resources:
+        limits:
+          memory: 8g
+          cpus: '4.0'
     restart: always
   it-tools:
     container_name: it-tools-comboom.sucht
@@ -56,12 +71,17 @@ services:
       - "8081:80"
     networks:
       - local-services
+    deploy:
+      resources:
+        limits:
+          memory: 8g
+          cpus: '4.0'
     restart: always
   stirling-pdf:
     container_name: stirling-pdf-comboom.sucht
     image: stirlingtools/stirling-pdf:latest-fat
     ports:
-      - '8082:8080'
+      - '8080:8080'
     volumes:
       - ./pdf/trainingData:/usr/share/tessdata #Required for extra OCR languages
       - ./pdf/extraConfigs:/configs
@@ -69,6 +89,12 @@ services:
       - ./pdf/logs:/logs/
     environment:
       - DOCKER_ENABLE_SECURITY=false
+      - SERVER_HOSTNAME=stirling-pdf.localhost
+    deploy:
+      resources:
+        limits:
+          memory: 8g
+          cpus: '4.0'
     networks:
       - local-services
     restart: always
