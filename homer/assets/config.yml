@@ -79,8 +79,8 @@ services:
         subtitle: "Database management"
         tag: "database"
         url: "https://apache2.localhost/phpmyadmin"
-  - name: "Monitoring"
-    icon: "fas fa-tachometer-alt"
+  - name: "Local Services"
+    icon: "fas fa-server"
     tagstyle: "badge badge-warning"
     items:
       - name: "IT-Tools"
