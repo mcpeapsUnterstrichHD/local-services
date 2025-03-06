@@ -10,19 +10,13 @@ services:
       - caddy-config:/config:rw
     environment:
       - SEARXNG_HOSTNAME=search.localhost
-      - SEARXNG_TLS=internal
       - IT_TOOLS_HOSTNAME=it-tools.localhost
-      - IT_TOOLS_TLS=internal
       - STIRLING_PDF_HOSTNAME=stirling-pdf.localhost
-      - STIRLING_PDF_TLS=internal
       - DEV_HOSTNAME=dev.localhost
-      - DEV_TLS=internal
       - APACHE2_HOSTNAME=apache2.localhost
-      - APACHE2_TLS=internal
       - PORTAINER_HOSTNAME=portainer.localhost
-      - PORTAINER_TLS=internal
-      - DASHY_HOSTNAME=localhost
-      - DASHY_TLS=internal
+      - HOMER_HOSTNAME=localhost
+      - TLS=internal
     cap_drop:
       - ALL
     cap_add:
@@ -105,14 +99,17 @@ services:
     restart: always
     networks:
       - local-services
-  dashy:
-    image: 'lissy93/dashy:latest'
-    restart: always
-    container_name: dashy-comboom.sucht
+  homer:
+    image: b4bz/homer
+    container_name: homer-comboom.sucht
     volumes:
-      - './dashy:/app/user-data/'
+      - ./homer/assets:/www/assets # Make sure your local config directory exists
     ports:
-      - '8084:8080'
+      - 8084:8080
+    user: 1000:1000 # default
+    environment:
+      - INIT_ASSETS=1 # default, requires the config directory to be writable for the container user (see user option)
+    restart: always
     networks:
       - local-services
     pull_policy: always

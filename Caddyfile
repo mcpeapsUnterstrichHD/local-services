@@ -8,7 +8,7 @@
     output discard
   }
 
-  tls {$SEARXNG_TLS}
+  tls {$TLS}
 
   @api {
     path /config
@@ -90,7 +90,7 @@
     output discard
   }
 
-  tls {$IT_TOOLS_TLS}
+  tls {$TLS}
 
   header {
     Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -125,7 +125,7 @@
     output discard
   }
 
-  tls {$STIRLING_PDF_TLS}
+  tls {$TLS}
 
   header {
     Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -160,7 +160,7 @@
     output discard
   }
 
-  tls {$DEV_TLS}
+  tls {$TLS}
 
   header {
     Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -195,7 +195,7 @@
     output discard
   }
 
-  tls {$APACHE2_TLS}
+  tls {$TLS}
 
   header {
     Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -230,7 +230,7 @@
     output discard
   }
 
-  tls {$PORTAINER_TLS}
+  tls {$TLS}
 
   header {
     Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -260,12 +260,12 @@
   }
 }
 
-{$DASHY_HOSTNAME} {
+{$HOMER_HOSTNAME} {
   log {
     output discard
   }
 
-  tls {$DASHY_TLS}
+  tls {$TLS}
 
   header {
     Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
