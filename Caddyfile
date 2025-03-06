@@ -154,3 +154,143 @@
     respond "{http.error.status_code} {http.error.status_text}" {http.error.status_code}
   }
 }
+
+{$DEV_HOSTNAME} {
+  log {
+    output discard
+  }
+
+  tls {$DEV_TLS}
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-XSS-Protection "1; mode=block"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "SAMEORIGIN"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    -Server
+  }
+
+  handle {
+    encode zstd gzip
+
+    reverse_proxy localhost:3000 {
+      # Port als String formatieren
+      header_up X-Forwarded-Port "{http.request.port}"
+      header_up X-Forwarded-Proto "{http.request.scheme}"
+      header_up X-Real-IP "{remote_host}"
+      header_up X-Forwarded-For "{remote_host}"
+      header_up Host "{http.request.host}"
+    }
+  }
+
+  handle_errors {
+    respond "{http.error.status_code} {http.error.status_text}" {http.error.status_code}
+  }
+}
+
+{$APACHE2_HOSTNAME} {
+  log {
+    output discard
+  }
+
+  tls {$APACHE2_TLS}
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-XSS-Protection "1; mode=block"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "SAMEORIGIN"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    -Server
+  }
+
+  handle {
+    encode zstd gzip
+
+    reverse_proxy localhost:3680 {
+      # Port als String formatieren
+      header_up X-Forwarded-Port "{http.request.port}"
+      header_up X-Forwarded-Proto "{http.request.scheme}"
+      header_up X-Real-IP "{remote_host}"
+      header_up X-Forwarded-For "{remote_host}"
+      header_up Host "{http.request.host}"
+    }
+  }
+
+  handle_errors {
+    respond "{http.error.status_code} {http.error.status_text}" {http.error.status_code}
+  }
+}
+
+{$PORTAINER_HOSTNAME} {
+  log {
+    output discard
+  }
+
+  tls {$PORTAINER_TLS}
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-XSS-Protection "1; mode=block"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "SAMEORIGIN"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    -Server
+  }
+
+  handle {
+    encode zstd gzip
+
+    reverse_proxy localhost:8083 {
+      # Port als String formatieren
+      header_up X-Forwarded-Port "{http.request.port}"
+      header_up X-Forwarded-Proto "{http.request.scheme}"
+      header_up X-Real-IP "{remote_host}"
+      header_up X-Forwarded-For "{remote_host}"
+      header_up Host "{http.request.host}"
+    }
+  }
+
+  handle_errors {
+    respond "{http.error.status_code} {http.error.status_text}" {http.error.status_code}
+  }
+}
+
+{$DASHY_HOSTNAME} {
+  log {
+    output discard
+  }
+
+  tls {$DASHY_TLS}
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-XSS-Protection "1; mode=block"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "SAMEORIGIN"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    -Server
+  }
+
+  handle {
+    encode zstd gzip
+
+    reverse_proxy localhost:8084 {
+      # Port als String formatieren
+      header_up X-Forwarded-Port "{http.request.port}"
+      header_up X-Forwarded-Proto "{http.request.scheme}"
+      header_up X-Real-IP "{remote_host}"
+      header_up X-Forwarded-For "{remote_host}"
+      header_up Host "{http.request.host}"
+    }
+  }
+
+  handle_errors {
+    respond "{http.error.status_code} {http.error.status_text}" {http.error.status_code}
+  }
+}
