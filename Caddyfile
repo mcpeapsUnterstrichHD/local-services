@@ -293,3 +293,33 @@
     respond "{http.error.status_code} {http.error.status_text}" {http.error.status_code}
   }
 }
+{$PUTTER_HOSTNAME} {
+    log {
+        output discard
+    }
+
+    tls {$TLS}
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-XSS-Protection "1; mode=block"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=()"
+        -Server
+    }
+
+    handle {
+        encode zstd gzip
+
+        reverse_proxy localhost:8086 {
+            header_up Host "os.localhost"
+            header_up X-Forwarded-Host "os.localhost"
+        }
+    }
+
+    handle_errors {
+        respond "{http.error.status_code} {http.error.status_text}" {http.error.status_code}
+    }
+}

@@ -1,27 +1,54 @@
 services:
-  caddy:
-    container_name: caddy-comboom.sucht
-    image: caddy:2-alpine
-    pull_policy: always
-    network_mode: host
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy-data:/data:rw
-      - caddy-config:/config:rw
-    environment:
-      - SEARXNG_HOSTNAME=search.localhost
-      - IT_TOOLS_HOSTNAME=it-tools.localhost
-      - STIRLING_PDF_HOSTNAME=stirling-pdf.localhost
-      - DEV_HOSTNAME=dev.localhost
-      - APACHE2_HOSTNAME=apache2.localhost
-      - PORTAINER_HOSTNAME=portainer.localhost
-      - HOMER_HOSTNAME=localhost
-      - TLS=internal
-    cap_drop:
-      - ALL
-    cap_add:
-      - NET_BIND_SERVICE
+  #caddy:
+  #  container_name: caddy-comboom.sucht
+  #  image: caddy:2-alpine
+  #  pull_policy: always
+  #  network_mode: host
+  #  volumes:
+  #    - ./Caddyfile:/etc/caddy/Caddyfile:ro
+  #    - caddy-data:/data:rw
+  #    - caddy-config:/config:rw
+  #  environment:
+  #    - SEARXNG_HOSTNAME=search.localhost
+  #    - IT_TOOLS_HOSTNAME=it-tools.localhost
+  #    - STIRLING_PDF_HOSTNAME=stirling-pdf.localhost
+  #    - DEV_HOSTNAME=dev.localhost
+  #    - APACHE2_HOSTNAME=apache2.localhost
+  #    - PORTAINER_HOSTNAME=portainer.localhost
+  #    - HOMER_HOSTNAME=localhost
+  #    - PUTTER_HOSTNAME=os.localhost
+  #    - TLS=internal
+  #  cap_drop:
+  #    - ALL
+  #  cap_add:
+  #    - NET_BIND_SERVICE
+  #  restart: always
+  nginx_proxy_manager:
+    container_name: nginx-proxy-manager-comboom.sucht
+    image: 'jc21/nginx-proxy-manager:latest'
     restart: always
+    #pull_policy: always
+    #ports:
+    #  # These ports are in format <host-port>:<container-port>
+    #  - '80:80' # Public HTTP Port
+    #  - '443:443' # Public HTTPS Port
+    #  - '81:81' # Admin Web Port
+    #  # Add any other Stream port you want to expose
+    #  - '21:21' # FTP
+    environment:
+      # Uncomment this if you want to change the location of
+      # the SQLite DB file within the container
+      DB_SQLITE_FILE: "/data/database.sqlite"
+      INITIAL_ADMIN_EMAIL: mcpeaps_HD@outlook.com
+      INITIAL_ADMIN_PASSWORD: fabian66
+
+      # Uncomment this if IPv6 is not enabled on your host
+      # DISABLE_IPV6: 'true'
+
+    volumes:
+      - ./ngninx/data:/data
+      - ./ngninx/ssl:/etc/letsencrypt
+    network_mode: host
   redis:
     container_name: redis-comboom.sucht
     image: docker.io/library/redis:alpine
@@ -113,7 +140,63 @@ services:
     restart: always
     networks:
       - local-services
+    #pull_policy: always
+  puter:
+    container_name: puter-comboom.sucht
+    image: ghcr.io/heyputer/puter:latest
     pull_policy: always
+    # build: ./
+    restart: always
+    ports:
+      - '8086:8086'
+    environment:
+      - TZ=Europe/Berlin
+      # CONFIG_PATH: /etc/puter
+      - HOST=0.0.0.0
+      - NODE_ENV=production
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./puter/config:/etc/puter
+      - ./puter/data:/var/puter
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://os.localhost/test || exit 1
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+    networks:
+      - local-services
+  mariadb:
+    image: mariadb:latest
+    pull_policy: always
+    container_name: mariadb-comboom.sucht
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: fabian66
+    networks:
+      - local-services
+    volumes:
+      - ./all-databases.sql:/all-databases.sql:ro
+      - ./mariadb_data:/var/lib/mysql
+
+  phpmyadmin:
+    pull_policy: always
+    container_name: phpmyadmin-comboom.sucht
+    links:
+      - mariadb:db
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8087:80
+    volumes:
+      - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+      - ./phpmyadmin/themes:/var/www/html/themes
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_
+    networks:
+      - local-services
 
 networks:
   local-services:
@@ -125,3 +208,4 @@ volumes:
   redis-data:
   searxng-data:
   portainer-data:
+  mariadb-data:

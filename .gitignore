@@ -8,6 +8,7 @@ pdf/logs
 pdf/extraConfigs/db
 pdf/extraConfigs/stirling-pdf-DB-2.3.232.mv.db
 pdf/trainingData
+puter/data
 */**/*.key
 */**/*.pub
 */**/*.pem
@@ -25,3 +26,17 @@ pdf/trainingData
 */**/*.p7r
 */**/*.p7s
 dashy/config-backups
+mariadb_data/**/*.*
+mariadb_data/*.*
+ngninx/data/logs/**/*.*
+ngninx/data/logs/*.*
+ngninx/ssl/accounts/acme-v02.api.letsencrypt.org/directory/ef3424b80e2757204cb847287186fd2d/private_key.json
+mariadb_data/aria_log_control
+mariadb_data/ib_buffer_pool
+mariadb_data/ib_logfile0
+mariadb_data/ibdata1
+mariadb_data/ibtmp1
+mariadb_data/mariadb_upgrade_info
+mariadb_data/undo001
+mariadb_data/undo002
+mariadb_data/undo003
