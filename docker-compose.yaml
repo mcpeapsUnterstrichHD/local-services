@@ -179,6 +179,8 @@ services:
     volumes:
       - ./all-databases.sql:/all-databases.sql:ro
       - ./mariadb_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
 
   phpmyadmin:
     pull_policy: always
