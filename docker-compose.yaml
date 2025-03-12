@@ -52,7 +52,7 @@ services:
   redis:
     container_name: redis-comboom.sucht
     image: docker.io/library/redis:alpine
-    pull_policy: always
+    #pull_policy: always
     command: redis-server --save 30 1 --loglevel warning
     networks:
       - local-services
@@ -116,7 +116,7 @@ services:
   portainer:
     container_name: portainer-comboom.sucht
     image: portainer/portainer-ce:latest
-    pull_policy: always
+    #pull_policy: always
     ports:
             - '8083:9000'
             - '8084:9443'
@@ -144,7 +144,7 @@ services:
   puter:
     container_name: puter-comboom.sucht
     image: ghcr.io/heyputer/puter:latest
-    pull_policy: always
+    #pull_policy: always
     # build: ./
     restart: always
     ports:
@@ -169,7 +169,7 @@ services:
       - local-services
   mariadb:
     image: mariadb:latest
-    pull_policy: always
+    #pull_policy: always
     container_name: mariadb-comboom.sucht
     restart: always
     environment:
@@ -183,7 +183,7 @@ services:
       - "3306:3306"
 
   phpmyadmin:
-    pull_policy: always
+    #pull_policy: always
     container_name: phpmyadmin-comboom.sucht
     links:
       - mariadb:db

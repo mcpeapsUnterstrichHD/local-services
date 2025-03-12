@@ -121,10 +121,11 @@ $cfg['ProtectBinary'] = false;
  * uncomment the desired line:
  * default = 'en'
  */
-$cfg['DefaultLang'] = 'en';
+$cfg['DefaultLang'] = 'de';
 $cfg['DefaultConnectionCollation'] = 'utf8mb4_uca1400_german2_as_cs';
 
 $cfg['Lang'] = 'en';
+$cfg['FilterLanguages'] = '(en|de)';
 
 $cfg['ThemeDefault'] = 'boodark-nord';
 $cfg['ThemeManager'] = true;
