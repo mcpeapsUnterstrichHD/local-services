@@ -27,7 +27,7 @@ services:
     container_name: nginx-proxy-manager-comboom.sucht
     image: 'jc21/nginx-proxy-manager:latest'
     restart: always
-    #pull_policy: always
+    pull_policy: always
     #ports:
     #  # These ports are in format <host-port>:<container-port>
     #  - '80:80' # Public HTTP Port
@@ -52,7 +52,7 @@ services:
   redis:
     container_name: redis-comboom.sucht
     image: docker.io/library/redis:alpine
-    #pull_policy: always
+    pull_policy: always
     command: redis-server --save 30 1 --loglevel warning
     networks:
       - local-services
@@ -127,49 +127,9 @@ services:
     restart: always
     networks:
       - local-services
-  homer:
-    image: b4bz/homer
-    container_name: homer-comboom.sucht
-    volumes:
-      - ./homer/assets:/www/assets # Make sure your local config directory exists
-    ports:
-      - 8085:8080
-    user: 1000:1000 # default
-    environment:
-      - INIT_ASSETS=1 # default, requires the config directory to be writable for the container user (see user option)
-    restart: always
-    networks:
-      - local-services
-    #pull_policy: always
-  puter:
-    container_name: puter-comboom.sucht
-    image: ghcr.io/heyputer/puter:latest
-    #pull_policy: always
-    # build: ./
-    restart: always
-    ports:
-      - '8086:8086'
-    environment:
-      - TZ=Europe/Berlin
-      # CONFIG_PATH: /etc/puter
-      - HOST=0.0.0.0
-      - NODE_ENV=production
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - ./puter/config:/etc/puter
-      - ./puter/data:/var/puter
-    healthcheck:
-      test: wget --no-verbose --tries=1 --spider http://os.localhost/test || exit 1
-      interval: 30s
-      timeout: 3s
-      retries: 3
-      start_period: 30s
-    networks:
-      - local-services
   mariadb:
     image: mariadb:latest
-    #pull_policy: always
+    pull_policy: always
     container_name: mariadb-comboom.sucht
     restart: always
     environment:
@@ -183,20 +143,19 @@ services:
       - "3306:3306"
 
   phpmyadmin:
-    #pull_policy: always
+    pull_policy: always
     container_name: phpmyadmin-comboom.sucht
     links:
       - mariadb:db
     image: phpmyadmin
     restart: always
     ports:
-      - 8087:80
+      - 8085:80
     volumes:
       - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
       - ./phpmyadmin/themes:/var/www/html/themes
     environment:
       - PMA_ARBITRARY=1
-      - PMA_
     networks:
       - local-services
 

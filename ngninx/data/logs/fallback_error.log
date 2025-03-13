@@ -1,0 +1,77 @@
+2025/03/12 09:45:41 [error] 182#182: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 127.0.0.1, server: nginxproxymanager, request: "GET /api/ HTTP/1.1", upstream: "http://127.0.0.1:3000/", host: "localhost:81", referrer: "http://localhost:81/nginx/proxy"
+2025/03/12 10:35:23 [error] 188#188: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 127.0.0.1, server: nginxproxymanager, request: "GET /api/ HTTP/1.1", upstream: "http://127.0.0.1:3000/", host: "localhost:81", referrer: "http://localhost:81/nginx/certificates"
+2025/03/13 06:31:41 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 06:31:41 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 06:31:54 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 06:31:54 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 06:32:08 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 06:32:08 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 06:32:21 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 06:32:21 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 06:32:35 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 06:32:35 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 06:32:47 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 06:32:47 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 06:33:33 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 06:33:33 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 09:49:33 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 09:49:33 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 09:55:18 [error] 413#413: *11601 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExWJv HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:55:18 [error] 416#416: *11597 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExWJn HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:55:19 [error] 416#416: *11597 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExWXU HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:55:19 [error] 416#416: *11597 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExWYe HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:55:22 [error] 416#416: *11603 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExXGK HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:55:22 [error] 411#411: *11604 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExXGQ HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:55:25 [error] 416#416: *11605 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExY1W HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:55:27 [error] 416#416: *11605 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExYUe HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:55:30 [error] 416#416: *11606 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExZGT HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:55:32 [error] 416#416: *11606 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExZiu HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:56:58 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 09:56:58 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 09:57:08 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 09:57:08 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 09:57:17 [error] 451#451: *11637 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExzGX HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:57:17 [error] 447#447: *11634 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExzGP HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:57:18 [error] 451#451: *11638 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExzds HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:57:18 [error] 451#451: *11638 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMExzek HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:57:20 [error] 449#449: *11640 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEx-Dv HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:57:20 [error] 449#449: *11640 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEx-FE HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:57:23 [error] 449#449: *11640 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEx-ql HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:57:25 [error] 450#450: *11641 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEx_HV HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:57:28 [error] 450#450: *11641 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEy031 HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 09:57:53 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 09:57:53 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:01:09 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:01:09 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:01:36 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:01:36 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:02:58 [error] 502#502: *11761 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEzGch HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 10:02:58 [error] 499#499: *11756 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEzGcn HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 10:02:59 [error] 499#499: *11757 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEzGpe HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 10:02:59 [error] 499#499: *11757 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEzGve HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 10:03:02 [error] 503#503: *11762 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEzHWp HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 10:03:02 [error] 503#503: *11762 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEzHab HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 10:03:05 [error] 501#501: *11763 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEzIPh HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 10:03:07 [error] 501#501: *11763 "/var/www/html/socket.io/index.html" is not found (2: No such file or directory), client: 127.0.0.1, server: localhost-nginx-proxy-manager, request: "GET /socket.io/?EIO=4&transport=polling&t=PMEzIot HTTP/1.1", host: "api.localhost", referrer: "http://localhost:8086/"
+2025/03/13 10:04:04 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:04:04 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:05:22 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:05:22 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:07:17 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:07:17 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:18:03 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:18:03 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:22:35 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:22:35 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:23:20 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:23:20 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:35:04 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:35:04 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:37:40 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:37:40 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:37:53 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:37:53 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:38:44 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:38:44 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
+2025/03/13 10:39:19 [warn] 167#167: conflicting server name "localhost" on 0.0.0.0:443, ignored
+2025/03/13 10:39:19 [warn] 167#167: conflicting server name "localhost" on [::]:443, ignored
