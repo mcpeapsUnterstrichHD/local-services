@@ -10,3 +10,4 @@ pdf/extraConfigs/stirling-pdf-DB-2.3.232.mv.db
 pdf/trainingData/
 mariadb_data/
 ngninx/ssl/
+ngninx/data/logs/
