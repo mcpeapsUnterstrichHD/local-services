@@ -39,8 +39,6 @@ services:
       # Uncomment this if you want to change the location of
       # the SQLite DB file within the container
       DB_SQLITE_FILE: "/data/database.sqlite"
-      INITIAL_ADMIN_EMAIL: mcpeaps_HD@outlook.com
-      INITIAL_ADMIN_PASSWORD: fabian66
 
       # Uncomment this if IPv6 is not enabled on your host
       # DISABLE_IPV6: 'true'
