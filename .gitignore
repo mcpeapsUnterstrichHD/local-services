@@ -16,3 +16,4 @@ ngninx/data/letsencrypt-acme-challenge
 ngninx/data/logs
 ngninx/data/database.sqlite
 ngninx/data/keys.json
+glance/.env

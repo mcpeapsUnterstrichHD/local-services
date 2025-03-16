@@ -1,0 +1,22 @@
+server:
+  assets-path: /app/assets
+
+theme:
+  background-color: 221 17 22
+  primary-color: 92 29 64
+  contrast-multiplier: 1.2
+  positive-color: 92 29 64
+  negative-color: 355 44 57
+  custom-css-file: /assets/user.css
+
+pages:
+  # It's not necessary to create a new file for each page and include it, you can simply
+  # put its contents here, though multiple pages are easier to manage when separated
+  !include: home.yml
+  !include: social.yml
+
+branding:
+  custom-footer: |
+    <a href="/home">2025 &copy; Fabian Aps</a>
+  logo-url: /assets/logo.png
+  favicon-url: /assets/logo.png

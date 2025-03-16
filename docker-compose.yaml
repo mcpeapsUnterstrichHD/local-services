@@ -156,6 +156,21 @@ services:
       - PMA_ARBITRARY=1
     networks:
       - local-services
+  glance:
+    container_name: glance-comboom.sucht
+    image: glanceapp/glance
+    pull_policy: always
+    networks:
+      - local-services
+    restart: always
+    volumes:
+      - ./glance/config:/app/config
+      - ./glance/assets:/app/assets
+      # Optionally, also mount docker socket if you want to use the docker containers widget
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - 8086:8080
+    env_file: ./glance/.env
 
 networks:
   local-services:
