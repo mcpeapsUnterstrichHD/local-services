@@ -39,30 +39,20 @@ services:
       # Uncomment this if you want to change the location of
       # the SQLite DB file within the container
       DB_SQLITE_FILE: "/data/database.sqlite"
-
       # Uncomment this if IPv6 is not enabled on your host
       # DISABLE_IPV6: 'true'
-
     volumes:
       - ./ngninx/data:/data
       - ./ngninx/ssl:/etc/letsencrypt
     network_mode: host
-  redis:
-    container_name: redis-comboom.sucht
-    image: docker.io/library/redis:alpine
-    pull_policy: always
-    command: redis-server --save 30 1 --loglevel warning
-    networks:
-      - local-services
-    volumes:
-      - redis-data:/data
-    cap_drop:
-      - ALL
-    cap_add:
-      - SETGID
-      - SETUID
-      - DAC_OVERRIDE
-    restart: always
+    labels:
+      glance.name: Nginx Proxy Manager
+      glance.icon: si:nginxproxymanager
+      glance.url: http://npm.localhost
+      glance.description: Reverse proxy
+      glance.id: npm
+      glance.tags: "type:proxy, type:management, type:reverse, type:service, type:web, type:gui"
+      glance.hide: false
   searxng:
     container_name: searxng-comboom.sucht
     image: searxng/searxng:latest
@@ -79,6 +69,14 @@ services:
       - SEARXNG_BASE_URL=https://search.localhost
       - INSTANCE_NAME=comboom.sucht
     restart: always
+    labels:
+      glance.name: SearXNG
+      glance.icon: si:searxng
+      glance.url: http://search.localhost
+      glance.description: Search engine
+      glance.id: searxng
+      glance.tags: "type:search, type:service, type:web, type:gui"
+      glance.hide: false
   it-tools:
     container_name: it-tools-comboom.sucht
     image: ghcr.io/sharevb/it-tools:nightly
@@ -90,6 +88,14 @@ services:
     networks:
       - local-services
     restart: always
+    labels:
+      glance.name: IT Tools
+      glance.icon: di:it-tools
+      glance.url: http://it-tools.localhost
+      glance.description: Collection of handy online tools for developers, with great UX.
+      glance.id: it-tools
+      glance.tags: "type:it,type:tools, type:service, type:web, type:gui"
+      glance.hide: false
   stirling-pdf:
     container_name: stirling-pdf-comboom.sucht
     image: stirlingtools/stirling-pdf:latest-fat
@@ -111,6 +117,14 @@ services:
     networks:
       - local-services
     restart: always
+    labels:
+      glance.name: Sirling PDF
+      glance.icon: di:stirling-pdf
+      glance.url: http://stirling-pdf.localhost
+      glance.description: Local hosted web based PDF editor
+      glance.id: stirling-pdf
+      glance.tags: "type:pdf, type:conversion, type:service, type:web, type:gui"
+      glance.hide: false
   portainer:
     container_name: portainer-comboom.sucht
     image: portainer/portainer-ce:latest
@@ -125,6 +139,14 @@ services:
     restart: always
     networks:
       - local-services
+    labels:
+      glance.name: Portainer
+      glance.icon: si:portainer
+      glance.url: http://portainer.localhost
+      glance.description: Docker management
+      glance.id: portainer
+      glance.tags: "type:docker, type:management, type:service, type:web, type:gui"
+      glance.hide: false
   mariadb:
     image: mariadb:latest
     pull_policy: always
@@ -139,6 +161,14 @@ services:
       - ./mariadb_data:/var/lib/mysql
     ports:
       - "3306:3306"
+    labels:
+      glance.name: MariaDB
+      glance.icon: si:mariadb
+      glance.description: Database
+      glance.id: mariadb
+      glance.parent: phpmyadmin
+      glance.tags: "type:database"
+      glance.hide: false
 
   phpmyadmin:
     pull_policy: always
@@ -156,21 +186,34 @@ services:
       - PMA_ARBITRARY=1
     networks:
       - local-services
+    labels:
+      glance.name: phpMyAdmin
+      glance.icon: si:phpmyadmin
+      glance.url: http://phpmyadmin.localhost
+      glance.description: Database management
+      glance.id: phpmyadmin
+      glance.tags: "type:web,type:database,type:gui"
+      glance.hide: false
   glance:
     container_name: glance-comboom.sucht
     image: glanceapp/glance
     pull_policy: always
-    networks:
-      - local-services
+    network_mode: host
     restart: always
     volumes:
       - ./glance/config:/app/config
       - ./glance/assets:/app/assets
       # Optionally, also mount docker socket if you want to use the docker containers widget
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    ports:
-      - 8086:8080
     env_file: ./glance/.env
+    labels:
+      glance.name: Glance
+      glance.description: Dashboard
+      glance.id: glance
+      glance.icon: di:glance
+      glance.url: http://dashboard.localhost/home
+      glance.tags: "type:web,type:dashboard"
+      glance.hide: false
 
 networks:
   local-services:

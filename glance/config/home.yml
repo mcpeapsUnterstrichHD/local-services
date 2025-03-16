@@ -37,6 +37,7 @@
               # Without authentication the Github API allows for up to 60 requests per hour. You can create a
               # read-only token from your Github account settings and use it here to increase the limit.
               token: ${GITHUB_TOKEN}
+              show-source-icon: true
               repositories:
                 - searxng/searxng
                 - NginxProxyManager/nginx-proxy-manager
@@ -94,20 +95,25 @@
           hour-format: 24h # alternatively "24h"
           # Optionally hide the location from being displayed in the widget
           # hide-location: true
-
-        - type: monitor
-          cache: 1m
+        - type: group
           title: Services
-          sites:
-            - title: SearXNG
-              url: http://search.localhost/
-            - title: Nginx Proxy Manager
-              url: http://npm.localhost/
-            - title: IT Tools
-              url: http://it-tools.localhost/
-            - title: Stirling PDF
-              url: http://stirling-pdf.localhost/
-            - title: phpMyAdmin
-              url: http://phpmyadmin.localhost/
-            - title: Portainer
-              url: http://portainer.localhost/
+          widgets:
+            - type: monitor
+              cache: 1m
+              title: Services
+              sites:
+                - title: SearXNG
+                  url: http://search.localhost/
+                - title: Nginx Proxy Manager
+                  url: http://npm.localhost/
+                - title: IT Tools
+                  url: http://it-tools.localhost/
+                - title: Stirling PDF
+                  url: http://stirling-pdf.localhost/
+                - title: phpMyAdmin
+                  url: http://phpmyadmin.localhost/
+                - title: Portainer
+                  url: http://portainer.localhost/
+            - type: docker-containers
+              title: Docker Containers
+              hide-by-default: true

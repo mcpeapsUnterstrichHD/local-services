@@ -1,4 +1,6 @@
 server:
+  port: 8086
+  host: 0.0.0.0
   assets-path: /app/assets
 
 theme:
