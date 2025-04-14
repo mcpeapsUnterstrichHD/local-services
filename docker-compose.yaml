@@ -153,11 +153,12 @@ services:
     container_name: mariadb-comboom.sucht
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: fabian66
+      - MYSQL_ROOT_PASSWORD=fabian66
+      - MYSQL_INITDB_SKIP_TZINFO=1
     networks:
       - local-services
     volumes:
-      - ./all-databases.sql:/all-databases.sql:ro
+      - ./all-databases.sql:/all-databases.sql
       - ./mariadb_data:/var/lib/mysql
     ports:
       - "3306:3306"
@@ -175,6 +176,8 @@ services:
     container_name: phpmyadmin-comboom.sucht
     links:
       - mariadb:db
+    depends_on:
+      - mariadb
     image: phpmyadmin
     restart: always
     ports:
@@ -215,6 +218,61 @@ services:
       glance.tags: "type:web,type:dashboard"
       glance.hide: false
 
+  postgres:
+    container_name: postgres-comboom.sucht
+    pull_policy: always
+    networks:
+      - local-services
+    image: postgres:13.4-alpine
+    environment:
+      - POSTGRES_USER=hedgedoc
+      - POSTGRES_PASSWORD=hedgedoc
+      - POSTGRES_DB=hedgedoc
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+    labels:
+      glance.name: PostgreSQL
+      glance.icon: si:postgresql
+      glance.description: Database
+      glance.id: postgres
+      glance.tags: "type:database"
+      glance.hide: false
+  hadgedoc:
+    # Make sure to use the latest release from https://hedgedoc.org/latest-release
+    image: quay.io/hedgedoc/hedgedoc:1.10.2
+    container_name: hedgedoc-comboom.sucht
+    environment:
+      - CMD_DOMAIN=hedgedoc.localhost
+      - CMD_PORT=8087
+      - CMD_PROTOCOL_USESSL=false
+      - CMD_URL_ADDPORT=false
+      - CMD_EMAIL=true
+      - CMD_ALLOW_EMAIL_REGISTER=true
+      - CMD_SESSION_SECRET=ygjkhhgfgcev654ertzu6trdcb7t6r6dsrtb675vrb
+      - CMD_DB_URL=postgres://hedgedoc:hedgedoc@postgres-comboom.sucht:5432/hedgedoc
+    depends_on:
+      - postgres
+    volumes:
+      - ./hedgedoc/public/uploads:/hedgedoc/public/uploads
+    ports:
+      - "8087:8087"
+    restart: always
+    networks:
+      - local-services
+    labels:
+      glance.name: HedgeDoc
+      glance.icon: si:hedgedoc
+      glance.url: http://hedgedoc.localhost
+      glance.description: Collaborative markdown editor
+      glance.id: hedgedoc
+      glance.tags: "type:web,type:editor,type:service,type:gui"
+      glance.hide: false
+    pull_policy: always
+
+
 networks:
   local-services:
     ipam:
@@ -226,3 +284,4 @@ volumes:
   searxng-data:
   portainer-data:
   mariadb-data:
+  postgresql_data:

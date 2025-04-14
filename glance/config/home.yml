@@ -110,6 +110,8 @@
                   url: http://it-tools.localhost/
                 - title: Stirling PDF
                   url: http://stirling-pdf.localhost/
+                - title: HadgeDoc
+                  url: http://hedgedoc.localhost/
                 - title: phpMyAdmin
                   url: http://phpmyadmin.localhost/
                 - title: Portainer

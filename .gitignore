@@ -9,6 +9,7 @@ pdf/extraConfigs/db
 pdf/extraConfigs/stirling-pdf-DB-2.3.232.mv.db
 pdf/trainingData/
 mariadb_data/
+postgresql_data/
 ngninx/ssl/
 ngninx/data/access
 ngninx/data/custom_ssl
@@ -17,3 +18,5 @@ ngninx/data/logs
 ngninx/data/database.sqlite
 ngninx/data/keys.json
 glance/.env
+all-databases.sql
+onlyoffice/
