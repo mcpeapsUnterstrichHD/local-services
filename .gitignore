@@ -19,4 +19,4 @@ ngninx/data/database.sqlite
 ngninx/data/keys.json
 glance/.env
 all-databases.sql
-onlyoffice/
+paperless/

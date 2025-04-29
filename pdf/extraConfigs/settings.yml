@@ -110,6 +110,7 @@ system:
     operations:
       weasyprint: '' #Defaults to /opt/venv/bin/weasyprint
       unoconvert: '' #Defaults to /opt/venv/bin/unoconvert
+  fileUploadLimit: '' # Defaults to "". No limit when string is empty. Set a number, between 0 and 999, followed by one of the following strings to set a limit. "KB", "MB", "GB".
 
 ui:
   appName: comboom.sucht | Stirling PDF # application's visible name
@@ -128,7 +129,7 @@ metrics:
 AutomaticallyGenerated:
   key: f4aee2de-d7f0-4c3b-a638-215f7f5e1735
   UUID: 7d2c496d-be22-49bc-a2d6-106ef7d7bb81
-  appVersion: 0.45.4
+  appVersion: 0.45.6
 
 processExecutor:
   sessionLimit: # Process executor instances limits

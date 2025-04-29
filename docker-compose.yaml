@@ -223,13 +223,14 @@ services:
     pull_policy: always
     networks:
       - local-services
-    image: postgres:13.4-alpine
+    image: postgres:alpine
     environment:
-      - POSTGRES_USER=hedgedoc
-      - POSTGRES_PASSWORD=hedgedoc
-      - POSTGRES_DB=hedgedoc
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_MULTIPLE_DATABASES: hedgedoc,paperless
     volumes:
       - postgresql_data:/var/lib/postgresql/data
+      - ./postgres-init/multiple-dbs.sh:/docker-entrypoint-initdb.d/multiple-dbs.sh:ro
     ports:
       - "5432:5432"
     restart: always
@@ -252,7 +253,7 @@ services:
       - CMD_EMAIL=true
       - CMD_ALLOW_EMAIL_REGISTER=true
       - CMD_SESSION_SECRET=ygjkhhgfgcev654ertzu6trdcb7t6r6dsrtb675vrb
-      - CMD_DB_URL=postgres://hedgedoc:hedgedoc@postgres-comboom.sucht:5432/hedgedoc
+      - CMD_DB_URL=postgres://postgres:postgres@postgres-comboom.sucht:5432/hedgedoc
     depends_on:
       - postgres
     volumes:
@@ -271,6 +272,61 @@ services:
       glance.tags: "type:web,type:editor,type:service,type:gui"
       glance.hide: false
     pull_policy: always
+  redis:
+    image: redis:latest
+    pull_policy: always
+    container_name: redis-comboom.sucht
+    restart: always
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - local-services
+    labels:
+      glance.name: Redis
+      glance.description: Redis
+      glance.id: redis
+      glance.icon: si:redis
+      glance.tags: "type:cache,type:queue"
+      glance.hide: false
+  paperless:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    pull_policy: always
+    container_name: paperless-ngx-comboom.sucht
+    depends_on:
+      - postgres
+    ports:
+      - "8088:8000"
+    restart: always
+    environment:
+      PAPERLESS_REDIS: redis://redis-comboom.sucht:6379
+      PAPERLESS_DBHOST: postgres-comboom.sucht
+      PAPERLESS_DBNAME: paperless
+      PAPERLESS_DBUSER: postgres
+      PAPERLESS_DBPASS: postgres
+      PAPERLESS_SECRET_KEY: "ygjkhhgfgcev654ertzu6trdcb7t6r6dsrtb675vrb"
+      PAPERLESS_ADMIN_USER: "mahd"
+      PAPERLESS_ADMIN_PASSWORD: "fabian66"
+      PAPERLESS_ALLOWED_HOSTS: paperless.localhost,paperless.comboompunktsucht.app,paperless.mcpeapsunterstrichhd.dev
+      PAPERLESS_CORS_ALLOWED_HOSTS: http://paperless.localhost,http://paperless.comboompunktsucht.app,http://paperless.mcpeapsunterstrichhd.dev,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
+      PAPERLESS_OCR_LANGUAGE: deu+eng
+      PAPERLESS_CSRF_TRUSTED_ORIGINS: http://paperless.localhost,http://paperless.comboompunktsucht.app,http://paperless.mcpeapsunterstrichhd.dev,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
+    volumes:
+      - ./paperless/data:/usr/src/paperless/data
+      - ./paperless/media:/usr/src/paperless/media
+      - ./paperless/export:/usr/src/paperless/export
+      - ./paperless/consume:/usr/src/paperless/consume
+    networks:
+      - local-services
+    labels:
+      glance.name: Paperless
+      glance.url: http://paperless.localhost
+      glance.description: Document management
+      glance.id: paperless-ngx
+      glance.icon: di:paperless-ngx
+      glance.tags: "type:document,type:management,type:service,type:web,type:gui"
+      glance.hide: false
 
 
 networks:
