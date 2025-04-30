@@ -279,10 +279,10 @@ services:
     restart: always
     volumes:
       - redis-data:/data
-    ports:
-      - "6379:6379"
     networks:
       - local-services
+    ports:
+      - "6379:6379"
     labels:
       glance.name: Redis
       glance.description: Redis
@@ -296,11 +296,10 @@ services:
     container_name: paperless-ngx-comboom.sucht
     depends_on:
       - postgres
-    ports:
-      - "8088:8000"
     restart: always
     environment:
       PAPERLESS_REDIS: redis://redis-comboom.sucht:6379
+      PAPERLESS_PORT: 8088
       PAPERLESS_DBHOST: postgres-comboom.sucht
       PAPERLESS_DBNAME: paperless
       PAPERLESS_DBUSER: postgres
@@ -309,9 +308,11 @@ services:
       PAPERLESS_ADMIN_USER: "mahd"
       PAPERLESS_ADMIN_PASSWORD: "fabian66"
       PAPERLESS_ALLOWED_HOSTS: paperless.localhost,paperless.comboompunktsucht.app,paperless.mcpeapsunterstrichhd.dev
-      PAPERLESS_CORS_ALLOWED_HOSTS: http://paperless.localhost,http://paperless.comboompunktsucht.app,http://paperless.mcpeapsunterstrichhd.dev,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
+      PAPERLESS_CORS_ALLOWED_HOSTS: http://paperless.localhost,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
       PAPERLESS_OCR_LANGUAGE: deu+eng
-      PAPERLESS_CSRF_TRUSTED_ORIGINS: http://paperless.localhost,http://paperless.comboompunktsucht.app,http://paperless.mcpeapsunterstrichhd.dev,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
+      PAPERLESS_CSRF_TRUSTED_ORIGINS: http://paperless.localhost,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
+      PAPERLESS_USE_X_FORWARDED_HOST: "true"
+      PAPERLESS_SECURE_PROXY_SSL_HEADER: "HTTP_X_FORWARDED_PROTO,https"
     volumes:
       - ./paperless/data:/usr/src/paperless/data
       - ./paperless/media:/usr/src/paperless/media
@@ -319,6 +320,8 @@ services:
       - ./paperless/consume:/usr/src/paperless/consume
     networks:
       - local-services
+    ports:
+      - "8088:8088"
     labels:
       glance.name: Paperless
       glance.url: http://paperless.localhost
