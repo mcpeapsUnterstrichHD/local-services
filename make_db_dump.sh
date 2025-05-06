@@ -4,4 +4,11 @@
 # https://opensource.org/licenses/MIT
 #!/bin/bash
 # This script creates a database dump of the specified database and saves it to a file.
-mariadb-dump --defaults-extra-file=mariadb.cnf -A --result-file=all-databases.sql
+
+# Path to your config file with login info
+CONFIG_FILE="mariadb.cnf"
+
+# Path to your SQL dump
+DUMP_FILE="all-databases.sql"
+
+mariadb-dump --defaults-extra-file="$CONFIG_FILE" -A --result-file="$DUMP_FILE"
