@@ -104,8 +104,8 @@
               sites:
                 - title: SearXNG
                   url: http://search.localhost/
-                - title: Nginx Proxy Manager
-                  url: http://npm.localhost/
+                - title: Zoraxy
+                  url: http://zoraxy.localhost/
                 - title: IT Tools
                   url: http://it-tools.localhost/
                 - title: Stirling PDF
