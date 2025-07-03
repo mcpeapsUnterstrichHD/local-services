@@ -396,6 +396,7 @@ services:
       glance.name: Authentik Server
       glance.description: OAuth2 Auth Server
       glance.id: authentik-server
+      glance.url: https://oauth2.localhost
       glance.icon: si:authentik
       glance.tags: "type:management,type:service,type:web,type:gui,type:auth"
       glance.hide: false
@@ -433,6 +434,7 @@ services:
       glance.name: Authentik Worker Server
       glance.description: OAuth2 Auth Worker Server
       glance.id: authentik-worker
+      glance.url: https://oauth2.localhost
       glance.icon: si:authentik
       glance.tags: "type:management,type:service,type:web,type:gui,type:auth"
       glance.hide: false
