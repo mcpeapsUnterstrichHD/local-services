@@ -11,6 +11,7 @@ pdf/trainingData/
 mariadb_data/
 postgresql_data/
 zoraxy/assets
+zoraxy/plugin/
 zoraxy/config/sys.db
 zoraxy/config/sys.uuid
 zoraxy/config/log
@@ -23,3 +24,4 @@ zoraxy/config/conf/plugin_groups.json
 glance/.env
 all-databases.sql
 paperless/
+rustdesk/

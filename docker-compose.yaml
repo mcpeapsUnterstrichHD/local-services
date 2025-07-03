@@ -7,6 +7,7 @@ services:
     volumes:
       - ./zoraxy/config:/opt/zoraxy/config
       - ./zoraxy/assets:/opt/zoraxy/assets
+      - ./zoraxy/plugin:/opt/zoraxy/plugin
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime
     extra_hosts:
@@ -18,7 +19,7 @@ services:
     labels:
       glance.name: zoraxy
       glance.icon: si:zoraxy
-      glance.url: http://zoraxy.localhost
+      glance.url: https://zoraxy.localhost
       glance.description: Zoraxy - Reverse proxy manager.
       glance.id: zoraxy
       glance.tags: "type:proxy, type:management, type:reverse, type:service, type:web, type:gui"
@@ -44,7 +45,7 @@ services:
     labels:
       glance.name: SearXNG
       glance.icon: si:searxng
-      glance.url: http://search.localhost
+      glance.url: https://search.localhost
       glance.description: Search engine
       glance.id: searxng
       glance.tags: "type:search, type:service, type:web, type:gui"
@@ -64,7 +65,7 @@ services:
     labels:
       glance.name: IT Tools
       glance.icon: di:it-tools
-      glance.url: http://it-tools.localhost
+      glance.url: https://it-tools.localhost
       glance.description: Collection of handy online tools for developers, with great UX.
       glance.id: it-tools
       glance.tags: "type:it,type:tools, type:service, type:web, type:gui"
@@ -94,7 +95,7 @@ services:
     labels:
       glance.name: Sirling PDF
       glance.icon: di:stirling-pdf
-      glance.url: http://stirling-pdf.localhost
+      glance.url: https://stirling-pdf.localhost
       glance.description: Local hosted web based PDF editor
       glance.id: stirling-pdf
       glance.tags: "type:pdf, type:conversion, type:service, type:web, type:gui"
@@ -116,7 +117,7 @@ services:
     labels:
       glance.name: Portainer
       glance.icon: si:portainer
-      glance.url: http://portainer.localhost
+      glance.url: https://portainer.localhost
       glance.description: Docker management
       glance.id: portainer
       glance.tags: "type:docker, type:management, type:service, type:web, type:gui"
@@ -168,7 +169,7 @@ services:
     labels:
       glance.name: phpMyAdmin
       glance.icon: si:phpmyadmin
-      glance.url: http://phpmyadmin.localhost
+      glance.url: https://phpmyadmin.localhost
       glance.description: Database management
       glance.id: phpmyadmin
       glance.tags: "type:web,type:database,type:gui"
@@ -190,7 +191,7 @@ services:
       glance.description: Dashboard
       glance.id: glance
       glance.icon: di:glance
-      glance.url: http://dashboard.localhost/home
+      glance.url: https://dashboard.localhost/home
       glance.tags: "type:web,type:dashboard"
       glance.hide: false
 
@@ -204,13 +205,19 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_MULTIPLE_DATABASES: hedgedoc,paperless,authelia
+      POSTGRES_MULTIPLE_DATABASES: hedgedoc,paperless,authentik
     volumes:
       - postgresql_data:/var/lib/postgresql/data
       - ./postgres-init/multiple-dbs.sh:/docker-entrypoint-initdb.d/multiple-dbs.sh:ro
     ports:
       - "5432:5432"
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d authentik -U postgres"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
     labels:
       glance.name: PostgreSQL
       glance.icon: si:postgresql
@@ -244,7 +251,7 @@ services:
     labels:
       glance.name: HedgeDoc
       glance.icon: si:hedgedoc
-      glance.url: http://hedgedoc.localhost
+      glance.url: https://hedgedoc.localhost
       glance.description: Collaborative markdown editor
       glance.id: hedgedoc
       glance.tags: "type:web,type:editor,type:service,type:gui"
@@ -262,6 +269,12 @@ services:
         ipv4_address: 192.168.1.10
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
     labels:
       glance.name: Redis
       glance.description: Redis
@@ -287,9 +300,9 @@ services:
       PAPERLESS_ADMIN_USER: "mahd"
       PAPERLESS_ADMIN_PASSWORD: "fabian66"
       PAPERLESS_ALLOWED_HOSTS: paperless.localhost,paperless.comboompunktsucht.app,paperless.mcpeapsunterstrichhd.dev
-      PAPERLESS_CORS_ALLOWED_HOSTS: http://paperless.localhost,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
+      PAPERLESS_CORS_ALLOWED_HOSTS: http://paperless.localhost,http://paperless.comboompunktsucht.app,http://paperless.mcpeapsunterstrichhd.dev,https://paperless.localhost,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
       PAPERLESS_OCR_LANGUAGE: deu+eng
-      PAPERLESS_CSRF_TRUSTED_ORIGINS: http://paperless.localhost,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
+      PAPERLESS_CSRF_TRUSTED_ORIGINS: http://paperless.localhost,http://paperless.comboompunktsucht.app,http://paperless.mcpeapsunterstrichhd.dev,https://paperless.localhost,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
       PAPERLESS_USE_X_FORWARDED_HOST: "true"
       PAPERLESS_SECURE_PROXY_SSL_HEADER: "HTTP_X_FORWARDED_PROTO,https"
     volumes:
@@ -304,12 +317,126 @@ services:
       - "8088:8088"
     labels:
       glance.name: Paperless
-      glance.url: http://paperless.localhost
+      glance.url: https://paperless.localhost
       glance.description: Document management
       glance.id: paperless-ngx
       glance.icon: di:paperless-ngx
       glance.tags: "type:document,type:management,type:service,type:web,type:gui"
       glance.hide: false
+  hbbs:
+    container_name: hbbs-comboom.sucht
+    image: rustdesk/rustdesk-server:latest
+    pull_policy: always
+    command: hbbs -r 192.168.1.13
+    volumes:
+      - ./rustdesk/data:/root
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.12
+    ports:
+      - "21114:21114"
+      - "21115:21115"
+      - "21116:21116"
+      - "21118:21118"
+    environment:
+      - ALWAYS_USE_RELAY=Y
+    depends_on:
+      - hbbr
+    restart: always
+    labels:
+      glance.name: RustDesk Server
+      glance.description: RustDesk Server
+      glance.id: rustdesk-server
+      glance.icon: si:rustdesk
+      glance.tags: "type:management,type:service,type:web,type:gui"
+      glance.hide: false
+  hbbr:
+    container_name: hbbr-comboom.sucht
+    image: rustdesk/rustdesk-server:latest
+    pull_policy: always
+    command: hbbr
+    volumes:
+      - ./rustdesk/data:/root
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.13
+    restart: always
+    ports:
+      - "21117:21117"
+      - "21119:21119"
+    labels:
+      glance.name: RustDesk Relay Server
+      glance.description: RustDesk Relay Server
+      glance.id: rustdesk-relay-server
+      glance.icon: si:rustdesk
+      glance.tags: "type:management,type:service,type:web,type:gui,type:relay"
+      glance.hide: false
+  server:
+    image: ghcr.io/goauthentik/server
+    restart: always
+    pull_policy: always
+    command: server
+    environment:
+      AUTHENTIK_SECRET_KEY: ik7CvVpcst7WtNzTmyQvJbd6RirMUZpZ7tsVeqvRMG9GTwM4fEHkpiXf81+6IjJ7atBFAuyyKTuf6sZO
+      AUTHENTIK_REDIS__HOST: 192.168.1.10
+      AUTHENTIK_POSTGRESQL__HOST: 192.168.1.8
+      AUTHENTIK_POSTGRESQL__USER: postgres
+      AUTHENTIK_POSTGRESQL__NAME: authentik
+      AUTHENTIK_POSTGRESQL__PASSWORD: postgres
+    volumes:
+      - ./authentik/media:/media
+      - ./authentik/custom-templates:/templates
+    network_mode: host
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    labels:
+      glance.name: Authentik Server
+      glance.description: OAuth2 Auth Server
+      glance.id: authentik-server
+      glance.icon: si:authentik
+      glance.tags: "type:management,type:service,type:web,type:gui,type:auth"
+      glance.hide: false
+  worker:
+    image: ghcr.io/goauthentik/server
+    restart: always
+    pull_policy: always
+    command: worker
+    environment:
+      AUTHENTIK_SECRET_KEY: ik7CvVpcst7WtNzTmyQvJbd6RirMUZpZ7tsVeqvRMG9GTwM4fEHkpiXf81+6IjJ7atBFAuyyKTuf6sZO
+      AUTHENTIK_REDIS__HOST: 192.168.1.10
+      AUTHENTIK_POSTGRESQL__HOST: 192.168.1.8
+      AUTHENTIK_POSTGRESQL__USER: postgres
+      AUTHENTIK_POSTGRESQL__NAME: authentik
+      AUTHENTIK_POSTGRESQL__PASSWORD: postgres
+    # `user: root` and the docker socket volume are optional.
+    # See more for the docker socket integration here:
+    # https://goauthentik.io/docs/outposts/integrations/docker
+    # Removing `user: root` also prevents the worker from fixing the permissions
+    # on the mounted folders, so when removing this make sure the folders have the correct UID/GID
+    # (1000:1000 by default)
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./authentik/media:/media
+      - ./authentik/certs:/certs
+      - ./authentik/custom-templates:/templates
+    network_mode: host
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    labels:
+      glance.name: Authentik Worker Server
+      glance.description: OAuth2 Auth Worker Server
+      glance.id: authentik-worker
+      glance.icon: si:authentik
+      glance.tags: "type:management,type:service,type:web,type:gui,type:auth"
+      glance.hide: false
+
 
 networks:
   local-services:

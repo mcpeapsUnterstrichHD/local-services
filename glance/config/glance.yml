@@ -138,6 +138,8 @@ pages:
                     url: http://phpmyadmin.localhost/
                   - title: Portainer
                     url: http://portainer.localhost/
+                  - title: Authentik
+                    url: http://oauth2.localhost/
               - type: docker-containers
                 title: Docker Containers
                 hide-by-default: true
