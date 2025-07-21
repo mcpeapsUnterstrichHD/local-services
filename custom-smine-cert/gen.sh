@@ -61,7 +61,7 @@ EOF
     -in "$OUTPUT_DIR/$SAFE_NAME/$SAFE_NAME.crt.pem" \
     -out "$OUTPUT_DIR/$SAFE_NAME.p12" \
     -name "$NAME" \
-    -passout pass:
+    -passout pass:fabian66
 
   echo "✅ Zertifikat erstellt: $OUTPUT_DIR/$SAFE_NAME.p12"
   echo ""
