@@ -8,3 +8,9 @@ openssl req -x509 \
   -out localhost.crt \
   -config openssl.cnf \
   -extensions req_ext
+openssl pkcs12 -export \
+-out localhost.p12 \
+-inkey localhost.key \
+-in localhost.crt \
+-name "localhost" \
+-passout pass:

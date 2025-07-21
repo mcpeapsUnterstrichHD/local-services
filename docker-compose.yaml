@@ -205,7 +205,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_MULTIPLE_DATABASES: hedgedoc,paperless,authentik
+      POSTGRES_MULTIPLE_DATABASES: hedgedoc,authentik
     volumes:
       - postgresql_data:/var/lib/postgresql/data
       - ./postgres-init/multiple-dbs.sh:/docker-entrypoint-initdb.d/multiple-dbs.sh:ro
@@ -281,47 +281,6 @@ services:
       glance.id: redis
       glance.icon: si:redis
       glance.tags: "type:cache,type:queue"
-      glance.hide: false
-  paperless:
-    image: ghcr.io/paperless-ngx/paperless-ngx:latest
-    pull_policy: always
-    container_name: paperless-ngx-comboom.sucht
-    depends_on:
-      - postgres
-    restart: always
-    environment:
-      PAPERLESS_REDIS: redis://redis-comboom.sucht:6379
-      PAPERLESS_PORT: 8088
-      PAPERLESS_DBHOST: postgres-comboom.sucht
-      PAPERLESS_DBNAME: paperless
-      PAPERLESS_DBUSER: postgres
-      PAPERLESS_DBPASS: postgres
-      PAPERLESS_SECRET_KEY: "ygjkhhgfgcev654ertzu6trdcb7t6r6dsrtb675vrb"
-      PAPERLESS_ADMIN_USER: "mahd"
-      PAPERLESS_ADMIN_PASSWORD: "fabian66"
-      PAPERLESS_ALLOWED_HOSTS: paperless.localhost,paperless.comboompunktsucht.app,paperless.mcpeapsunterstrichhd.dev
-      PAPERLESS_CORS_ALLOWED_HOSTS: http://paperless.localhost,http://paperless.comboompunktsucht.app,http://paperless.mcpeapsunterstrichhd.dev,https://paperless.localhost,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
-      PAPERLESS_OCR_LANGUAGE: deu+eng
-      PAPERLESS_CSRF_TRUSTED_ORIGINS: http://paperless.localhost,http://paperless.comboompunktsucht.app,http://paperless.mcpeapsunterstrichhd.dev,https://paperless.localhost,https://paperless.comboompunktsucht.app,https://paperless.mcpeapsunterstrichhd.dev
-      PAPERLESS_USE_X_FORWARDED_HOST: "true"
-      PAPERLESS_SECURE_PROXY_SSL_HEADER: "HTTP_X_FORWARDED_PROTO,https"
-    volumes:
-      - ./paperless/data:/usr/src/paperless/data
-      - ./paperless/media:/usr/src/paperless/media
-      - ./paperless/export:/usr/src/paperless/export
-      - ./paperless/consume:/usr/src/paperless/consume
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.11
-    ports:
-      - "8088:8088"
-    labels:
-      glance.name: Paperless
-      glance.url: https://paperless.localhost
-      glance.description: Document management
-      glance.id: paperless-ngx
-      glance.icon: di:paperless-ngx
-      glance.tags: "type:document,type:management,type:service,type:web,type:gui"
       glance.hide: false
   hbbs:
     container_name: hbbs-comboom.sucht
@@ -438,6 +397,37 @@ services:
       glance.icon: si:authentik
       glance.tags: "type:management,type:service,type:web,type:gui,type:auth"
       glance.hide: false
+  wordpress:
+    image: bitnami/wordpress
+    volumes:
+      - ./wordpress-data:/bitnami/wordpress
+    environment:
+      WORDPRESS_DATABASE_HOST: mariadb-comboom.sucht
+      WORDPRESS_DATABASE_PORT_NUMBER: 3306
+      WORDPRESS_DATABASE_NAME: wordpress_db
+      WORDPRESS_DATABASE_USER: wordpress
+      WORDPRESS_DATABASE_PASSWORD: wordpress
+      WORDPRESS_TABLE_PREFIX: wordpress_db
+      WORDPRESS_BLOG_NAME: comboom.sucht
+      WORDPRESS_FIRST_NAME: mcpeaps_HD
+      WORDPRESS_LAST_NAME: MAHD
+      WORDPRESS_USERNAME: mahd
+      WORDPRESS_PASSWORD: fabian66
+      WORDPRESS_EMAIL: mcpeaps_HD@outlook.com
+      #WORDPRESS_SMTP_HOST: ${WORDPRESS_SMTP_ADDRESS}
+      #WORDPRESS_SMTP_PORT: ${WORDPRESS_SMTP_PORT}
+      #WORDPRESS_SMTP_USER: ${WORDPRESS_SMTP_USER_NAME}
+      #WORDPRESS_SMTP_PASSWORD: ${WORDPRESS_SMTP_PASSWORD}
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.14
+    ports:
+      - "8089:8080"
+      - "8090:8443"
+    restart: always
+    pull_policy: always
+    depends_on:
+      - mariadb
 
 
 networks:

@@ -132,8 +132,6 @@ pages:
                     url: http://stirling-pdf.localhost/
                   - title: HadgeDoc
                     url: http://hedgedoc.localhost/
-                  - title: paperless-ngx
-                    url: http://paperless.localhost/
                   - title: phpMyAdmin
                     url: http://phpmyadmin.localhost/
                   - title: Portainer
