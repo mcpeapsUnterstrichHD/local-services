@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# =============================
-# Self-Signed S/MIME Zertifikate Generator
-# Autor: ChatGPT (für Fabian Aps)
-# Gültigkeit: 30 Jahre (10950 Tage)
-# =============================
-
-set -e
-
 EMAILS=(
   "mcpeaps_HD@outlook.com"
   "aps.fabian@icloud.com"
@@ -23,45 +15,39 @@ EMAILS=(
 )
 
 OUTPUT_DIR="."
-DAYS_VALID=10950  # 30 Jahre
+
+# Check if Homebrew is installed
+if ! command -v brew >/dev/null 2>&1; then
+  echo "❌ Homebrew ist nicht installiert. Bitte installiere Homebrew zuerst: https://brew.sh"
+  exit 1
+fi
+
+echo "✅ Homebrew ist installiert."
+
+# Check if mkcert is installed
+if ! command -v mkcert >/dev/null 2>&1; then
+  echo "📦 mkcert wird installiert..."
+  brew install mkcert
+else
+  echo "✅ mkcert ist bereits installiert."
+fi
+
+# Check if nss is installed (needed for Firefox trust store)
+if ! brew list nss >/dev/null 2>&1; then
+  echo "📦 nss wird installiert..."
+  brew install nss
+else
+  echo "✅ nss ist bereits installiert."
+fi
 
 
 
 for EMAIL in "${EMAILS[@]}"; do
   SAFE_NAME=$(echo "$EMAIL" | tr '@' '_' | tr '.' '_')
-  CN="$EMAIL"
-  NAME="S/MIME Cert for $EMAIL"
-
   mkdir -p "$OUTPUT_DIR/$SAFE_NAME"
-
+  # Generate certificate
   echo "🔧 Erzeuge Zertifikat für: $EMAIL"
-
-  openssl genrsa -out "$OUTPUT_DIR/$SAFE_NAME/$SAFE_NAME.key.pem" 4096
-
-  openssl req -new -key "$OUTPUT_DIR/$SAFE_NAME/$SAFE_NAME.key.pem" \
-    -subj "/C=DE/ST=Berlin/L=Berlin/O=Privat/CN=$CN/emailAddress=$EMAIL" \
-    -out "$OUTPUT_DIR/$SAFE_NAME/$SAFE_NAME.csr.pem"
-
-  openssl x509 -req -days $DAYS_VALID \
-    -in "$OUTPUT_DIR/$SAFE_NAME/$SAFE_NAME.csr.pem" \
-    -signkey "$OUTPUT_DIR/$SAFE_NAME/$SAFE_NAME.key.pem" \
-    -out "$OUTPUT_DIR/$SAFE_NAME/$SAFE_NAME.crt.pem" \
-    -extensions usr_cert \
-    -extfile <(cat <<EOF
-[usr_cert]
-basicConstraints=CA:FALSE
-keyUsage = digitalSignature, nonRepudiation, keyEncipherment
-extendedKeyUsage = emailProtection
-subjectAltName = email:$EMAIL
-EOF
-)
-
-  openssl pkcs12 -export \
-    -inkey "$OUTPUT_DIR/$SAFE_NAME/$SAFE_NAME.key.pem" \
-    -in "$OUTPUT_DIR/$SAFE_NAME/$SAFE_NAME.crt.pem" \
-    -out "$OUTPUT_DIR/$SAFE_NAME.p12" \
-    -name "$NAME" \
-    -passout pass:fabian66
+  mkcert -key-file "$OUTPUT_DIR/$SAFE_NAME/$SAFE_NAME.key" -cert-file "$OUTPUT_DIR/$SAFE_NAME/$SAFE_NAME.crt" -p12-file "$OUTPUT_DIR/$SAFE_NAME.p12" -pkcs12 -install "$EMAIL"
 
   echo "✅ Zertifikat erstellt: $OUTPUT_DIR/$SAFE_NAME.p12"
   echo ""
