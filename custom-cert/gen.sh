@@ -41,6 +41,6 @@ fi
 
 # Generate certificate
 echo "📄 Zertifikat wird erstellt..."
-mkcert -key-file localhost.key -cert-file localhost.crt -p12-file localhost.p12 -install localhost "*.localhost"
+mkcert -key-file localhost.key -cert-file localhost.crt -p12-file localhost.p12 -install localhost "*.localhost" 127.0.0.1 ::1
 
 echo "✅ Zertifikat erfolgreich erstellt."
