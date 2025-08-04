@@ -428,6 +428,159 @@ services:
     pull_policy: always
     depends_on:
       - mariadb
+  kroki:
+    image: yuzutech/kroki
+    container_name: kroki-comboom.sucht
+    pull_policy: always
+    restart: always
+    depends_on:
+      - kroki-mermaid
+      - kroki-bpmn
+      - kroki-excalidraw
+      - kroki-drawio
+    environment:
+      - KROKI_MERMAID_HOST=kroki-mermaid
+      - KROKI_BPMN_HOST=kroki-bpmn
+      - KROKI_EXCALIDRAW_HOST=kroki-excalidraw
+      - KROKI_DIAGRAMSNET_HOST=kroki-drawio
+    ports:
+      - "8091:8000"
+    # If you do need to explicitly mount /tmp, make sure to include the exec option
+    tmpfs:
+      - /tmp:exec
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.15
+  kroki-mermaid:
+    image: yuzutech/kroki-mermaid
+    container_name: kroki-mermaid-comboom.sucht
+    pull_policy: always
+    restart: always
+    expose:
+      - "8002"
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.16
+  kroki-bpmn:
+    image: yuzutech/kroki-bpmn
+    container_name: kroki-bpmn-comboom.sucht
+    pull_policy: always
+    restart: always
+    expose:
+      - "8003"
+  kroki-excalidraw:
+    image: yuzutech/kroki-excalidraw:latest
+    container_name: kroki-excalidraw-comboom.sucht
+    restart: always
+    pull_policy: always
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.17
+    expose:
+      - "8004"
+  kroki-drawio:
+    image: yuzutech/kroki-diagramsnet
+    container_name: kroki-drawio-comboom.sucht
+    restart: always
+    pull_policy: always
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.18
+    expose:
+      - "8005"
+  excalidraw:
+    image: excalidraw/excalidraw:latest
+    container_name: excalidraw-comboom.sucht
+    restart: always
+    pull_policy: always
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.19
+    ports:
+      - "8092:80"
+    environment:
+      - COLLAB_SERVER_URL=wss://excalidraw-room
+    labels:
+      glance.name: Excalidraw Editor
+      glance.description: Excalidraw is a whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.
+      glance.id: excalidraw
+      glance.url: https://excalidraw.localhost
+      glance.icon: si:excalidraw
+      glance.tags: "type:service,type:web,type:gui"
+      glance.hide: false
+  excalidraw-room:
+    image: excalidraw/excalidraw-room:latest
+    container_name: excalidraw-room-localhost
+    restart: always
+    pull_policy: always
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.20
+    ports:
+      - "8093:80"
+    labels:
+      glance.name: Excalidraw Room
+      glance.description: Excalidraw is a whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.
+      glance.id: excalidraw-room
+      glance.url: https://kroki.localhost/excalidraw
+      glance.icon: si:excalidraw
+      glance.tags: "type:service,type:web,type:gui"
+      glance.hide: false
+  drawio:
+    image: jgraph/drawio
+    container_name: drawio-comboom.sucht
+    restart: always
+    pull_policy: always
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.21
+    ports:
+      - "8094:8080"
+    labels:
+      glance.name: Draw.io
+      glance.description: Draw.io is a JavaScript, client-side editor for general diagramming.
+      glance.id: drawio
+      glance.url: https://drawio.localhost
+      glance.icon: di:drawio
+      glance.tags: "type:service,type:web,type:gui"
+      glance.hide: false
+  plantuml:
+    image: plantuml/plantuml-server:latest
+    container_name: plantuml-comboom.sucht
+    pull_policy: always
+    restart: always
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.22
+    ports:
+      - "8097:8080"
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    pull_policy: always
+    container_name: code-server-comboom.sucht
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - PASSWORD=fabian66 #optional
+      - SUDO_PASSWORD=fabian66 #optional
+      - PROXY_DOMAIN=code-server.localhost #optional
+      - DEFAULT_WORKSPACE=/DEV #optional
+      - PWA_APPNAME=code-server-comboom.sucht #optional
+      - DOCKER_MODS=linuxserver/mods:universal-docker|linuxserver/mods:code-server-npmglobal|linuxserver/mods:code-server-nodejs|linuxserver/mods:code-server-java11|linuxserver/mods:code-server-extension-arguments|inuxserver/mods:code-server-nvm|linuxserver/mods:code-server-python3|linuxserver/mods:code-server-rust|linuxserver/mods:code-server-zsh
+      - VSCODE_EXTENSION_IDS=comboompunktsucht.vsc-comboom-sucht-nordic
+    volumes:
+      - ./code-server/config:/config
+      - $HOME/DEV:/DEV
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime
+    ports:
+      - "8098:8443"
+    restart: always
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.23
+
 
 
 networks:

@@ -128,6 +128,10 @@ pages:
                     url: http://zoraxy.localhost/
                   - title: IT Tools
                     url: http://it-tools.localhost/
+                  - title: Excalidraw Editor
+                    url: http://excalidraw.localhost/
+                  - title: Draw.io
+                    url: http://drawio.localhost/
                   - title: Stirling PDF
                     url: http://stirling-pdf.localhost/
                   - title: HadgeDoc

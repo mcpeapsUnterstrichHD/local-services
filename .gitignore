@@ -25,3 +25,4 @@ glance/.env
 all-databases.sql
 paperless/
 rustdesk/
+code-server/
