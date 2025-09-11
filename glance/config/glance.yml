@@ -45,7 +45,7 @@ pages:
       - size: full
         widgets:
           - type: search
-            search-engine: http://search.localhost/search?q={QUERY}
+            search-engine: https://search.localhost/search?q={QUERY}
             new-tab: true
             autofocus: true
             placeholder: Search the web...

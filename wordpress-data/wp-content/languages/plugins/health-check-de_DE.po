@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Health Check &amp; Troubleshooting - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-05-17 18:10:40+0000\n"
+"PO-Revision-Date: 2025-09-05 18:13:06+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -932,7 +932,7 @@ msgstr "Probleme behandeln"
 
 #: HealthCheck/class-health-check-troubleshoot.php:176
 msgid "Return to the Dashboard"
-msgstr "Zum Dashboard zurückkehren"
+msgstr "Zurück zum Dashboard"
 
 #: HealthCheck/class-health-check-troubleshoot.php:149
 msgid "We were unable to replace the plugin file required to enable the Troubleshooting Mode."
@@ -1253,7 +1253,7 @@ msgstr "Datenbank"
 
 #: HealthCheck/BackCompat/class-wp-debug-data.php:195
 msgid "The options shown below relate to your server setup. If changes are required, you may need your web host&#8217;s assistance."
-msgstr "Die unten aufgeführten Optionen beziehen sich auf deine Serverkonfiguration. Wenn Änderungen erforderlich sind, benötigst du möglicherweise die Unterstützung deines Webhostingunternehmens."
+msgstr "Die unten aufgeführten Optionen beziehen sich auf deine Serverkonfiguration. Wenn Änderungen erforderlich sind, benötigst du möglicherweise die Unterstützung deines Webhosting-Unternehmens."
 
 #: HealthCheck/BackCompat/class-wp-debug-data.php:194
 msgid "Server"

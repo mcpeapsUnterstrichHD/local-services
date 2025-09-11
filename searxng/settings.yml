@@ -28,7 +28,7 @@ ui:
   results_on_new_tab: true
   search_on_category_select: true
   hotkeys: vim
-redis:
+valkey:
   url: redis://192.168.1.10:6379
 search:
   safe_search: 0

@@ -59,12 +59,17 @@ security:
     idpCert: classpath:okta.crt # The certificate your Provider will use to authenticate your app's SAML authentication requests. Provided by your Provider
     privateKey: classpath:saml-private-key.key # Your private key. Generated from your keypair
     spCert: classpath:saml-public-cert.crt # Your signing certificate. Generated from your keypair
+  jwt: # This feature is currently under development and not yet fully supported. Do not use in production.
+    persistence: true # Set to 'true' to enable JWT key store
+    enableKeyRotation: true # Set to 'true' to enable key pair rotation
+    enableKeyCleanup: true # Set to 'true' to enable key pair cleanup
+    keyRetentionDays: 7 # Number of days to retain old keys. The default is 7 days.
+    secureCookie: false # Set to 'true' to use secure cookies for JWTs
 
 premium:
   key: 00000000-0000-0000-0000-000000000000
   enabled: false # Enable license key checks for pro/enterprise features
   proFeatures:
-    database: true # Enable database features
     SSOAutoLogin: false
     CustomMetadata:
       autoUpdateMetadata: false
@@ -108,6 +113,7 @@ system:
   enableAnalytics: true # set to 'true' to enable analytics, set to 'false' to disable analytics; for enterprise users, this is set to true
   enableUrlToPDF: false # Set to 'true' to enable URL to PDF, INTERNAL ONLY, known security issues, should not be used externally
   disableSanitize: false # set to true to disable Sanitize HTML; (can lead to injections in HTML)
+  maxDPI: 500 # Maximum allowed DPI for PDF to image conversion
   html:
     urlSecurity:
       enabled: true # Enable URL security restrictions for HTML processing
@@ -145,6 +151,8 @@ system:
     cleanupIntervalMinutes: 30 # How often to run cleanup (in minutes)
     startupCleanup: true # Clean up old temp files on startup
     cleanupSystemTemp: false # Whether to clean broader system temp directory
+  databaseBackup:
+    cron: '0 0 0 * * ?' # Cron expression for automatic database backups "0 0 0 * * ?" daily at midnight
 
 ui:
   appName: comboom.sucht | Stirling PDF # application's visible name
@@ -163,7 +171,7 @@ metrics:
 AutomaticallyGenerated:
   key: f4aee2de-d7f0-4c3b-a638-215f7f5e1735
   UUID: 7d2c496d-be22-49bc-a2d6-106ef7d7bb81
-  appVersion: 1.1.1
+  appVersion: 1.3.2
 
 processExecutor:
   sessionLimit: # Process executor instances limits
