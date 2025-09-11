@@ -7,7 +7,7 @@ general:
 server:
   # base_url is defined in the SEARXNG_BASE_URL environment variable, see .env and docker-compose.yml
   secret_key: "f5d817c17939446ea1bbd875d6b65b6aebff9cd1640fcc646d04def498495240afa0e75662570d758320af00e7e4250847567b3448181cf5bb5be4459680e7783b1f31f40a6cdfc96c72eef75d03628a0f661d449c7ecae84fbd6e589851ee57787d96f016f3c527abf0d8e181d7c7a37884d5f487494506df3e2d1c308efb67"  # change this!
-  limiter: true  # can be disabled for a private instance
+  limiter: false  # can be disabled for a private instance
   image_proxy: true
   public_instance: false
   default_http_headers:
@@ -15,6 +15,12 @@ server:
     X-Download-Options: noopen
     X-Robots-Tag: noindex, nofollow
     Referrer-Policy: no-referrer
+
+outgoing:
+  proxies:
+    all://:
+      - http://192.168.1.26:3128
+
 ui:
   static_use_hash: true
   default_locale: "en"
@@ -53,6 +59,14 @@ search:
     - csv
     - json
     - rss
+  timeout: 10         # Timeout in Sekunden für jede Suchmaschine
+  retries: 2          # Anzahl der Wiederholungen bei Fehlern
+
+# Delay zwischen Anfragen an die Suchmaschinen
+requests:
+  delay: 1            # Sekunden Pause zwischen Requests an die Suchmaschinen
+  parallel: 10  # Anzahl der gleichzeitigen Requests an die Suchmaschinen
+
 
 
 plugins:
