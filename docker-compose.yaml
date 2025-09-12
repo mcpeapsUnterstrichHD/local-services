@@ -334,9 +334,9 @@ services:
       - CMD_EMAIL=true
       - CMD_ALLOW_EMAIL_REGISTER=true
       - CMD_SESSION_SECRET=ygjkhhgfgcev654ertzu6trdcb7t6r6dsrtb675vrb
-      - CMD_DB_URL=postgres://postgres:postgres@postgres-comboom.sucht:5432/hedgedoc
+      - CMD_DB_URL=mysql://hedgedoc:hedgedoc@mariadb-comboom.sucht:3306/hedgedoc
     depends_on:
-      - postgres
+      - mariadb
     volumes:
       - ./hedgedoc/public/uploads:/hedgedoc/public/uploads
     ports:
@@ -783,6 +783,48 @@ services:
       glance.icon: di:element
       glance.tags: "type:service,type:web,type:gui"
       glance.hide: false
+  grafana:
+    pull_policy: always
+    restart: always
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.27
+    container_name: grafana-comboom.sucht
+    ports:
+      - 8105:8105
+    volumes:
+      - ./grafana/etc:/etc/grafana
+      - ./grafana/var/lib:/var/lib/grafana
+      - ./grafana/usr/share:/usr/share/grafana
+      #- ./grafana/var/log/:/var/log/grafana
+    environment:
+      GF_DEFAULT_INSTANCE_NAME: "grafana-comboom.sucht"
+      GF_DEFAULT_APP_MODE: "production"
+      GF_SECURITY_ADMIN_USER: "mahd"
+      GF_SECURITY_ADMIN_EMAIL: "mcpeaps_HD@outlook.com"
+      GF_SECURITY_ADMIN_PASSWORD: "fabian66"
+      GF_SERVER_HTTP_PORT: 8105
+      GF_SERVER_ENABLE_GZIP: true
+      GF_DATE_FORMATS_DEFAULT_TIMEZONE: "browser"
+      GF_DATE_FORMATS_DEFAULT_WEEK_START: "browser"
+      GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
+      GF_AUTH_ANONYMOS_ORG_NAME: "comboom.sucht"
+    tty: true
+    stdin_open: true
+    image: grafana/grafana
+  uptime-kuma:
+    image: 'louislam/uptime-kuma'
+    container_name: uptime-kuma-comboom.sucht
+    volumes:
+        - './uptime-kuma:/app/data'
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+        - '8106:3001'
+    restart: always
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.28
+
 
 
 
