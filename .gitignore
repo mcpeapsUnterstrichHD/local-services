@@ -36,3 +36,9 @@ grafana/etc/provisioning/
 grafana/etc/ldap.toml
 grafana/usr/
 grafana/var/
+gitlab/
+postgres/
+pgadmin/var/lib/pgadmin4.db
+/pgadmin/var/lib/sessions
+/pgadmin/var/lib/storage
+.DS_Store

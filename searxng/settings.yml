@@ -16,10 +16,10 @@ server:
     X-Robots-Tag: noindex, nofollow
     Referrer-Policy: no-referrer
 
-outgoing:
-  proxies:
-    all://:
-      - http://192.168.1.26:3128
+#outgoing:
+#  proxies:
+#    all://:
+#      - http://192.168.1.26:3128
 
 ui:
   static_use_hash: true

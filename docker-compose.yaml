@@ -97,33 +97,6 @@ services:
       glance.tags: "type:proxy, type:management, type:reverse, type:service, type:web, type:gui"
       glance.hide: false
 
-  squid:
-    image: ubuntu/squid:latest
-    container_name: squid-comboom.sucht
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.26
-    ports:
-      - "3128:3128"
-    volumes:
-      - ./squid/squid.conf:/etc/squid/squid.conf:rw
-      - ./squid/cache:/var/spool/squid
-      - ./squid/logs:/var/log/squid
-      - /etc/localtime:/etc/localtime
-    deploy:
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 1G
-    labels:
-      glance.name: Squid Proxy
-      glance.icon: si:squid
-      glance.url: https://squid.localhost
-      glance.description: Squid Proxy.
-      glance.id: squid
-      glance.tags: "type:proxy, type:management, type:service"
-      glance.hide: false
-
   searxng:
     container_name: searxng-comboom.sucht
     image: searxng/searxng:2025.9.10-a9b088d
@@ -131,6 +104,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.3
+        ipv6_address: fd07:b51a:cc66:d001::0003
     environment:
       - TZ=Europe/Berlin
     ports:
@@ -158,6 +132,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.4
+        ipv6_address: fd07:b51a:cc66:d001::0004
     restart: always
     labels:
       glance.name: IT Tools
@@ -188,6 +163,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.5
+        ipv6_address: fd07:b51a:cc66:d001::0005
     restart: always
     labels:
       glance.name: Sirling PDF
@@ -210,7 +186,9 @@ services:
       - portainer-data:/data
     restart: always
     networks:
-      - local-services
+      local-services:
+        ipv4_address: 192.168.1.30
+        ipv6_address: fd07:b51a:cc66:d001::001E
     labels:
       glance.name: Portainer
       glance.icon: si:portainer
@@ -230,6 +208,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.6
+        ipv6_address: fd07:b51a:cc66:d001::0006
     volumes:
       - ./all-databases.sql:/all-databases.sql
       - ./mariadb_data:/var/lib/mysql
@@ -263,6 +242,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.7
+        ipv6_address: fd07:b51a:cc66:d001::0007
     labels:
       glance.name: phpMyAdmin
       glance.icon: si:phpmyadmin
@@ -298,14 +278,16 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.8
-    image: postgres:alpine
+        ipv6_address: fd07:b51a:cc66:d001::0008
+    image: postgres:17
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_MULTIPLE_DATABASES: hedgedoc,authentik,webstudio,synapse-mahd,synapse-cbps
+      POSTGRES_MULTIPLE_DATABASES: hedgedoc,authentik,webstudio,pgadmin
+      PGDATA: /data
     volumes:
-      - postgresql_data:/var/lib/postgresql/data
-      - ./postgres-init/multiple-dbs.sh:/docker-entrypoint-initdb.d/multiple-dbs.sh:ro
+      - ./postgres/data:/data
+      - ./postgres/init/multiple-dbs.sh:/docker-entrypoint-initdb.d/multiple-dbs.sh:ro
     ports:
       - "5432:5432"
     restart: always
@@ -345,6 +327,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.9
+        ipv6_address: fd07:b51a:cc66:d001::0009
     labels:
       glance.name: HedgeDoc
       glance.icon: si:hedgedoc
@@ -364,6 +347,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.10
+        ipv6_address: fd07:b51a:cc66:d001::000A
     ports:
       - "6379:6379"
     healthcheck:
@@ -389,6 +373,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.12
+        ipv6_address: fd07:b51a:cc66:d001::000C
     ports:
       - "21114:21114"
       - "21115:21115"
@@ -416,6 +401,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.13
+        ipv6_address: fd07:b51a:cc66:d001::000D
     restart: always
     ports:
       - "21117:21117"
@@ -493,38 +479,39 @@ services:
       glance.url: https://oauth2.localhost
       glance.icon: si:authentik
       glance.tags: "type:management,type:service,type:web,type:gui,type:auth"
-      glance.hide: false
-  wordpress:
-    image: bitnami/wordpress
-    volumes:
-      - ./wordpress-data:/bitnami/wordpress
-    environment:
-      WORDPRESS_DATABASE_HOST: mariadb-comboom.sucht
-      WORDPRESS_DATABASE_PORT_NUMBER: 3306
-      WORDPRESS_DATABASE_NAME: wordpress_db
-      WORDPRESS_DATABASE_USER: wordpress
-      WORDPRESS_DATABASE_PASSWORD: wordpress
-      WORDPRESS_TABLE_PREFIX: wordpress_db
-      WORDPRESS_BLOG_NAME: comboom.sucht
-      WORDPRESS_FIRST_NAME: mcpeaps_HD
-      WORDPRESS_LAST_NAME: MAHD
-      WORDPRESS_USERNAME: mahd
-      WORDPRESS_PASSWORD: fabian66
-      WORDPRESS_EMAIL: mcpeaps_HD@outlook.com
-      #WORDPRESS_SMTP_HOST: ${WORDPRESS_SMTP_ADDRESS}
-      #WORDPRESS_SMTP_PORT: ${WORDPRESS_SMTP_PORT}
-      #WORDPRESS_SMTP_USER: ${WORDPRESS_SMTP_USER_NAME}
-      #WORDPRESS_SMTP_PASSWORD: ${WORDPRESS_SMTP_PASSWORD}
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.14
-    ports:
-      - "8089:8080"
-      - "8090:8443"
-    restart: always
-    pull_policy: always
-    depends_on:
-      - mariadb
+  #     glance.hide: false
+  # wordpress:
+  #   image: bitnami/wordpress
+  #   volumes:
+  #     - ./wordpress-data:/bitnami/wordpress
+  #   environment:
+  #     WORDPRESS_DATABASE_HOST: mariadb-comboom.sucht
+  #     WORDPRESS_DATABASE_PORT_NUMBER: 3306
+  #     WORDPRESS_DATABASE_NAME: wordpress_db
+  #     WORDPRESS_DATABASE_USER: wordpress
+  #     WORDPRESS_DATABASE_PASSWORD: wordpress
+  #     WORDPRESS_TABLE_PREFIX: wordpress_db
+  #     WORDPRESS_BLOG_NAME: comboom.sucht
+  #     WORDPRESS_FIRST_NAME: mcpeaps_HD
+  #     WORDPRESS_LAST_NAME: MAHD
+  #     WORDPRESS_USERNAME: mahd
+  #     WORDPRESS_PASSWORD: fabian66
+  #     WORDPRESS_EMAIL: mcpeaps_HD@outlook.com
+  #     #WORDPRESS_SMTP_HOST: ${WORDPRESS_SMTP_ADDRESS}
+  #     #WORDPRESS_SMTP_PORT: ${WORDPRESS_SMTP_PORT}
+  #     #WORDPRESS_SMTP_USER: ${WORDPRESS_SMTP_USER_NAME}
+  #     #WORDPRESS_SMTP_PASSWORD: ${WORDPRESS_SMTP_PASSWORD}
+  #   networks:
+  #     local-services:
+  #       ipv4_address: 192.168.1.14
+  #       ipv6_address: fd07:b51a:cc66:d001::000E
+  #   ports:
+  #     - "8089:8080"
+  #     - "8090:8443"
+  #   restart: always
+  #   pull_policy: always
+  #   depends_on:
+  #     - mariadb
   kroki:
     image: yuzutech/kroki
     container_name: kroki-comboom.sucht
@@ -548,6 +535,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.15
+        ipv6_address: fd07:b51a:cc66:d001::000F
   kroki-mermaid:
     image: yuzutech/kroki-mermaid
     container_name: kroki-mermaid-comboom.sucht
@@ -558,6 +546,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.16
+        ipv6_address: fd07:b51a:cc66:d001::0010
   kroki-bpmn:
     image: yuzutech/kroki-bpmn
     container_name: kroki-bpmn-comboom.sucht
@@ -573,6 +562,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.17
+        ipv6_address: fd07:b51a:cc66:d001::0011
     expose:
       - "8004"
   kroki-drawio:
@@ -583,6 +573,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.18
+        ipv6_address: fd07:b51a:cc66:d001::0012
     expose:
       - "8005"
   excalidraw:
@@ -593,6 +584,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.19
+        ipv6_address: fd07:b51a:cc66:d001::0013
     ports:
       - "8092:80"
     environment:
@@ -613,6 +605,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.20
+        ipv6_address: fd07:b51a:cc66:d001::0014
     ports:
       - "8093:80"
     labels:
@@ -631,6 +624,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.21
+        ipv6_address: fd07:b51a:cc66:d001::0015
     ports:
       - "8094:8080"
     labels:
@@ -649,6 +643,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.22
+        ipv6_address: fd07:b51a:cc66:d001::0016
     labels:
       glance.name: PlantUML
       glance.description: PlantUML
@@ -732,6 +727,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.23
+        ipv6_address: fd07:b51a:cc66:d001::0017
     labels:
       glance.name: Matrix Server (comboom.sucht)
       glance.description: Matrix Server for comboom.sucht
@@ -755,6 +751,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.24
+        ipv6_address: fd07:b51a:cc66:d001::0018
     labels:
       glance.name: Matrix Server (mcpeaps_HD)
       glance.description: Matrix Server for mcpeaps_HD
@@ -775,6 +772,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.25
+        ipv6_address: fd07:b51a:cc66:d001::0019
     labels:
       glance.name: Element Web
       glance.description: Matrix Web Client
@@ -789,6 +787,7 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.27
+        ipv6_address: fd07:b51a:cc66:d001::001B
     container_name: grafana-comboom.sucht
     ports:
       - 8105:8105
@@ -824,26 +823,70 @@ services:
     networks:
       local-services:
         ipv4_address: 192.168.1.28
+        ipv6_address: fd07:b51a:cc66:d001::001C
 
+  pgadmin4:
+    container_name: pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=mcpeaps_HD@outlook.com
+      - PGADMIN_DEFAULT_PASSWORD=fabian66
+      # - PGADMIN_CONFIG_DATABASE_URI=postgres://postgres:postgres@192.168.1.8:5432/pgadmin
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.29
+        ipv6_address: fd07:b51a:cc66:d001::001D
+    image: dpage/pgadmin4
+    pull_policy: always
+    restart: always
+    ports:
+      - "8107:80"
+    volumes:
+      - ./pgadmin/var/lib/:/var/lib/pgadmin
+      - ./pgadmin/servers.json:/var/lib/pgadmin/storage/mcpeaps_HD_outlook.com/servers.json
 
-
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab-comboo.sucht
+    restart: always
+    pull_policy: always
+    hostname: 'gitlab.localhost'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.localhost:80'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2424
+    ports:
+      - '8108:80'
+      - '8109:443'
+      - '2424:22'
+    volumes:
+      - './gitlab/config:/etc/gitlab'
+      - './gitlab/logs:/var/log/gitlab'
+      - './gitlab/data:/var/opt/gitlab'
+    shm_size: '256m'
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.31
+        ipv6_address: fd07:b51a:cc66:d001::001F
 
 networks:
   local-services:
+    name: local-services
     ipam:
       driver: default
       config:
         - subnet: 192.168.1.0/24
           gateway: 192.168.1.2
           ip_range: 192.168.1.0/24
+        - subnet: fd07:b51a:cc66:d001::/64
+          gateway: fd07:b51a:cc66:d001::02
+          ip_range: fd07:b51a:cc66:d001::/64
+
+
 
 
 volumes:
   redis-data:
   portainer-data:
-  mariadb-data:
-  postgresql_data:
-  samba-lib:
 #  shm-volume:
 #    driver: local
 #    driver_opts:
