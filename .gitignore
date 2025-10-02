@@ -42,3 +42,6 @@ pgadmin/var/lib/pgadmin4.db
 /pgadmin/var/lib/sessions
 /pgadmin/var/lib/storage
 .DS_Store
+uptime-kuma/kuma.db-shm
+uptime-kuma/kuma.db-wal
+uptime-kuma/kuma.db
