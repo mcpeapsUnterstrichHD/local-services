@@ -1,0 +1,52 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "comboom.sucht",
+            "Group": "local-services",
+            "Host": "192.168.1.8",
+            "Port": 5432,
+            "MaintenanceDB": "pgadmin",
+            "Username": "postgres",
+            "Role": "postgres",
+            "Shared": true,
+            "SharedUsername": "postgres",
+            "DBRestrictionType": "databases",
+            "UseSSHTunnel": 0,
+            "TunnelPort": "22",
+            "TunnelAuthentication": 0,
+            "TunnelKeepAlive": 0,
+            "KerberosAuthentication": false,
+            "ConnectionParameters": {
+                "sslmode": "prefer",
+                "connect_timeout": 10,
+                "sslcert": "<STORAGE_DIR>/.postgresql/postgresql.crt",
+                "sslkey": "<STORAGE_DIR>/.postgresql/postgresql.key"
+            },
+            "Tags": []
+        },
+        "2": {
+            "Name": "comboom.sucht(me)",
+            "Group": "local-services",
+            "Host": "192.168.1.8",
+            "Port": 5432,
+            "MaintenanceDB": "pgadmin",
+            "Username": "mahd",
+            "Role": "mahd",
+            "Shared": false,
+            "SharedUsername": "postgres",
+            "DBRestrictionType": "databases",
+            "UseSSHTunnel": 0,
+            "TunnelPort": "22",
+            "TunnelAuthentication": 0,
+            "TunnelKeepAlive": 0,
+            "KerberosAuthentication": false,
+            "ConnectionParameters": {
+                "sslmode": "prefer",
+                "connect_timeout": 10,
+                "sslcert": "<STORAGE_DIR>/.postgresql/postgresql.crt",
+                "sslkey": "<STORAGE_DIR>/.postgresql/postgresql.key"
+            },
+            "Tags": []
+        }
+    }
+}
