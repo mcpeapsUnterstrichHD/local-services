@@ -201,7 +201,7 @@ pages:
             autofocus: true
             placeholder: Search the web...
           - type: extension
-            url: http://192.168.1.10:8080/graph/mcpeapsUnterstrichHD
+            url: http://192.168.1.10:8080/graph/${GITHUB_USERNAME}
             allow-potentially-dangerous-html: true
             parameters:
               background-color: "#2E3440" # cell background
@@ -455,7 +455,7 @@ pages:
             # Optionally hide the location from being displayed in the widget
             # hide-location: true
           - type: extension
-            url: http://192.168.1.10:8080/stats/mcpeapsUnterstrichHD
+            url: http://192.168.1.10:8080/stats/${GITHUB_USERNAME}
             allow-potentially-dangerous-html: true
             parameters:
             show_quartiles: true # whether to include "quartiles" in the stats
