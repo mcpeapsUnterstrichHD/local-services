@@ -33,7 +33,8 @@ pages:
           - type: twitch-channels
             channels:
               - tsoding
-              - christitustech
+              - asot
+              - thejocraft_live
           - type: videos
             channels:
               - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
@@ -42,6 +43,156 @@ pages:
               - UCqwGaUvq_l0RKszeHhZ5leA # PietSmiet
               - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
             style: vertical-list
+          - type: custom-api
+            title: Epic Games
+            cache: 1h
+            url: https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?locale=en&country=DE&allowCountries=DE
+            template: |
+              <div>
+                {{ if eq .Response.StatusCode 200 }}
+                  <div class="horizontal-cards-2">
+                    {{ range .JSON.Array "data.Catalog.searchStore.elements" }}
+                      {{ $price := .String "price.totalPrice.discountPrice" }}
+                      {{ $hasPromo := gt (len (.Array "promotions.promotionalOffers")) 0 }}
+                      {{ if and $hasPromo (eq $price "0") }}
+                        {{ $gamePage := .String "productSlug" }}
+                        {{ if gt (len (.Array "offerMappings")) 0 }}
+                          {{ $gamePage = .String "offerMappings.0.pageSlug" }}
+                        {{end }}
+                        <a href="https://store.epicgames.com/en-US/p/{{ $gamePage }}" target="_blank" class="card">
+                          {{ $title := .String "title" }}
+                          {{ range .Array "keyImages" }}
+                            {{ if eq (.String "type") "OfferImageWide" }}
+                              <img src="{{ .String "url" }}" alt="{{ $title }}" style="width: 100%; max-width: 300px; height: 150px; object-fit: cover; border-radius: var(--border-radius);">
+                            {{ end }}
+                          {{ end }}
+                          <div class="card-content">
+                            <span class="size-base color-primary">{{ $title }}</span><br>
+                            <span class="size-h5 color-subdue">
+                              {{ if $hasPromo }}
+                                {{ $promotions := .Array "promotions.promotionalOffers" }}
+                                {{ if gt (len $promotions) 0 }}
+                                  {{ $firstPromo := index $promotions 0 }}
+                                  {{ $offers := $firstPromo.Array "promotionalOffers" }}
+                                  {{ if gt (len $offers) 0 }}
+                                    {{ $firstOffer := index $offers 0 }}
+                                    Free until {{ slice ($firstOffer.String "endDate") 0 10 }}
+                                  {{ else }}
+                                    Free this week!
+                                  {{ end }}
+                                {{ else }}
+                                  Free this week!
+                                {{ end }}
+                              {{ end }}
+                            </span>
+                          </div>
+                        </a>
+                      {{ end }}
+                    {{ end }}
+                  </div>
+                {{ else }}
+                  <p class="color-negative">Error fetching Epic Games data.</p>
+                {{ end }}
+              </div>
+          - type: custom-api
+            title: Recently Played Games
+            cache: 1h
+            url: http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${STEAM_API_KEY}&steamid=${STEAM_USER}&format=json
+            template: |
+              <div>
+                {{ if eq .Response.StatusCode 200 }}
+                  {{ $games := .JSON.Array "response.games" }}
+                  {{ if gt (len $games) 0 }}
+                    <ul class="list list-gap-10 collapsible-container" data-collapse-after="5">
+                      {{ range $games }}
+                        <li style="display: flex; align-items: center;">
+                          <a href="https://store.steampowered.com/app/{{ .Int "appid" }}" target="_blank">
+                            <img
+                              src="http://media.steampowered.com/steamcommunity/public/images/apps/{{ .Int "appid" }}/{{ .String "img_icon_url" }}.jpg"
+                              alt="{{ .String "name" }}"
+                              style="width: 32px; border-radius: var(--border-radius); margin-right: 10px;">
+                          </a>
+                          <div>
+                            <a
+                              href="https://store.steampowered.com/app/{{ .Int "appid" }}"
+                              class="size-base color-primary"
+                              target="_blank"
+                            >
+                              {{ .String "name" }}
+                            </a>
+                            <br>
+                            <span class="size-h5 color-subdue">
+                              Last 2 weeks:
+                              {{ if gt (toFloat (.Int "playtime_2weeks")) 60.0 }}
+                                {{ printf "%.2f hrs" (div (toFloat (.Int "playtime_2weeks")) 60.0) }}
+                              {{ else }}
+                                {{ .Int "playtime_2weeks" }} mins
+                              {{ end }}
+                            </span>
+                          </div>
+                        </li>
+                      {{ end }}
+                    </ul>
+                  {{ else }}
+                    <p class="color-negative">No recently played games found.</p>
+                  {{ end }}
+                {{ else }}
+                  <p class="color-negative">An unexpected error occurred. Please try again later.</p>
+                {{ end }}
+              </div>
+          - type: custom-api
+            title: Steam Specials
+            cache: 12h
+            url: https://store.steampowered.com/api/featuredcategories?cc=de
+            template: |
+              <ul class="list list-gap-10 collapsible-container" data-collapse-after="5">
+              {{ range .JSON.Array "specials.items" }}
+                {{ $header := .String "header_image" }}
+                {{ $urlPrefix := "https://store.steampowered.com/sub/" }}
+                {{ if findMatch "/steam/apps/" $header }}
+                  {{ $urlPrefix = "https://store.steampowered.com/app/" }}
+                {{ end }}
+                <li>
+                  <a class="size-h4 color-highlight block text-truncate" href="{{ $urlPrefix }}{{ .Int "id" }}/">{{ .String "name" }}</a>
+                  <ul class="list-horizontal-text">
+                    <li>{{ .Int "final_price" | toFloat | mul 0.01 | printf "$%.2f" }}</li>
+                    {{ $discount := .Int "discount_percent" }}
+                    <li{{ if ge $discount 40 }} class="color-positive"{{ end }}>{{ $discount }}% off</li>
+                  </ul>
+                </li>
+              {{ end }}
+              </ul>
+          - type: custom-api
+            title: Steam Top Sellers
+            cache: 12h
+            url: https://store.steampowered.com/api/featuredcategories?cc=us
+            template: |
+              <ul class="list list-gap-10 collapsible-contain" data-collapse-after="15">
+                  {{ range .JSON.Array "top_sellers.items" }}
+                  {{ if ne (.String "name") "Steam Deck" }}
+                  <li style="display: flex; align-items: center; gap: 1rem;">
+                      <img src="{{ .String "small_capsule_image" }}" alt="{{ .String "name" }}"
+                          style="width: 120px; height: auto; border-radius: 4px; flex-shrink: 0;">
+                      <div style="min-width: 0;">
+                          <a class="size-h4 color-highlight text-truncate" style="display: block;"
+                              href="https://store.steampowered.com/app/{{ .Int "id" }}/">
+                              {{ .String "name" }}
+                          </a>
+                          <ul class="list-horizontal-text">
+                              <li>{{ div (.Int "final_price" | toFloat) 100 | printf "$%.2f" }}</li>
+                              {{ $discount := .Int "discount_percent" }}
+                              {{ if gt $discount 0 }}
+                              <li{{ if ge $discount 40 }} class="color-positive" {{ end }}>
+                                  {{ $discount }}% off
+                  </li>
+                  {{ end }}
+              </ul>
+              </div>
+              </li>
+              {{ end }}
+              {{ end }}
+              </ul>
+
       - size: full
         widgets:
           - type: search
@@ -49,6 +200,22 @@ pages:
             new-tab: true
             autofocus: true
             placeholder: Search the web...
+          - type: extension
+            url: http://192.168.1.10:8080/graph/mcpeapsUnterstrichHD
+            allow-potentially-dangerous-html: true
+            parameters:
+              background-color: "#2E3440" # cell background
+              primary-color: "#A2BF8A" # cell foreground
+              svg-height: 150 # height for graph svg
+              show-months: true # show months on the graph
+              show-weekdays: true # show weekdays on the graph
+              font-size: 9 # size of weekdays & months text on graph
+
+              # if true, it will transition the hue from background
+              # to primary color per the number of commits.
+              # otherwise it will just use the background hue for
+              # 0 commits and the foreground hue for all others
+              transition-hue: true
           - type: group
             title: Repositories
             widgets:
@@ -156,8 +323,117 @@ pages:
                 {{ end }}
               </ul>
               {{ end }}
+          - type: custom-api
+            title: Nginx Proxy Manager
+            url: ${NGINX_PROXY_URL}/api/tokens
+            method: POST
+            body-type: json
+            body:
+              identity: ${NGINX_EMAIL_ID}
+              secret: ${NGINX_PASSWORD}
+            cache: 12h
+            options:
+              collapse-after: 6
+              show-icons: true
+              domain-name: ".localhost"
+              tooltip-enabled: true
+              # custom icons (example keys)
+              code: coder
+              paperless: paperlessngx
+              docker: docker
+              glance: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/glance-dark.svg
+              portainer: portainer
+            template: |
+              <style>
+                .widget-type-nginx li {
+                  margin-top: var(--list-half-gap); 
+                  border-top: 1px solid var(--color-separator);
+                  padding-top: var(--list-half-gap);
+                }
+                .widget-ngix-proxy-icon, .widget-ngix-proxy-icon-default  {
+                  display: block;
+                  filter: grayscale(0.4);
+                  object-fit: contain;
+                  aspect-ratio: 1 / 1;
+                  width: 2.7rem;
+                  opacity: 0.8;
+                  transition: filter 0.3s, opacity 0.3s;
+                }
+                // DISABLE THE BELOW CSS FOR COLOR ICONS 
+                :root[data-scheme="dark"] .widget-ngix-proxy-icon {
+                  filter: invert(100%); // this to invert colors for dark and light theme 
+                } 
+              </style>
 
+              {{ $defaultIconUrl := "https://cdn.jsdelivr.net/gh/selfhst/icons/svg/nginx-proxy-manager.svg" }}
+                 
+              {{ if eq .Response.StatusCode 200 }}
+                {{ $accessToken := .JSON.String "token" }}
+                {{
+                  $proxyHosts := newRequest (concat "${NGINX_PROXY_URL}" "/api/nginx/proxy-hosts")
+                    | withHeader "Authorization" (print "Bearer " $accessToken)
+                    | getResponse
+                }}
+                <ul  class="dynamic-columns list list-gap-15 list-with-separator  collapsible-container"  data-collapse-after="{{ .Options.IntOr "collapse-after" 6 }}">
+                  {{ range $proxyHosts.JSON.Array "" }}
+                    {{ if and (.String "domain_names.0") (.Bool "enabled")  }}
+                      
+                      {{ $proxy_url  := (concat (.String "forward_scheme") "://" (.String "domain_names.0") ) }}
+                      {{ $host_url   := (concat (.String "forward_scheme") "://" (.String "forward_host") ":" (.String "forward_port") ) }}
+                      {{ $subDomain  := .String "domain_names.0" | trimSuffix ($.Options.StringOr "domain-name" "") }}
 
+                      <li class="flex items-center gap-20" >
+                        <!-- Icon Section -->
+                        {{ if $.Options.BoolOr "show-icons" true }}
+                          <div class="shrink-0">
+                              {{ $iconUrl := $.Options.StringOr $subDomain $defaultIconUrl}}
+                              {{ if eq $iconUrl $defaultIconUrl }}
+                                <img class="widget-ngix-proxy-icon-default" src="{{ $defaultIconUrl }}" loading="lazy">
+                              {{ else }}
+                                {{ if ne (findMatch "://" $iconUrl)  "://" }} <!-- check if url is NOT provided -->
+                                  <img class="widget-ngix-proxy-icon" src="https://simpleicons.org/icons/{{$iconUrl}}.svg" loading="lazy">
+                                {{ else }}
+                                  <img class="widget-ngix-proxy-icon" src="{{ $iconUrl }}" loading="lazy">
+                                {{ end }}
+                              {{ end }}
+                          </div>
+                        {{ end }}
+
+                        <!-- Proxy URLs Section -->
+                        <div class="min-width-0 grow">
+                          <a href='{{ $proxy_url }}' class="color-highlight size-title-dynamic block" style="display: inline;" target="_blank" rel="noreferrer"
+                              {{if $.Options.BoolOr "tooltip-enabled" false}}data-popover-type="text" data-popover-text="{{$proxy_url}}"{{end}}
+                            >{{ $subDomain }}</a>
+                          <div class="flex items-center gap-10" style="margin-bottom: 5px">
+                            <div class="text-left">
+                                  ➔
+                            </div>
+                            <div class="size-h6 flex-1 text-left">
+                              <a href='{{ $host_url }}' target="_blank" rel="noreferrer">{{ $host_url }}</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    {{ end }}
+                  {{ end }}
+                </ul>
+
+              {{ else }}
+                <p class='color-negative'>Failed to get token: {{ .JSON.String "error.message" }} ({{ $.Response.Status }}) </p>
+              {{ end }}
+          - type: group
+            widgets:
+              - type: reddit
+                show-thumbnails: true
+                subreddit: pcgaming
+                style: horizontal-cards
+              - type: reddit
+                subreddit: games
+                style: horizontal-cards
+              - type: reddit
+                subreddit: gamingnews
+                limit: 7
+                style: horizontal-cards
       - size: small
         title: Infos
         widgets:
@@ -178,6 +454,200 @@ pages:
             hour-format: 24h # alternatively "24h"
             # Optionally hide the location from being displayed in the widget
             # hide-location: true
+          - type: extension
+            url: http://192.168.1.10:8080/stats/mcpeapsUnterstrichHD
+            allow-potentially-dangerous-html: true
+            parameters:
+            show_quartiles: true # whether to include "quartiles" in the stats
+          - type: custom-api
+            title: GitHub Notifications
+            url: https://api.github.com/notifications?all=true&per_page=20
+            headers:
+              Authorization: Bearer ${GITHUB_TOKEN}
+              Accept: application/vnd.github+json
+            template: |
+              <ul class="list list-gap-14 collapsible-container" data-collapse-after="6">
+              {{ range .JSON.Array "" }}
+                {{ $url := concat (.String "repository.html_url") "/actions" }}
+                {{ if ne (.String "subject.url") "" }}
+                  {{
+                    $notification := newRequest (.String "subject.url")
+                      | withHeader "Authorization" "Bearer ${GITHUB_TOKEN}"
+                      | getResponse
+                  }}
+                  {{ if eq $notification.Response.StatusCode 200 }}
+                    {{ $url = $notification.JSON.String "html_url" }}
+                  {{ else }}
+                    {{ $url = (.String "subject.url") | replaceMatches "repos\\/" "" | replaceMatches "api\\." "" | replaceAll "pulls" "pull" }}
+                  {{ end }}
+                {{ end }}
+                <li>
+                  <a href="{{ $url }}" class="size-title-dynamic {{ if .Bool "unread" }}color-primary-if-not-visited{{ else }}negative-color{{ end }}" target="_blank" rel="noreferrer">{{ .String "subject.title" }}</a>
+                  <ul class="list-horizontal-text flex-nowrap">
+                    <li class="min-width-0" {{ .String "updated_at" | parseTime "rfc3339" | toRelativeTime }}></li>
+                    <li class="min-width-0"><a target="_blank" href="{{ $url }}">{{ .String "repository.full_name" }}</a></li>
+                  </ul>
+                </li>
+              {{ end }}
+              </ul>
+          - type: custom-api
+            title: LeetCode Daily Question
+            cache: 6h
+            url: https://leetcode.com/graphql
+            method: POST
+            headers:
+              Accept: application/json
+            body-type: json
+            body:
+              query: |
+                query questionOfToday {
+                  activeDailyCodingChallengeQuestion {
+                    link
+                    question {
+                      questionId
+                      title
+                      difficulty
+                      topicTags {
+                        name
+                        slug
+                      }
+                    }
+                  }
+                }
+              operationName: questionOfToday
+            template: |
+              <div class="leetcode-card">
+                <style>
+                  .leetcode-card {
+                    max-width: 600px;
+                    margin: 8px auto;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+                  }
+                  .leetcode-card h1 {
+                    font-size: 24px;
+                    margin: 0 0 16px;
+                    line-height: 1.3;
+                  }
+                  .leetcode-card h1 a {
+                    color: #8CAAEE;
+                    text-decoration: none;
+                    transition: color 0.2s ease;
+                  }
+                  .leetcode-card h1 a:hover {
+                    color: #BAC8FF;
+                    text-decoration: underline;
+                  }
+                  .leetcode-card p {
+                    margin: 8px 0;
+                    color: #C6D0F5;
+                    font-size: 16px;
+                  }
+                  .leetcode-card .difficulty {
+                    font-weight: 600;
+                    color: #A5ADCE;
+                  }
+                  .leetcode-card .difficulty.Easy {
+                    color: #A6D189;
+                  }
+                  .leetcode-card .difficulty.Medium {
+                    color: #E5C890;
+                  }
+                  .leetcode-card .difficulty.Hard {
+                    color: #E78284;
+                  }
+                  .leetcode-card .topics {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                    margin: 12px 0;
+                  }
+                  .leetcode-card .topic-tag {
+                    background: #CA9EE6;
+                    color: #303446;
+                    padding: 4px 12px;
+                    border-radius: 16px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    transition: transform 0.2s ease;
+                  }
+                  .leetcode-card .topic-tag:hover {
+                    transform: scale(1.05);
+                  }
+                  .leetcode-card .premium {
+                    color: #E78284;
+                    font-weight: 600;
+                    margin-top: 12px;
+                  }
+                  @media (max-width: 600px) {
+                    .leetcode-card {
+                      padding: 16px;
+                      margin: 8px;
+                    }
+                    .leetcode-card h1 {
+                      font-size: 20px;
+                    }
+                    .leetcode-card p {
+                      font-size: 14px;
+                    }
+                    .leetcode-card .topic-tag {
+                      font-size: 12px;
+                      padding: 3px 10px;
+                    }
+                  }
+                </style>
+                <h1>
+                  <a href="https://leetcode.com{{ .JSON.String "data.activeDailyCodingChallengeQuestion.link" }}" target="_blank">
+                    {{ .JSON.String "data.activeDailyCodingChallengeQuestion.question.questionId" }} - {{ .JSON.String "data.activeDailyCodingChallengeQuestion.question.title" }}
+                  </a>
+                </h1>
+                <p class="difficulty {{ .JSON.String "data.activeDailyCodingChallengeQuestion.question.difficulty" }}"><strong>Difficulty:</strong> {{ .JSON.String "data.activeDailyCodingChallengeQuestion.question.difficulty" }}</p>
+                <p><strong>Topics:</strong></p>
+                <div class="topics">
+                  {{ if .JSON.Exists "data.activeDailyCodingChallengeQuestion.question.topicTags" }}
+                    {{ range .JSON.Array "data.activeDailyCodingChallengeQuestion.question.topicTags" }}
+                      <span class="topic-tag">{{ .String "name" }}</span>
+                    {{ end }}
+                  {{ else }}
+                    <span class="topic-tag">None</span>
+                  {{ end }}
+                </div>
+                {{ if .JSON.Bool "data.activeDailyCodingChallengeQuestion.question.paidOnly" }}
+                  <p class="premium">This is a Premium question</p>
+                {{ end }}
+              </div>
+          - type: custom-api
+            title: GitHub Repositories
+            url: https://api.github.com/user/repos
+            cache: 30m
+            parameters:
+              affiliation: owner
+              sort: updated
+              visibility: all
+            headers:
+              Authorization: Bearer ${GITHUB_TOKEN}
+              Accept: application/vnd.github.v3+json
+              User-Agent: Glance-Dashboard
+            template: |
+              <div class="github-repos">
+                <ul class="list list-gap-14 collapsible-container" data-collapse-after="5">
+                 {{ range .JSON.Array "" }}
+                    <li>
+                      <a class="size-h3 color-primary" href="{{ .String "html_url" }}">{{ .String "full_name" }}</a>
+                      <h3><a href="" target="_blank"></a></h3>
+                      <p>{{ .String "description" }}</p>
+                      <ul class="list-horizontal-text device-info">
+                        <li data-popover-type="html"><div data-popover-html="">Last Update</div>{{ formatTime "DateOnly" ( parseTime "RFC3339" (.String "updated_at") ) }}</li>
+                        <li data-popover-type="html"><div data-popover-html="">Visibility</div>{{ .String "visibility" }}</li>
+                        <li data-popover-type="html"><div data-popover-html="">Stars</div>{{ .Int "stargazers_count" }}✩</li>
+                        {{ if .String "language" }}
+                        <li data-popover-type="html"><div data-popover-html="">Language</div>{{ .String "language" }}</li>
+                        {{ end }}
+                      </ul>
+                    </li>
+                  {{ end }}
+                </ul>
+              </div>
           - type: group
             title: Services
             widgets:
@@ -187,24 +657,12 @@ pages:
                 sites:
                   - title: SearXNG
                     url: http://search.localhost/
-                  - title: Zoraxy
-                    url: http://zoraxy.localhost/
                   - title: IT Tools
                     url: http://it-tools.localhost/
-                  - title: Excalidraw Editor
-                    url: http://excalidraw.localhost/
-                  - title: Draw.io
-                    url: http://drawio.localhost/
                   - title: Stirling PDF
                     url: http://stirling-pdf.localhost/
-                  - title: HadgeDoc
-                    url: http://hedgedoc.localhost/
                   - title: phpMyAdmin
                     url: http://phpmyadmin.localhost/
-                  - title: Portainer
-                    url: http://portainer.localhost/
-                  - title: Authentik
-                    url: http://oauth2.localhost/
               - type: docker-containers
                 title: Docker Containers
                 hide-by-default: true

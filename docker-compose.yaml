@@ -2,6 +2,7 @@ services:
   npmplus:
     container_name: npmplus-comboom.sucht
     image: docker.io/zoeyvid/npmplus:latest # or ghcr.io/zoeyvid/npmplus:latest
+    pull_policy: always
     restart: always
     network_mode: host
     ipc: host # required when you want to use the openappsec attachment module
@@ -12,81 +13,81 @@ services:
     volumes:
       - "./npmplus/data:/data"
       - "./npmplus/www:/var/www" # optional, if you want to use NPMplus directly as webserver for html/php
-#      - "/path/to/old/npm/letsencrypt/folder:/etc/letsencrypt" # Only needed for first time migration from original nginx-proxy-manager to this fork, remove after migration
-#      - "shm-volume:/dev/shm/check-point" # required if you want to use the openappsec attachment module, also enable this volume at the end of this compose.yaml
+      #      - "/path/to/old/npm/letsencrypt/folder:/etc/letsencrypt" # Only needed for first time migration from original nginx-proxy-manager to this fork, remove after migration
+      #      - "shm-volume:/dev/shm/check-point" # required if you want to use the openappsec attachment module, also enable this volume at the end of this compose.yaml
       - "/etc/localtime:/etc/localtime"
     environment:
-      - "TZ=Europe/Berlin" # set timezone, required, set it to one of the values from the "TZ identifier" https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
-      - "ACME_EMAIL=mcpeaps_HD@outlook.com" # email address which should be used for acme, currently optional, may be required in the future, so I recommend you to enter your email here, optional for letsencrypt, but required for zerossl and google public ca
-#      - "ACME_SERVER=https://dv.acme-v02.api.pki.goog/directory (google public ca) / https://acme.zerossl.com/v2/DV90 (zerossl)" # acme server used when requesting/renewing certs using certbot, default is set to: https://acme-v02.api.letsencrypt.org/directory (letsencrypt)
-#      - "ACME_EAB_KID=123456789abcdef" # Key Identifier for External Account Binding for the acme server, not supported by letsencrypt, optional for zerossl (Login on theier site => Developer), but required for google public ca: https://cloud.google.com/certificate-manager/docs/public-ca-tutorial?hl=de#request-key-hmac
-#      - "ACME_EAB_HMAC_KEY=123456789abcdef" # HMAC key for External Account Binding for the acme server, not supported by letsencrypt, optional for zerossl (Login on theier site => Developer), but required for google public ca: https://cloud.google.com/certificate-manager/docs/public-ca-tutorial?hl=de#request-key-hmac
-#      - "ACME_MUST_STAPLE=true" # enables must-staple, default false, I recommend you to enable this if your CA supports it, supported by zerossl, google public ca ignores this, unsupported by letsencrypt (will fail), overrides ACME_OCSP_STAPLING to true
-#      - "ACME_OCSP_STAPLING=true" # enables ocsp stapling, default false, I recommend you to enable this if your CA supports it, supported by zerossl and google public ca
-#      - "ACME_PROFILE=shortlived" # sets the profile to be used from the acme server, default is "none" (so the default profile), supported by letsencrypt (https://letsencrypt.org/docs/profiles), if you use letsencrypt I would recommend the "shortlived" profile, until it is public you should use the "tlsserver" profile, note: both are limited to 25 domains per cert instead of 100 like the "classic" (default) profile
-#      - "ACME_KEY_TYPE=rsa" # which key type to use ecdsa or rsa, default and recommended: ecdsa
-      - "ACME_SERVER_TLS_VERIFY=false" # enables checking if ACME_SERVER has a valid TLS cert, default and recommended true
-#      - "CUSTOM_OCSP_STAPLING=true" # enables ocsp stapling for custom certs, default false, I recommend you to enable this if your custom certs support it
-#      - "PUID=1000" # set group id, needs to be a number greater or equal to 99, or equal to 0, default 0 (root)
-#      - "PGID=1000" # set user id, needs to be a number greater or equal to 99, or equal to 0, default 0 (root), requires PUID to be not 0
-#      - "NPM_PORT=82" # Port the NPM UI should be bound to, default 81, you need to change it, if you want to run multiple npm instances in network mode host
-#      - "GOA_PORT=92" # Port the goaccess should be bound to, default 91, you need to change it, if you want to run multiple npm with goaccess instances in network mode host
-#      - "IPV4_BINDING=127.0.0.1" # IPv4 address to bind, defaults to all
-#      - "NPM_IPV4_BINDING=127.0.0.1" # IPv4 address to bind for the NPM UI, defaults to all
-#      - "GOA_IPV4_BINDING=127.0.0.1" # IPv4 address to bind for the goaccess, defaults to all
-#      - "IPV6_BINDING=[::1]" # IPv6 address to bind, defaults to all
-#      - "NPM_IPV6_BINDING=[::1]" # IPv6 address to bind for the NPM UI, defaults to all
-#      - "GOA_IPV6_BINDING=[::1]" # IPv6 address to bind for goaccess, defaults to all
-#      - "DISABLE_IPV6=true" # fully disables listing on IPv6 and the IPv6 resolver of nginx, overrides IPV6_BINDING/NPM_IPV6_BINDING/GOA_IPV6_BINDING, default false
-#      - "NPM_LISTEN_LOCALHOST=true" # Binds the NPM UI only to localhost (IPv4+IPv6), overrides NPM_IPV4_BINDING/NPM_IPV6_BINDING, default false
-#      - "GOA_LISTEN_LOCALHOST=true" # Binds goaccess only to localhost (IPv4+IPv6), overrides NPM_IPV4_BINDING/NPM_IPV6_BINDING, default false
-#      - "DEFAULT_CERT_ID=1" # ID of cert, which should be used instead of dummycerts, default 0/unset/dummycerts
-#      - "HTTP_PORT=8080" # tcp port to use for http traffic, changing this may breaks certbot http challenge, default 80
-#      - "HTTPS_PORT=8443" # udp and tcp port to use for https traffic, changing this may breaks certbot http challenge, default 443
-#      - "HTTP3_ALT_SVC_PORT=8443" # please change this if the udp port the clients connect to is not 443, default 443
-#      - "DISABLE_HTTP=true" # disables nginx to listen on port 80, default false
-#      - "LISTEN_PROXY_PROTOCOL=true" # should listeners of http(s) hosts (proxy/redirect/dead and default) use proxy protocol instead of http(s)? default false, overrides DISABLE_H3_QUIC to true
-#      - "DISABLE_H3_QUIC=true" # disables nginx to listen on port 443 udp for default host and all your hosts, this will fully disable HTTP/3 and QUIC, even if you enable it inside the UI, not recommended, default false
-#      - "NGINX_QUIC_BPF=true" # enables nginxs quic_bpf (https://nginx.org/en/docs/http/ngx_http_v3_module.html#quic_bpf), you also need to add caps to the NPMplus container (see cap_add of this compose file) to use this, recommended, default false
-#      - "NGINX_LOG_NOT_FOUND=true" # Log 404 errors to the docker logs, unrelated to access logs, default false
-#      - "NGINX_404_REDIRECT=true" # Redirect to / instead of showing a 404 error page, default false
-#      - "NGINX_HSTS_SUBDOMAINS=false" # when enabling security headers, also enable hsts for subdomains, recommended, default true
-#      - "X_FRAME_OPTIONS=deny" # value to use for the X-Frame-Options header when enabling security headers, valid is "deny", "sameorigin" and "none" (means unset), default sameorigin, since this applies to all hosts I recommend you to instead keep the default and only change it for hosts which need it using the advanced config and more_set_headers
-#      - "NGINX_DISABLE_PROXY_BUFFERING=true" # Disables the proxy_buffering/proxy_request_buffering options of nginx by default for all hosts, default false, may not work if you use crowdsec/appsec
-#      - "NGINX_WORKER_PROCESSES=8" # value of worker_processes, default and recommended: auto
-#      - "NGINX_WORKER_CONNECTIONS=1024" # value of worker_connections, default: 512
-#      - "DISABLE_NGINX_BEAUTIFIER=true" # disables nginxbeautifier, useful when it fails parsing non-standard custom/advanced configs, default false
-#      - "FULLCLEAN=true" # Clean unused config folders, default false
-#      - "LOGROTATE=true" # Enables writing http access logs to /opt/npmplus/nginx/access.log, stream access logs to /opt/npmplus/nginx/stream.log and enables daily logrotation, default false
-#      - "LOGROTATIONS=7" # Set how often the access.log should be rotated until it is deleted, default 3
-      - "SKIP_IP_RANGES=false" # Skip feteching/whitelisting ip ranges from cloudflare, default true
-#      - "IPRT=3" # Set how many hours should be between updating ip ranges from aws and cloudflare, default 1, ignored when SKIP_IP_RANGES is true
-#      - "CRT=72" # Set how many hours should be between certbot trying to renew your certs, default 23
-#      - "GOA=true" # Enables goaccess (and overrides LOGROTATE to true), default false --- if you download the GeoLite2-Country.mmdb, GeoLite2-City.mmdb AND GeoLite2-ASN.mmdb file from MaxMind and place them in /opt/npmplus/goaccess/geoip it will automatically enable GeoIP in goaccess after restarting NPMplus (no need to change GOACLA below), you may also enable the geoipupdate container below (please change the timezone)
-#      - "GOACLA=--agent-list --real-os --double-decode --anonymize-ip --anonymize-level=2 --keep-last=7 --with-output-resolver --no-query-string" # Arguments that should be passed to goaccess, default: --agent-list --real-os --double-decode --anonymize-ip --anonymize-level=1 --keep-last=30 --with-output-resolver --no-query-string
-#      - "PHP82=true" # Activate PHP82, default false, supported, but not recommended, you should prefer to use a dedicated php-fpm container
-#      - "PHP82_APKS=php82-curl php82-openssl" # Add php extensions, also enables PHP82, see available packages here: https://pkgs.alpinelinux.org/packages?branch=v3.21&repo=community&arch=x86_64&name=php82-*, default none, requires PHP82
-#      - "PHP83=true" # Activate PHP83, default false, supported, but not recommended, you should prefer to use a dedicated php-fpm container
-#      - "PHP83_APKS=php83-curl php83-openssl" # Add php extensions, also enables PHP83, see available packages here: https://pkgs.alpinelinux.org/packages?branch=v3.21&repo=community&arch=x86_64&name=php83-*, default none, requires PHP83
-#      - "PHP84=true" # Activate PHP84, default false, supported, but not recommended, you should prefer to use a dedicated php-fpm container
-#      - "PHP84_APKS=php84-curl php84-openssl" # Add php extensions, also enables PHP84, see available packages here: https://pkgs.alpinelinux.org/packages?branch=v3.21&repo=community&arch=x86_64&name=php84-*, default none, requires PHP84
-#      - "PHP_APKS=php-pecl-apcu php-pecl-redis" # Add php extensions, see available packages here: https://pkgs.alpinelinux.org/packages?branch=v3.21&repo=community&arch=x86_64&name=php-*, default none, requires PHP82, PHP83 and/or PHP84, not recommended, please use PHP82_APKS, PHP83_APKS or PHP84_APKS
-#      - "INITIAL_ADMIN_EMAIL=mcpeaps_HD@outlook.com" # email to use instead of admin@example.org on first start of NPMplus for the initial user
-#      - "INITIAL_ADMIN_PASSWORD=fabian66" # password to use instead of a random password which is logged on first start of NPMplus for the initial user
-#      - "INITIAL_DEFAULT_PAGE=444" # default page to set on first start of NPMplus for the initial user, default congratulations, can be one of: 404, 444, redirect, congratulations or html
-#      - "ENABLE_PRERUN=true" # see readme, default off
-#      - "NGINX_LOAD_OPENAPPSEC_ATTACHMENT_MODULE=true" # loads the openappsec attachment module, you also need to set ipc and enable the shm-volume for NPMplus in this composse file, this will fully disable brotli, default false
-#      - "NGINX_LOAD_OPENTELEMETRY_MODULE=true" # loads the opentelemetry module, you need to configure this yourself, default false
-#      - "NGINX_LOAD_GEOIP2_MODULE=true" # loads the geoip2 module, you need to configure this yourself, default false
-#      - "NGINX_LOAD_NJS_MODULE=true" # loads the njs module (nginx JavaScript module), you need to configure this yourself, default false
-#      - "NGINX_LOAD_NTLM_MODULE=true" # loads the ntml module, you need to configure this yourself, default false
-#      - "NGINX_LOAD_VHOST_TRAFFIC_STATUS_MODULE=true" # loads the virtual host traffic status module, you need to configure this yourself, default false
+      TZ: "Europe/Berlin" # set timezone, required, set it to one of the values from the "TZ identifier" https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
+      ACME_EMAIL: "mcpeaps_HD@outlook.com" # email address which should be used for acme, currently optional, may be required in the future, so I recommend you to enter your email here, optional for letsencrypt, but required for zerossl and google public ca
+      #      ACME_SERVER: "https://dv.acme-v02.api.pki.goog/directory (google public ca) / https://acme.zerossl.com/v2/DV90 (zerossl)" # acme server used when requesting/renewing certs using certbot, default is set to: https://acme-v02.api.letsencrypt.org/directory (letsencrypt)
+      #      ACME_EAB_KID: "123456789abcdef" # Key Identifier for External Account Binding for the acme server, not supported by letsencrypt, optional for zerossl (Login on theier site => Developer), but required for google public ca: https://cloud.google.com/certificate-manager/docs/public-ca-tutorial?hl=de#request-key-hmac
+      #      ACME_EAB_HMAC_KEY: "123456789abcdef" # HMAC key for External Account Binding for the acme server, not supported by letsencrypt, optional for zerossl (Login on theier site => Developer), but required for google public ca: https://cloud.google.com/certificate-manager/docs/public-ca-tutorial?hl=de#request-key-hmac
+      #      ACME_MUST_STAPLE: "true" # enables must-staple, default false, I recommend you to enable this if your CA supports it, supported by zerossl, google public ca ignores this, unsupported by letsencrypt (will fail), overrides ACME_OCSP_STAPLING to true
+      #      ACME_OCSP_STAPLING: "true" # enables ocsp stapling, default false, I recommend you to enable this if your CA supports it, supported by zerossl and google public ca
+      #      ACME_PROFILE: "shortlived" # sets the profile to be used from the acme server, default is "none" (so the default profile), supported by letsencrypt (https://letsencrypt.org/docs/profiles), if you use letsencrypt I would recommend the "shortlived" profile, until it is public you should use the "tlsserver" profile, note: both are limited to 25 domains per cert instead of 100 like the "classic" (default) profile
+      ACME_KEY_TYPE: "rsa" # which key type to use ecdsa or rsa, default and recommended: ecdsa
+      ACME_SERVER_TLS_VERIFY: "false" # enables checking if ACME_SERVER has a valid TLS cert, default and recommended true
+      #CUSTOM_OCSP_STAPLING: "true" # enables ocsp stapling for custom certs, default false, I recommend you to enable this if your custom certs support it
+      #      PUID: "1000" # set group id, needs to be a number greater or equal to 99, or equal to 0, default 0 (root)
+      #      PGID: "1000" # set user id, needs to be a number greater or equal to 99, or equal to 0, default 0 (root), requires PUID to be not 0
+      #      NPM_PORT: "82" # Port the NPM UI should be bound to, default 81, you need to change it, if you want to run multiple npm instances in network mode host
+      #      GOA_PORT: "92" # Port the goaccess should be bound to, default 91, you need to change it, if you want to run multiple npm with goaccess instances in network mode host
+      #      IPV4_BINDING: "127.0.0.1" # IPv4 address to bind, defaults to all
+      #      NPM_IPV4_BINDING: "127.0.0.1" # IPv4 address to bind for the NPM UI, defaults to all
+      #      GOA_IPV4_BINDING: "127.0.0.1" # IPv4 address to bind for the goaccess, defaults to all
+      #      IPV6_BINDING: "[::1]" # IPv6 address to bind, defaults to all
+      #      NPM_IPV6_BINDING: "[::1]" # IPv6 address to bind for the NPM UI, defaults to all
+      #      GOA_IPV6_BINDING: "[::1]" # IPv6 address to bind for goaccess, defaults to all
+      #      DISABLE_IPV6: "true" # fully disables listing on IPv6 and the IPv6 resolver of nginx, overrides IPV6_BINDING/NPM_IPV6_BINDING/GOA_IPV6_BINDING, default false
+      #      NPM_LISTEN_LOCALHOST: "true" # Binds the NPM UI only to localhost (IPv4+IPv6), overrides NPM_IPV4_BINDING/NPM_IPV6_BINDING, default false
+      #      GOA_LISTEN_LOCALHOST: "true" # Binds goaccess only to localhost (IPv4+IPv6), overrides NPM_IPV4_BINDING/NPM_IPV6_BINDING, default false
+      #      DEFAULT_CERT_ID: "1" # ID of cert, which should be used instead of dummycerts, default 0/unset/dummycerts
+      #      HTTP_PORT: "8080" # tcp port to use for http traffic, changing this may breaks certbot http challenge, default 80
+      #      HTTPS_PORT: "8443" # udp and tcp port to use for https traffic, changing this may breaks certbot http challenge, default 443
+      #      HTTP3_ALT_SVC_PORT: "8443" # please change this if the udp port the clients connect to is not 443, default 443
+      #      DISABLE_HTTP: "true" # disables nginx to listen on port 80, default false
+      #      LISTEN_PROXY_PROTOCOL: "true" # should listeners of http(s) hosts (proxy/redirect/dead and default) use proxy protocol instead of http(s)? default false, overrides DISABLE_H3_QUIC to true
+      #      DISABLE_H3_QUIC: "true" # disables nginx to listen on port 443 udp for default host and all your hosts, this will fully disable HTTP/3 and QUIC, even if you enable it inside the UI, not recommended, default false
+      NGINX_QUIC_BPF: "true" # enables nginxs quic_bpf (https://nginx.org/en/docs/http/ngx_http_v3_module.html#quic_bpf), you also need to add caps to the NPMplus container (see cap_add of this compose file) to use this, recommended, default false
+      NGINX_LOG_NOT_FOUND: "true" # Log 404 errors to the docker logs, unrelated to access logs, default false
+      NGINX_404_REDIRECT: "true" # Redirect to / instead of showing a 404 error page, default false
+      NGINX_HSTS_SUBDOMAINS: "true" # when enabling security headers, also enable hsts for subdomains, recommended, default true
+      #      X_FRAME_OPTIONS: "deny" # value to use for the X-Frame-Options header when enabling security headers, valid is "deny", "sameorigin" and "none" (means unset), default sameorigin, since this applies to all hosts I recommend you to instead keep the default and only change it for hosts which need it using the advanced config and more_set_headers
+      #      NGINX_DISABLE_PROXY_BUFFERING: "true" # Disables the proxy_buffering/proxy_request_buffering options of nginx by default for all hosts, default false, may not work if you use crowdsec/appsec
+      #      NGINX_WORKER_PROCESSES: "8" # value of worker_processes, default and recommended: auto
+      #      NGINX_WORKER_CONNECTIONS: "1024" # value of worker_connections, default: 512
+      #      DISABLE_NGINX_BEAUTIFIER: "true" # disables nginxbeautifier, useful when it fails parsing non-standard custom/advanced configs, default false
+      #      FULLCLEAN: "true" # Clean unused config folders, default false
+      #      LOGROTATE: "true" # Enables writing http access logs to /opt/npmplus/nginx/access.log, stream access logs to /opt/npmplus/nginx/stream.log and enables daily logrotation, default false
+      #      LOGROTATIONS: "7" # Set how often the access.log should be rotated until it is deleted, default 3
+      SKIP_IP_RANGES: "false" # Skip feteching/whitelisting ip ranges from cloudflare, default true
+    #      IPRT: "3" # Set how many hours should be between updating ip ranges from aws and cloudflare, default 1, ignored when SKIP_IP_RANGES is true
+    #      CRT: "72" # Set how many hours should be between certbot trying to renew your certs, default 23
+    #      GOA: "true" # Enables goaccess (and overrides LOGROTATE to true), default false --- if you download the GeoLite2-Country.mmdb, GeoLite2-City.mmdb AND GeoLite2-ASN.mmdb file from MaxMind and place them in /opt/npmplus/goaccess/geoip it will automatically enable GeoIP in goaccess after restarting NPMplus (no need to change GOACLA below), you may also enable the geoipupdate container below (please change the timezone)
+    #      GOACLA: "--agent-list --real-os --double-decode --anonymize-ip --anonymize-level=2 --keep-last=7 --with-output-resolver --no-query-string" # Arguments that should be passed to goaccess, default: --agent-list --real-os --double-decode --anonymize-ip --anonymize-level=1 --keep-last=30 --with-output-resolver --no-query-string
+    #      PHP82: "true" # Activate PHP82, default false, supported, but not recommended, you should prefer to use a dedicated php-fpm container
+    #      PHP82_APKS: "php82-curl php82-openssl" # Add php extensions, also enables PHP82, see available packages here: https://pkgs.alpinelinux.org/packages?branch=v3.21&repo=community&arch=x86_64&name=php82-*, default none, requires PHP82
+    #      PHP83: "true" # Activate PHP83, default false, supported, but not recommended, you should prefer to use a dedicated php-fpm container
+    #      PHP83_APKS: "php83-curl php83-openssl" # Add php extensions, also enables PHP83, see available packages here: https://pkgs.alpinelinux.org/packages?branch=v3.21&repo=community&arch=x86_64&name=php83-*, default none, requires PHP83
+    #      PHP84: "true" # Activate PHP84, default false, supported, but not recommended, you should prefer to use a dedicated php-fpm container
+    #      PHP84_APKS: "php84-curl php84-openssl" # Add php extensions, also enables PHP84, see available packages here: https://pkgs.alpinelinux.org/packages?branch=v3.21&repo=community&arch=x86_64&name=php84-*, default none, requires PHP84
+    #      PHP_APKS: "php-pecl-apcu php-pecl-redis" # Add php extensions, see available packages here: https://pkgs.alpinelinux.org/packages?branch=v3.21&repo=community&arch=x86_64&name=php-*, default none, requires PHP82, PHP83 and/or PHP84, not recommended, please use PHP82_APKS, PHP83_APKS or PHP84_APKS
+    #      INITIAL_ADMIN_EMAIL: "mcpeaps_HD@outlook.com" # email to use instead of admin@example.org on first start of NPMplus for the initial user
+    #      INITIAL_ADMIN_PASSWORD: "fabian66" # password to use instead of a random password which is logged on first start of NPMplus for the initial user
+    #      INITIAL_DEFAULT_PAGE: "444" # default page to set on first start of NPMplus for the initial user, default congratulations, can be one of: 404, 444, redirect, congratulations or html
+    #      ENABLE_PRERUN: "true" # see readme, default off
+    #      NGINX_LOAD_OPENAPPSEC_ATTACHMENT_MODULE: "true" # loads the openappsec attachment module, you also need to set ipc and enable the shm-volume for NPMplus in this composse file, this will fully disable brotli, default false
+    #      NGINX_LOAD_OPENTELEMETRY_MODULE: "true" # loads the opentelemetry module, you need to configure this yourself, default false
+    #      NGINX_LOAD_GEOIP2_MODULE: "true" # loads the geoip2 module, you need to configure this yourself, default false
+    #      NGINX_LOAD_NJS_MODULE: "true" # loads the njs module (nginx JavaScript module), you need to configure this yourself, default false
+    #      NGINX_LOAD_NTLM_MODULE: "true" # loads the ntml module, you need to configure this yourself, default false
+    #      NGINX_LOAD_VHOST_TRAFFIC_STATUS_MODULE: "true" # loads the virtual host traffic status module, you need to configure this yourself, default false
     extra_hosts:
       - "host.docker.internal:host-gateway"
     deploy:
       resources:
         limits:
-          cpus: '1.0'
+          cpus: "1.0"
           memory: 1G
     labels:
       glance.name: Nginx Proxy Manager Plus
@@ -106,7 +107,7 @@ services:
         ipv4_address: 192.168.1.3
         ipv6_address: fd07:b51a:cc66:d001::0003
     environment:
-      - TZ=Europe/Berlin
+      TZ: "Europe/Berlin"
     ports:
       - "8082:8080"
     volumes:
@@ -147,19 +148,19 @@ services:
     image: stirlingtools/stirling-pdf:latest-fat
     pull_policy: always
     ports:
-      - '8080:8080'
+      - "8080:8080"
     volumes:
       - ./pdf/trainingData:/usr/share/tessdata #Required for extra OCR languages
       - ./pdf/extraConfigs:/configs
       - ./pdf/customFiles:/customFiles/
       - ./pdf/logs:/logs/
     environment:
-      - DOCKER_ENABLE_SECURITY=false
-      - SERVER_HOSTNAME=stirling-pdf.localhost
+      DOCKER_ENABLE_SECURITY: "false"
+      SERVER_HOSTNAME: "stirling-pdf.localhost"
     deploy:
       resources:
         limits:
-          cpus: '4.0'
+          cpus: "4.0"
     networks:
       local-services:
         ipv4_address: 192.168.1.5
@@ -173,38 +174,15 @@ services:
       glance.id: stirling-pdf
       glance.tags: "type:pdf, type:conversion, type:service, type:web, type:gui"
       glance.hide: false
-  portainer:
-    container_name: portainer-comboom.sucht
-    image: portainer/portainer-ce:latest
-    #pull_policy: always
-    ports:
-            - '8083:9000'
-            - '8084:9443'
-            - '8000:8000'
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer-data:/data
-    restart: always
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.30
-        ipv6_address: fd07:b51a:cc66:d001::001E
-    labels:
-      glance.name: Portainer
-      glance.icon: si:portainer
-      glance.url: https://portainer.localhost
-      glance.description: Docker management
-      glance.id: portainer
-      glance.tags: "type:docker, type:management, type:service, type:web, type:gui"
-      glance.hide: false
+
   mariadb:
     image: mariadb:latest
     pull_policy: always
     container_name: mariadb-comboom.sucht
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=fabian66
-      - MYSQL_INITDB_SKIP_TZINFO=1
+      MYSQL_ROOT_PASSWORD: "fabian66"
+      MYSQL_INITDB_SKIP_TZINFO: "1"
     networks:
       local-services:
         ipv4_address: 192.168.1.6
@@ -238,7 +216,7 @@ services:
       - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
       - ./phpmyadmin/themes:/var/www/html/themes
     environment:
-      - PMA_ARBITRARY=1
+      PMA_ARBITRARY: "1"
     networks:
       local-services:
         ipv4_address: 192.168.1.7
@@ -272,71 +250,22 @@ services:
       glance.tags: "type:web,type:dashboard"
       glance.hide: false
 
-  postgres:
-    container_name: postgres-comboom.sucht
+  glance-github-graph:
+    image: haumea/glance-github-graph:latest
+    container_name: glance-github-graph-comboom.sucht
     pull_policy: always
+    restart: always
+    ports:
+      - 8084:8080
+    environment:
+      - CACHE_ENABLED=true
+      - CACHE_TYPE=memory
+      - CACHE_DURATION_SECS=3600
     networks:
       local-services:
-        ipv4_address: 192.168.1.8
-        ipv6_address: fd07:b51a:cc66:d001::0008
-    image: postgres:17
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_MULTIPLE_DATABASES: hedgedoc,authentik,webstudio,pgadmin
-      PGDATA: /data
-    volumes:
-      - ./postgres/data:/data
-      - ./postgres/init/multiple-dbs.sh:/docker-entrypoint-initdb.d/multiple-dbs.sh:ro
-    ports:
-      - "5432:5432"
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d authentik -U postgres"]
-      start_period: 20s
-      interval: 30s
-      retries: 5
-      timeout: 5s
-    labels:
-      glance.name: PostgreSQL
-      glance.icon: si:postgresql
-      glance.description: Database
-      glance.id: postgres
-      glance.tags: "type:database"
-      glance.hide: false
-  hadgedoc:
-    # Make sure to use the latest release from https://hedgedoc.org/latest-release
-    image: quay.io/hedgedoc/hedgedoc:1.10.2
-    container_name: hedgedoc-comboom.sucht
-    environment:
-      - CMD_DOMAIN=hedgedoc.localhost
-      - CMD_PORT=8087
-      - CMD_PROTOCOL_USESSL=false
-      - CMD_URL_ADDPORT=false
-      - CMD_EMAIL=true
-      - CMD_ALLOW_EMAIL_REGISTER=true
-      - CMD_SESSION_SECRET=ygjkhhgfgcev654ertzu6trdcb7t6r6dsrtb675vrb
-      - CMD_DB_URL=mysql://hedgedoc:hedgedoc@mariadb-comboom.sucht:3306/hedgedoc
-    depends_on:
-      - mariadb
-    volumes:
-      - ./hedgedoc/public/uploads:/hedgedoc/public/uploads
-    ports:
-      - "8087:8087"
-    restart: always
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.9
-        ipv6_address: fd07:b51a:cc66:d001::0009
-    labels:
-      glance.name: HedgeDoc
-      glance.icon: si:hedgedoc
-      glance.url: https://hedgedoc.localhost
-      glance.description: Collaborative markdown editor
-      glance.id: hedgedoc
-      glance.tags: "type:web,type:editor,type:service,type:gui"
-      glance.hide: false
-    pull_policy: always
+        ipv4_address: 192.168.1.10
+        ipv6_address: fd07:b51a:cc66:d001::000A
+
   redis:
     image: redis:latest
     pull_policy: always
@@ -346,8 +275,8 @@ services:
       - redis-data:/data
     networks:
       local-services:
-        ipv4_address: 192.168.1.10
-        ipv6_address: fd07:b51a:cc66:d001::000A
+        ipv4_address: 192.168.1.8
+        ipv6_address: fd07:b51a:cc66:d001::0008
     ports:
       - "6379:6379"
     healthcheck:
@@ -363,122 +292,7 @@ services:
       glance.icon: si:redis
       glance.tags: "type:cache,type:queue"
       glance.hide: false
-  hbbs:
-    container_name: hbbs-comboom.sucht
-    image: rustdesk/rustdesk-server:latest
-    pull_policy: always
-    command: hbbs -r 192.168.1.13
-    volumes:
-      - ./rustdesk/data:/root
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.12
-        ipv6_address: fd07:b51a:cc66:d001::000C
-    ports:
-      - "21114:21114"
-      - "21115:21115"
-      - "21116:21116"
-      - "21118:21118"
-    environment:
-      - ALWAYS_USE_RELAY=Y
-    depends_on:
-      - hbbr
-    restart: always
-    labels:
-      glance.name: RustDesk Server
-      glance.description: RustDesk Server
-      glance.id: rustdesk-server
-      glance.icon: si:rustdesk
-      glance.tags: "type:management,type:service,type:web,type:gui"
-      glance.hide: false
-  hbbr:
-    container_name: hbbr-comboom.sucht
-    image: rustdesk/rustdesk-server:latest
-    pull_policy: always
-    command: hbbr
-    volumes:
-      - ./rustdesk/data:/root
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.13
-        ipv6_address: fd07:b51a:cc66:d001::000D
-    restart: always
-    ports:
-      - "21117:21117"
-      - "21119:21119"
-    labels:
-      glance.name: RustDesk Relay Server
-      glance.description: RustDesk Relay Server
-      glance.id: rustdesk-relay-server
-      glance.icon: si:rustdesk
-      glance.tags: "type:management,type:service,type:web,type:gui,type:relay"
-      glance.hide: false
-  server:
-    image: ghcr.io/goauthentik/server
-    restart: always
-    pull_policy: always
-    command: server
-    environment:
-      AUTHENTIK_SECRET_KEY: ik7CvVpcst7WtNzTmyQvJbd6RirMUZpZ7tsVeqvRMG9GTwM4fEHkpiXf81+6IjJ7atBFAuyyKTuf6sZO
-      AUTHENTIK_REDIS__HOST: 192.168.1.10
-      AUTHENTIK_POSTGRESQL__HOST: 192.168.1.8
-      AUTHENTIK_POSTGRESQL__USER: postgres
-      AUTHENTIK_POSTGRESQL__NAME: authentik
-      AUTHENTIK_POSTGRESQL__PASSWORD: postgres
-    volumes:
-      - ./authentik/media:/media
-      - ./authentik/custom-templates:/templates
-    network_mode: host
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    labels:
-      glance.name: Authentik Server
-      glance.description: OAuth2 Auth Server
-      glance.id: authentik-server
-      glance.url: https://oauth2.localhost
-      glance.icon: si:authentik
-      glance.tags: "type:management,type:service,type:web,type:gui,type:auth"
-      glance.hide: false
-  worker:
-    image: ghcr.io/goauthentik/server
-    restart: always
-    pull_policy: always
-    command: worker
-    environment:
-      AUTHENTIK_SECRET_KEY: ik7CvVpcst7WtNzTmyQvJbd6RirMUZpZ7tsVeqvRMG9GTwM4fEHkpiXf81+6IjJ7atBFAuyyKTuf6sZO
-      AUTHENTIK_REDIS__HOST: 192.168.1.10
-      AUTHENTIK_POSTGRESQL__HOST: 192.168.1.8
-      AUTHENTIK_POSTGRESQL__USER: postgres
-      AUTHENTIK_POSTGRESQL__NAME: authentik
-      AUTHENTIK_POSTGRESQL__PASSWORD: postgres
-    # `user: root` and the docker socket volume are optional.
-    # See more for the docker socket integration here:
-    # https://goauthentik.io/docs/outposts/integrations/docker
-    # Removing `user: root` also prevents the worker from fixing the permissions
-    # on the mounted folders, so when removing this make sure the folders have the correct UID/GID
-    # (1000:1000 by default)
-    user: root
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./authentik/media:/media
-      - ./authentik/certs:/certs
-      - ./authentik/custom-templates:/templates
-    network_mode: host
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    labels:
-      glance.name: Authentik Worker Server
-      glance.description: OAuth2 Auth Worker Server
-      glance.id: authentik-worker
-      glance.url: https://oauth2.localhost
-      glance.icon: si:authentik
-      glance.tags: "type:management,type:service,type:web,type:gui,type:auth"
+
   #     glance.hide: false
   # wordpress:
   #   image: bitnami/wordpress
@@ -512,169 +326,6 @@ services:
   #   pull_policy: always
   #   depends_on:
   #     - mariadb
-  kroki:
-    image: yuzutech/kroki
-    container_name: kroki-comboom.sucht
-    pull_policy: always
-    restart: always
-    depends_on:
-      - kroki-mermaid
-      - kroki-bpmn
-      - kroki-excalidraw
-      - kroki-drawio
-    environment:
-      - KROKI_MERMAID_HOST=kroki-mermaid
-      - KROKI_BPMN_HOST=kroki-bpmn
-      - KROKI_EXCALIDRAW_HOST=kroki-excalidraw
-      - KROKI_DIAGRAMSNET_HOST=kroki-drawio
-    ports:
-      - "8091:8000"
-    # If you do need to explicitly mount /tmp, make sure to include the exec option
-    tmpfs:
-      - /tmp:exec
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.15
-        ipv6_address: fd07:b51a:cc66:d001::000F
-  kroki-mermaid:
-    image: yuzutech/kroki-mermaid
-    container_name: kroki-mermaid-comboom.sucht
-    pull_policy: always
-    restart: always
-    expose:
-      - "8002"
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.16
-        ipv6_address: fd07:b51a:cc66:d001::0010
-  kroki-bpmn:
-    image: yuzutech/kroki-bpmn
-    container_name: kroki-bpmn-comboom.sucht
-    pull_policy: always
-    restart: always
-    expose:
-      - "8003"
-  kroki-excalidraw:
-    image: yuzutech/kroki-excalidraw:latest
-    container_name: kroki-excalidraw-comboom.sucht
-    restart: always
-    pull_policy: always
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.17
-        ipv6_address: fd07:b51a:cc66:d001::0011
-    expose:
-      - "8004"
-  kroki-drawio:
-    image: yuzutech/kroki-diagramsnet
-    container_name: kroki-drawio-comboom.sucht
-    restart: always
-    pull_policy: always
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.18
-        ipv6_address: fd07:b51a:cc66:d001::0012
-    expose:
-      - "8005"
-  excalidraw:
-    image: excalidraw/excalidraw:latest
-    container_name: excalidraw-comboom.sucht
-    restart: always
-    pull_policy: always
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.19
-        ipv6_address: fd07:b51a:cc66:d001::0013
-    ports:
-      - "8092:80"
-    environment:
-      - COLLAB_SERVER_URL=wss://excalidraw-room.comboompunktsucht.app
-    labels:
-      glance.name: Excalidraw Editor
-      glance.description: Excalidraw is a whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.
-      glance.id: excalidraw
-      glance.url: https://excalidraw.localhost
-      glance.icon: si:excalidraw
-      glance.tags: "type:service,type:web,type:gui"
-      glance.hide: false
-  excalidraw-room:
-    image: excalidraw/excalidraw-room:latest
-    container_name: excalidraw-room-localhost
-    restart: always
-    pull_policy: always
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.20
-        ipv6_address: fd07:b51a:cc66:d001::0014
-    ports:
-      - "8093:80"
-    labels:
-      glance.name: Excalidraw Room
-      glance.description: Excalidraw is a whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.
-      glance.id: excalidraw-room
-      glance.url: https://kroki.localhost/excalidraw
-      glance.icon: si:excalidraw
-      glance.tags: "type:service,type:web,type:gui"
-      glance.hide: false
-  drawio:
-    image: jgraph/drawio
-    container_name: drawio-comboom.sucht
-    restart: always
-    pull_policy: always
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.21
-        ipv6_address: fd07:b51a:cc66:d001::0015
-    ports:
-      - "8094:8080"
-    labels:
-      glance.name: Draw.io
-      glance.description: Draw.io is a JavaScript, client-side editor for general diagramming.
-      glance.id: drawio
-      glance.url: https://drawio.localhost
-      glance.icon: di:drawio
-      glance.tags: "type:service,type:web,type:gui"
-      glance.hide: false
-  plantuml:
-    image: plantuml/plantuml-server:latest
-    container_name: plantuml-comboom.sucht
-    pull_policy: always
-    restart: always
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.22
-        ipv6_address: fd07:b51a:cc66:d001::0016
-    labels:
-      glance.name: PlantUML
-      glance.description: PlantUML
-      glance.id: plantuml
-      glance.url: https://plantuml.localhost
-      glance.icon: di:plantuml
-      glance.tags: "type:service,type:web,type:gui"
-      glance.hide: false
-    ports:
-      - "8097:8080"
-  open-webui:
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    volumes:
-      - ./open-webui:/app/backend/data
-    container_name: open-webui-comboom.sucht
-    restart: always
-    image: ghcr.io/open-webui/open-webui:main
-    pull_policy: always
-    network_mode: host
-    environment:
-      - PORT=8095
-      - OLLAMA_BASE_URL=http://127.0.0.1:11434
-    labels:
-      glance.name: Open-Webui
-      glance.description: Open-Webui is a ui for OpenAi-API or Ollama
-      glance.id: open-webui
-      glance.url: https://open-webui.localhost
-      glance.icon: di:ollama
-      glance.tags: "type:service,type:web,type:gui"
-      glance.hide: false
 
   adguardhome:
     image: adguard/adguardhome:edge
@@ -712,161 +363,20 @@ services:
       glance.tags: "type:service,type:web,type:gui"
       glance.hide: false
 
-  synapse-cbps:
-    image: matrixdotorg/synapse:latest
-    container_name: synapse-comboom.sucht
-    restart: always
-    pull_policy: always
-    volumes:
-      - ./synapse-cbps:/data:rw
-    environment:
-      - SYNAPSE_HTTP_PORT=8100
-    ports:
-      - "8100:8100"   # Client-API (http)
-      #- "8101:8448"   # Federation (https)
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.23
-        ipv6_address: fd07:b51a:cc66:d001::0017
-    labels:
-      glance.name: Matrix Server (comboom.sucht)
-      glance.description: Matrix Server for comboom.sucht
-      glance.id: synapse-cbps
-      glance.url: https://matrix.comboompunktsucht.app
-      glance.icon: di:matrix
-      glance.tags: "type:service,type:web,type:gui"
-      glance.hide: false
-  synapse-mahd:
-    image: matrixdotorg/synapse:latest
-    container_name: synapse-mcpeaps_HD
-    restart: always
-    pull_policy: always
-    volumes:
-      - ./synapse-mahd:/data:rw
-    environment:
-      - SYNAPSE_HTTP_PORT=8102
-    ports:
-      - "8102:8102"   # Client-API (http)
-      #- "8103:8448"   # Federation (https)
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.24
-        ipv6_address: fd07:b51a:cc66:d001::0018
-    labels:
-      glance.name: Matrix Server (mcpeaps_HD)
-      glance.description: Matrix Server for mcpeaps_HD
-      glance.id: synapse-cbps
-      glance.url: https://matrix.mcpeapsunterstrichhd.dev
-      glance.icon: di:matrix
-      glance.tags: "type:service,type:web,type:gui"
-      glance.hide: false
-
-  element:
-    image: vectorim/element-web:latest
-    container_name: element
-    restart: unless-stopped
-    volumes:
-      - ./element/config.json:/app/config.json:ro
-    ports:
-      - "8104:80"
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.25
-        ipv6_address: fd07:b51a:cc66:d001::0019
-    labels:
-      glance.name: Element Web
-      glance.description: Matrix Web Client
-      glance.id: synapse-cbps
-      glance.url: https://chat.localhost
-      glance.icon: di:element
-      glance.tags: "type:service,type:web,type:gui"
-      glance.hide: false
-  grafana:
-    pull_policy: always
-    restart: always
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.27
-        ipv6_address: fd07:b51a:cc66:d001::001B
-    container_name: grafana-comboom.sucht
-    ports:
-      - 8105:8105
-    volumes:
-      - ./grafana/etc:/etc/grafana
-      - ./grafana/var/lib:/var/lib/grafana
-      - ./grafana/usr/share:/usr/share/grafana
-      #- ./grafana/var/log/:/var/log/grafana
-    environment:
-      GF_DEFAULT_INSTANCE_NAME: "grafana-comboom.sucht"
-      GF_DEFAULT_APP_MODE: "production"
-      GF_SECURITY_ADMIN_USER: "mahd"
-      GF_SECURITY_ADMIN_EMAIL: "mcpeaps_HD@outlook.com"
-      GF_SECURITY_ADMIN_PASSWORD: "fabian66"
-      GF_SERVER_HTTP_PORT: 8105
-      GF_SERVER_ENABLE_GZIP: true
-      GF_DATE_FORMATS_DEFAULT_TIMEZONE: "browser"
-      GF_DATE_FORMATS_DEFAULT_WEEK_START: "browser"
-      GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
-      GF_AUTH_ANONYMOS_ORG_NAME: "comboom.sucht"
-    tty: true
-    stdin_open: true
-    image: grafana/grafana
   uptime-kuma:
-    image: 'louislam/uptime-kuma'
+    image: "louislam/uptime-kuma"
+    pull_policy: always
     container_name: uptime-kuma-comboom.sucht
     volumes:
-        - './uptime-kuma:/app/data'
-        - /var/run/docker.sock:/var/run/docker.sock:ro
+      - "./uptime-kuma:/app/data"
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
-        - '8106:3001'
+      - "8106:3001"
     restart: always
     networks:
       local-services:
-        ipv4_address: 192.168.1.28
-        ipv6_address: fd07:b51a:cc66:d001::001C
-
-  pgadmin4:
-    container_name: pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=mcpeaps_HD@outlook.com
-      - PGADMIN_DEFAULT_PASSWORD=fabian66
-      # - PGADMIN_CONFIG_DATABASE_URI=postgres://postgres:postgres@192.168.1.8:5432/pgadmin
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.29
-        ipv6_address: fd07:b51a:cc66:d001::001D
-    image: dpage/pgadmin4
-    pull_policy: always
-    restart: always
-    ports:
-      - "8107:80"
-    volumes:
-      - ./pgadmin/var/lib/:/var/lib/pgadmin
-      - ./pgadmin/servers.json:/var/lib/pgadmin/storage/mcpeaps_HD_outlook.com/servers.json
-
-  gitlab:
-    image: gitlab/gitlab-ce:latest
-    container_name: gitlab-comboo.sucht
-    restart: always
-    pull_policy: always
-    hostname: 'gitlab.localhost'
-    environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://gitlab.localhost:80'
-        gitlab_rails['gitlab_shell_ssh_port'] = 2424
-    ports:
-      - '8108:80'
-      - '8109:443'
-      - '2424:22'
-    volumes:
-      - './gitlab/config:/etc/gitlab'
-      - './gitlab/logs:/var/log/gitlab'
-      - './gitlab/data:/var/opt/gitlab'
-    shm_size: '256m'
-    networks:
-      local-services:
-        ipv4_address: 192.168.1.31
-        ipv6_address: fd07:b51a:cc66:d001::001F
+        ipv4_address: 192.168.1.9
+        ipv6_address: fd07:b51a:cc66:d001::009
 
 networks:
   local-services:
@@ -881,14 +391,5 @@ networks:
           gateway: fd07:b51a:cc66:d001::02
           ip_range: fd07:b51a:cc66:d001::/64
 
-
-
-
 volumes:
   redis-data:
-  portainer-data:
-#  shm-volume:
-#    driver: local
-#    driver_opts:
-#      type: tmpfs
-#      device: tmpfs
