@@ -200,6 +200,26 @@ pages:
             new-tab: true
             autofocus: true
             placeholder: Search the web...
+            bangs:
+              - title: Youtube
+                shortcut: "!yt"
+                url: https://www.youtube.com/results?search_query={QUERY}
+              - title: Github
+                shortcut: "!gh"
+                url: https://github.com/search?q={QUERY}
+              - title: Technische Universität Berlin
+                shortcut: "!tub"
+                url: https://www.tu.berlin/suche?tx_solr[q]={QUERY}
+              - title: Technische Universität Berlin ISIS
+                shortcut: "!tub-isis"
+                url: https://isis.tu-berlin.de/local/coursemanager/search.php?search={QUERY}
+              - title: Technische Universität Berlin Moses Veranstaltungsverzeichnis
+                shortcut: "!tub-moses-v"
+                url: https://moseskonto.tu-berlin.de/moses/verzeichnis/veranstaltungen/volltextsuche.html?query={QUERY}&search=true
+              - title: Technische Universität Berlin Moses Studiengang
+                shortcut: "!tub-moses-s"
+                url: https://moseskonto.tu-berlin.de/moses/modultransfersystem/studiengaenge/suchen.html?text={QUERY}
+
           - type: extension
             url: http://192.168.1.10:8080/graph/${GITHUB_USERNAME}
             allow-potentially-dangerous-html: true
@@ -426,14 +446,14 @@ pages:
               - type: reddit
                 show-thumbnails: true
                 subreddit: pcgaming
-                style: horizontal-cards
+                style: grid-cards
               - type: reddit
                 subreddit: games
-                style: horizontal-cards
+                style: grid-cards
               - type: reddit
                 subreddit: gamingnews
                 limit: 7
-                style: horizontal-cards
+                style: grid-cards
       - size: small
         title: Infos
         widgets:
@@ -454,6 +474,65 @@ pages:
             hour-format: 24h # alternatively "24h"
             # Optionally hide the location from being displayed in the widget
             # hide-location: true
+          - type: bookmarks
+            groups:
+              - title: Uni
+                color: 354 44 57
+                links:
+                  - title: ISIS
+                    url: https://isis.tu-berlin.de/my/
+                  - title: Moses
+                    url: https://moseskonto.tu-berlin.de/moses/index.html
+                  - title: Github Repo
+                    url: https://github.com/comboomPunkTsucht/TU-Berlin-repo-aps
+                  - title: Gitlab
+                    url: https://git.tu-berlin.de
+                  - title: Gitlab Repo
+                    url: https://git.tu-berlin.de/mahd/TU-Berlin-repo-aps
+                  - title: E-Mails
+                    url: https://mail.tu-berlin.de
+                  - title: Zoom IntroProg-WiSe2025/26
+                    url: https://s.fhg.de/VL-Introprog-2025
+              - title: Entertainment
+                color: 15 53 63
+                links:
+                  - title: YouTube
+                    url: https://www.youtube.com/
+                  - title: S.to
+                    url: https://s.to/
+                  - title: Disney+
+                    url: https://www.disneyplus.com/
+                  - title: Netflix
+                    url: https://www.netflix.com/
+                  - title: Twitch
+                    url: https://www.primevideo.com/
+                  - title: Filmpalast.to
+                    url: https://filmpalast.to/
+              - title: Dev
+                color: 221 17 36
+                links:
+                  - title: Local Dev Site
+                    url: https://dev.localhost/
+                  - title: Github
+                    url: https://github.com
+              - title: Meine Webseiten
+                color: 93 29 65
+                links:
+                  - title: Meine Webseite
+                    url: https://mcpeapsunterstrichhd.dev/
+                  - title: Linkhub
+                    url: https://mcpeapsunterstrichhd.dev/linkhub/
+                  - title: comboom.sucht
+                    url: https://comboompunktsucht.app/
+              - title: Social
+                color: 311 21 63
+                links:
+                  - title: Reddit
+                    url: https://www.reddit.com/
+                  - title: Twitter
+                    url: https://twitter.com/
+                  - title: Instagram
+                    url: https://www.instagram.com/
           - type: extension
             url: http://192.168.1.10:8080/stats/${GITHUB_USERNAME}
             allow-potentially-dangerous-html: true
@@ -490,6 +569,12 @@ pages:
                 </li>
               {{ end }}
               </ul>
+          - type: dns-stats
+            service: adguard
+            url: ${DNS_URL}
+            username: ${DNS_USERNAME}
+            password: ${DNS_PASSWORD}
+            hour-format: 24h
           - type: custom-api
             title: LeetCode Daily Question
             cache: 6h
