@@ -210,6 +210,9 @@ pages:
               - title: Technische Universität Berlin
                 shortcut: "!tub"
                 url: https://www.tu.berlin/suche?tx_solr[q]={QUERY}
+              - title: Technische Universität Berlin Go Code
+                shortcut: "!tub-go"
+                url: https://www.tu.berlin/go{QUERY}
               - title: Technische Universität Berlin ISIS
                 shortcut: "!tub-isis"
                 url: https://isis.tu-berlin.de/local/coursemanager/search.php?search={QUERY}
@@ -483,6 +486,8 @@ pages:
                     url: https://isis.tu-berlin.de/my/
                   - title: Moses
                     url: https://moseskonto.tu-berlin.de/moses/index.html
+                  - title: TUPort
+                    url: https://tuport.sap.tu-berlin.de/
                   - title: Github Repo
                     url: https://github.com/comboomPunkTsucht/TU-Berlin-repo-aps
                   - title: Gitlab
