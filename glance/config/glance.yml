@@ -496,6 +496,8 @@ pages:
                     url: https://git.tu-berlin.de/mahd/TU-Berlin-repo-aps
                   - title: E-Mails
                     url: https://mail.tu-berlin.de
+                  - title: Elements Web (matrix)
+                    url: https://chat.tu-berlin.de
                   - title: Zoom IntroProg-WiSe2025/26
                     url: https://s.fhg.de/VL-Introprog-2025
               - title: Entertainment
