@@ -29,7 +29,6 @@ pages:
     show-mobile-header: true
     columns:
       - size: small
-        title: Social
         widgets:
           - type: bookmarks
             groups:
@@ -124,23 +123,12 @@ pages:
               - title: Technische Universität Berlin Moses Studiengang
                 shortcut: "!tub-moses-s"
                 url: https://moseskonto.tu-berlin.de/moses/modultransfersystem/studiengaenge/suchen.html?text={QUERY}
-
-          - type: extension
-            url: http://192.168.1.10:8080/graph/${GITHUB_USERNAME}
-            allow-potentially-dangerous-html: true
-            parameters:
-              background-color: "#2E3440" # cell background
-              primary-color: "#A2BF8A" # cell foreground
-              svg-height: 150 # height for graph svg
-              show-months: true # show months on the graph
-              show-weekdays: true # show weekdays on the graph
-              font-size: 9 # size of weekdays & months text on graph
-
-              # if true, it will transition the hue from background
-              # to primary color per the number of commits.
-              # otherwise it will just use the background hue for
-              # 0 commits and the foreground hue for all others
-              transition-hue: true
+          - type: dns-stats
+            service: adguard
+            url: ${DNS_URL}
+            username: ${DNS_USERNAME}
+            password: ${DNS_PASSWORD}
+            hour-format: 24h
           - type: custom-api
             title: Uptime Kumas
             title-url: ${UPTIME_KUMA_URL}
@@ -302,7 +290,6 @@ pages:
                 <p class='color-negative'>Failed to get token: {{ .JSON.String "error.message" }} ({{ $.Response.Status }}) </p>
               {{ end }}
       - size: small
-        title: Infos
         widgets:
           - type: clock
             hour-format: 24h
@@ -331,6 +318,72 @@ pages:
     expand-mobile-page-navigation: true
     show-mobile-header: true
     columns:
+      - size: small
+        widgets:
+          - type: bookmarks
+            groups:
+              - title: Uni
+                color: 354 44 57
+                links:
+                  - title: ISIS
+                    url: https://isis.tu-berlin.de/my/
+                  - title: Moses
+                    url: https://moseskonto.tu-berlin.de/moses/index.html
+                  - title: TUPort
+                    url: https://tuport.sap.tu-berlin.de/
+                  - title: Github Repo
+                    url: https://github.com/comboomPunkTsucht/TU-Berlin-repo-aps
+                  - title: Gitlab
+                    url: https://git.tu-berlin.de
+                  - title: Gitlab Repo
+                    url: https://git.tu-berlin.de/mahd/TU-Berlin-repo-aps
+                  - title: E-Mails
+                    url: https://mail.tu-berlin.de
+                  - title: Elements Web (matrix)
+                    url: https://chat.tu-berlin.de
+                  - title: Zoom IntroProg-WiSe2025/26
+                    url: https://s.fhg.de/VL-Introprog-2025
+              - title: Entertainment
+                color: 15 53 63
+                links:
+                  - title: YouTube
+                    url: https://www.youtube.com/
+                  - title: S.to
+                    url: https://s.to/
+                  - title: Disney+
+                    url: https://www.disneyplus.com/
+                  - title: Netflix
+                    url: https://www.netflix.com/
+                  - title: Twitch
+                    url: https://twitch.tv
+                  - title: Filmpalast.to
+                    url: https://filmpalast.to/
+                  - title: Prime Video DE
+                    url: https://www.amazon.de/gp/video/storefront
+              - title: Dev
+                color: 221 17 36
+                links:
+                  - title: Local Dev Site
+                    url: https://dev.localhost/
+                  - title: Github
+                    url: https://github.com
+              - title: Meine Webseiten
+                color: 93 29 65
+                links:
+                  - title: Meine Webseite
+                    url: https://mcpeapsunterstrichhd.dev/
+                  - title: Linkhub
+                    url: https://mcpeapsunterstrichhd.dev/linkhub/
+                  - title: comboom.sucht
+                    url: https://comboompunktsucht.app/
+              - title: Social
+                color: 311 21 63
+                links:
+                  - title: Reddit
+                    url: https://www.reddit.com/
+                  - title: Twitter
+                    url: https://twitter.com/
+                  - title: Instagram
       - size: full
         widgets:
           - type: search
@@ -362,6 +415,7 @@ pages:
                 url: https://moseskonto.tu-berlin.de/moses/modultransfersystem/studiengaenge/suchen.html?text={QUERY}
           - type: twitch-channels
             channels:
+              - asot
               - tsoding
               - christitustech
           - type: videos
@@ -372,6 +426,25 @@ pages:
               - UCqwGaUvq_l0RKszeHhZ5leA # PietSmiet
               - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
             style: grid-cards
+      - size: small
+        widgets:
+          - type: clock
+            hour-format: 24h
+            timezones:
+              - timezone: Europe/Paris
+                label: Paris
+              - timezone: America/New_York
+                label: New York
+              - timezone: Asia/Tokyo
+                label: Tokyo
+          - type: calendar
+            first-day-of-week: monday
+          - type: weather
+            location: Berlin, Germany
+            units: metric # alternatively "imperial"
+            hour-format: 24h # alternatively "24h"
+            # Optionally hide the location from being displayed in the widget
+            # hide-location: true
   #############################################################################################
   - name: DEV
     # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
@@ -382,6 +455,72 @@ pages:
     expand-mobile-page-navigation: true
     show-mobile-header: true
     columns:
+      - size: small
+        widgets:
+          - type: bookmarks
+            groups:
+              - title: Uni
+                color: 354 44 57
+                links:
+                  - title: ISIS
+                    url: https://isis.tu-berlin.de/my/
+                  - title: Moses
+                    url: https://moseskonto.tu-berlin.de/moses/index.html
+                  - title: TUPort
+                    url: https://tuport.sap.tu-berlin.de/
+                  - title: Github Repo
+                    url: https://github.com/comboomPunkTsucht/TU-Berlin-repo-aps
+                  - title: Gitlab
+                    url: https://git.tu-berlin.de
+                  - title: Gitlab Repo
+                    url: https://git.tu-berlin.de/mahd/TU-Berlin-repo-aps
+                  - title: E-Mails
+                    url: https://mail.tu-berlin.de
+                  - title: Elements Web (matrix)
+                    url: https://chat.tu-berlin.de
+                  - title: Zoom IntroProg-WiSe2025/26
+                    url: https://s.fhg.de/VL-Introprog-2025
+              - title: Entertainment
+                color: 15 53 63
+                links:
+                  - title: YouTube
+                    url: https://www.youtube.com/
+                  - title: S.to
+                    url: https://s.to/
+                  - title: Disney+
+                    url: https://www.disneyplus.com/
+                  - title: Netflix
+                    url: https://www.netflix.com/
+                  - title: Twitch
+                    url: https://twitch.tv
+                  - title: Filmpalast.to
+                    url: https://filmpalast.to/
+                  - title: Prime Video DE
+                    url: https://www.amazon.de/gp/video/storefront
+              - title: Dev
+                color: 221 17 36
+                links:
+                  - title: Local Dev Site
+                    url: https://dev.localhost/
+                  - title: Github
+                    url: https://github.com
+              - title: Meine Webseiten
+                color: 93 29 65
+                links:
+                  - title: Meine Webseite
+                    url: https://mcpeapsunterstrichhd.dev/
+                  - title: Linkhub
+                    url: https://mcpeapsunterstrichhd.dev/linkhub/
+                  - title: comboom.sucht
+                    url: https://comboompunktsucht.app/
+              - title: Social
+                color: 311 21 63
+                links:
+                  - title: Reddit
+                    url: https://www.reddit.com/
+                  - title: Twitter
+                    url: https://twitter.com/
+                  - title: Instagram
       - size: full
         widgets:
           - type: search
@@ -463,12 +602,6 @@ pages:
                 </li>
               {{ end }}
               </ul>
-          - type: dns-stats
-            service: adguard
-            url: ${DNS_URL}
-            username: ${DNS_USERNAME}
-            password: ${DNS_PASSWORD}
-            hour-format: 24h
           - type: custom-api
             title: LeetCode Daily Question
             cache: 6h
@@ -627,6 +760,25 @@ pages:
                   {{ end }}
                 </ul>
               </div>
+      - size: small
+        widgets:
+          - type: clock
+            hour-format: 24h
+            timezones:
+              - timezone: Europe/Paris
+                label: Paris
+              - timezone: America/New_York
+                label: New York
+              - timezone: Asia/Tokyo
+                label: Tokyo
+          - type: calendar
+            first-day-of-week: monday
+          - type: weather
+            location: Berlin, Germany
+            units: metric # alternatively "imperial"
+            hour-format: 24h # alternatively "24h"
+            # Optionally hide the location from being displayed in the widget
+            # hide-location: true
   #############################################################################################
   - name: Gaming
     # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
@@ -637,6 +789,72 @@ pages:
     expand-mobile-page-navigation: true
     show-mobile-header: true
     columns:
+      - size: small
+        widgets:
+          - type: bookmarks
+            groups:
+              - title: Uni
+                color: 354 44 57
+                links:
+                  - title: ISIS
+                    url: https://isis.tu-berlin.de/my/
+                  - title: Moses
+                    url: https://moseskonto.tu-berlin.de/moses/index.html
+                  - title: TUPort
+                    url: https://tuport.sap.tu-berlin.de/
+                  - title: Github Repo
+                    url: https://github.com/comboomPunkTsucht/TU-Berlin-repo-aps
+                  - title: Gitlab
+                    url: https://git.tu-berlin.de
+                  - title: Gitlab Repo
+                    url: https://git.tu-berlin.de/mahd/TU-Berlin-repo-aps
+                  - title: E-Mails
+                    url: https://mail.tu-berlin.de
+                  - title: Elements Web (matrix)
+                    url: https://chat.tu-berlin.de
+                  - title: Zoom IntroProg-WiSe2025/26
+                    url: https://s.fhg.de/VL-Introprog-2025
+              - title: Entertainment
+                color: 15 53 63
+                links:
+                  - title: YouTube
+                    url: https://www.youtube.com/
+                  - title: S.to
+                    url: https://s.to/
+                  - title: Disney+
+                    url: https://www.disneyplus.com/
+                  - title: Netflix
+                    url: https://www.netflix.com/
+                  - title: Twitch
+                    url: https://twitch.tv
+                  - title: Filmpalast.to
+                    url: https://filmpalast.to/
+                  - title: Prime Video DE
+                    url: https://www.amazon.de/gp/video/storefront
+              - title: Dev
+                color: 221 17 36
+                links:
+                  - title: Local Dev Site
+                    url: https://dev.localhost/
+                  - title: Github
+                    url: https://github.com
+              - title: Meine Webseiten
+                color: 93 29 65
+                links:
+                  - title: Meine Webseite
+                    url: https://mcpeapsunterstrichhd.dev/
+                  - title: Linkhub
+                    url: https://mcpeapsunterstrichhd.dev/linkhub/
+                  - title: comboom.sucht
+                    url: https://comboompunktsucht.app/
+              - title: Social
+                color: 311 21 63
+                links:
+                  - title: Reddit
+                    url: https://www.reddit.com/
+                  - title: Twitter
+                    url: https://twitter.com/
+                  - title: Instagram
       - size: full
         widgets:
           - type: search
@@ -828,6 +1046,25 @@ pages:
                 subreddit: gamingnews
                 limit: 7
                 style: grid-cards
+      - size: small
+        widgets:
+          - type: clock
+            hour-format: 24h
+            timezones:
+              - timezone: Europe/Paris
+                label: Paris
+              - timezone: America/New_York
+                label: New York
+              - timezone: Asia/Tokyo
+                label: Tokyo
+          - type: calendar
+            first-day-of-week: monday
+          - type: weather
+            location: Berlin, Germany
+            units: metric # alternatively "imperial"
+            hour-format: 24h # alternatively "24h"
+            # Optionally hide the location from being displayed in the widget
+            # hide-location: true
 branding:
   custom-footer: |
     <a href="/home">2025 &copy; Fabian Aps</a>
