@@ -123,12 +123,19 @@ pages:
               - title: Technische Universität Berlin Moses Studiengang
                 shortcut: "!tub-moses-s"
                 url: https://moseskonto.tu-berlin.de/moses/modultransfersystem/studiengaenge/suchen.html?text={QUERY}
+          - type: server-stats
+            servers:
+              - type: remote
+                name: localhost
+                url: http://192.168.1.11:27973
+                # token:
           - type: dns-stats
             service: adguard
             url: ${DNS_URL}
             username: ${DNS_USERNAME}
             password: ${DNS_PASSWORD}
             hour-format: 24h
+            allow-insecure: true
           - type: custom-api
             title: Uptime Kumas
             title-url: ${UPTIME_KUMA_URL}
@@ -201,7 +208,7 @@ pages:
               secret: ${NGINX_PASSWORD}
             cache: 12h
             options:
-              collapse-after: 6
+              collapse-after: -1
               show-icons: true
               domain-name: ".localhost"
               tooltip-enabled: true

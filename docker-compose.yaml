@@ -266,6 +266,26 @@ services:
       local-services:
         ipv4_address: 192.168.1.10
         ipv6_address: fd07:b51a:cc66:d001::000A
+  glance-agent:
+    container_name: glance-agent-comboom.sucht
+    image: glanceapp/agent
+    pull_policy: always
+    restart: always
+    # command: /app/agent --config /opt/glance-agent/agent.yml
+    # environment:
+    # Optional, leave empty or comment out for no authentication
+    # TOKEN: your_auth_token_here
+    volumes:
+      # Add your mount points below in the format host_path:container_path with :ro suffix for read-only
+      - "/:/Volumes/Macintosh HD/:ro"
+      # - "/Volumes/Macintosh HD/:/storage/Macintosh HD/:ro"
+      - ./glance/agent:/app/config/
+    ports:
+      - 27973:27973
+    networks:
+      local-services:
+        ipv4_address: 192.168.1.11
+        ipv6_address: fd07:b51a:cc66:d001::000B
 
   redis:
     image: redis:latest
