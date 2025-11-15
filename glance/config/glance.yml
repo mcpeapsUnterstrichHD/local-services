@@ -14,6 +14,7 @@ theme:
   positive-color: 92 29 64
   negative-color: 355 44 57
   custom-css-file: /assets/user.css
+  disable-picker: true
 
 pages:
   # It's not necessary to create a new file for each page and include it, you can simply
@@ -30,169 +31,70 @@ pages:
       - size: small
         title: Social
         widgets:
-          - type: twitch-channels
-            channels:
-              - tsoding
-              - asot
-              - thejocraft_live
-          - type: videos
-            channels:
-              - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
-              - UCEbYhDd6c6vngsF5PQpFVWg # Tsoding
-              - UCrqM0Ym_NbK1fqeQG2VIohg # Tsoding Daily
-              - UCqwGaUvq_l0RKszeHhZ5leA # PietSmiet
-              - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
-            style: vertical-list
-          - type: custom-api
-            title: Epic Games
-            cache: 1h
-            url: https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?locale=en&country=DE&allowCountries=DE
-            template: |
-              <div>
-                {{ if eq .Response.StatusCode 200 }}
-                  <div class="horizontal-cards-2">
-                    {{ range .JSON.Array "data.Catalog.searchStore.elements" }}
-                      {{ $price := .String "price.totalPrice.discountPrice" }}
-                      {{ $hasPromo := gt (len (.Array "promotions.promotionalOffers")) 0 }}
-                      {{ if and $hasPromo (eq $price "0") }}
-                        {{ $gamePage := .String "productSlug" }}
-                        {{ if gt (len (.Array "offerMappings")) 0 }}
-                          {{ $gamePage = .String "offerMappings.0.pageSlug" }}
-                        {{end }}
-                        <a href="https://store.epicgames.com/en-US/p/{{ $gamePage }}" target="_blank" class="card">
-                          {{ $title := .String "title" }}
-                          {{ range .Array "keyImages" }}
-                            {{ if eq (.String "type") "OfferImageWide" }}
-                              <img src="{{ .String "url" }}" alt="{{ $title }}" style="width: 100%; max-width: 300px; height: 150px; object-fit: cover; border-radius: var(--border-radius);">
-                            {{ end }}
-                          {{ end }}
-                          <div class="card-content">
-                            <span class="size-base color-primary">{{ $title }}</span><br>
-                            <span class="size-h5 color-subdue">
-                              {{ if $hasPromo }}
-                                {{ $promotions := .Array "promotions.promotionalOffers" }}
-                                {{ if gt (len $promotions) 0 }}
-                                  {{ $firstPromo := index $promotions 0 }}
-                                  {{ $offers := $firstPromo.Array "promotionalOffers" }}
-                                  {{ if gt (len $offers) 0 }}
-                                    {{ $firstOffer := index $offers 0 }}
-                                    Free until {{ slice ($firstOffer.String "endDate") 0 10 }}
-                                  {{ else }}
-                                    Free this week!
-                                  {{ end }}
-                                {{ else }}
-                                  Free this week!
-                                {{ end }}
-                              {{ end }}
-                            </span>
-                          </div>
-                        </a>
-                      {{ end }}
-                    {{ end }}
-                  </div>
-                {{ else }}
-                  <p class="color-negative">Error fetching Epic Games data.</p>
-                {{ end }}
-              </div>
-          - type: custom-api
-            title: Recently Played Games
-            cache: 1h
-            url: http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${STEAM_API_KEY}&steamid=${STEAM_USER}&format=json
-            template: |
-              <div>
-                {{ if eq .Response.StatusCode 200 }}
-                  {{ $games := .JSON.Array "response.games" }}
-                  {{ if gt (len $games) 0 }}
-                    <ul class="list list-gap-10 collapsible-container" data-collapse-after="5">
-                      {{ range $games }}
-                        <li style="display: flex; align-items: center;">
-                          <a href="https://store.steampowered.com/app/{{ .Int "appid" }}" target="_blank">
-                            <img
-                              src="http://media.steampowered.com/steamcommunity/public/images/apps/{{ .Int "appid" }}/{{ .String "img_icon_url" }}.jpg"
-                              alt="{{ .String "name" }}"
-                              style="width: 32px; border-radius: var(--border-radius); margin-right: 10px;">
-                          </a>
-                          <div>
-                            <a
-                              href="https://store.steampowered.com/app/{{ .Int "appid" }}"
-                              class="size-base color-primary"
-                              target="_blank"
-                            >
-                              {{ .String "name" }}
-                            </a>
-                            <br>
-                            <span class="size-h5 color-subdue">
-                              Last 2 weeks:
-                              {{ if gt (toFloat (.Int "playtime_2weeks")) 60.0 }}
-                                {{ printf "%.2f hrs" (div (toFloat (.Int "playtime_2weeks")) 60.0) }}
-                              {{ else }}
-                                {{ .Int "playtime_2weeks" }} mins
-                              {{ end }}
-                            </span>
-                          </div>
-                        </li>
-                      {{ end }}
-                    </ul>
-                  {{ else }}
-                    <p class="color-negative">No recently played games found.</p>
-                  {{ end }}
-                {{ else }}
-                  <p class="color-negative">An unexpected error occurred. Please try again later.</p>
-                {{ end }}
-              </div>
-          - type: custom-api
-            title: Steam Specials
-            cache: 12h
-            url: https://store.steampowered.com/api/featuredcategories?cc=de
-            template: |
-              <ul class="list list-gap-10 collapsible-container" data-collapse-after="5">
-              {{ range .JSON.Array "specials.items" }}
-                {{ $header := .String "header_image" }}
-                {{ $urlPrefix := "https://store.steampowered.com/sub/" }}
-                {{ if findMatch "/steam/apps/" $header }}
-                  {{ $urlPrefix = "https://store.steampowered.com/app/" }}
-                {{ end }}
-                <li>
-                  <a class="size-h4 color-highlight block text-truncate" href="{{ $urlPrefix }}{{ .Int "id" }}/">{{ .String "name" }}</a>
-                  <ul class="list-horizontal-text">
-                    <li>{{ .Int "final_price" | toFloat | mul 0.01 | printf "$%.2f" }}</li>
-                    {{ $discount := .Int "discount_percent" }}
-                    <li{{ if ge $discount 40 }} class="color-positive"{{ end }}>{{ $discount }}% off</li>
-                  </ul>
-                </li>
-              {{ end }}
-              </ul>
-          - type: custom-api
-            title: Steam Top Sellers
-            cache: 12h
-            url: https://store.steampowered.com/api/featuredcategories?cc=us
-            template: |
-              <ul class="list list-gap-10 collapsible-contain" data-collapse-after="15">
-                  {{ range .JSON.Array "top_sellers.items" }}
-                  {{ if ne (.String "name") "Steam Deck" }}
-                  <li style="display: flex; align-items: center; gap: 1rem;">
-                      <img src="{{ .String "small_capsule_image" }}" alt="{{ .String "name" }}"
-                          style="width: 120px; height: auto; border-radius: 4px; flex-shrink: 0;">
-                      <div style="min-width: 0;">
-                          <a class="size-h4 color-highlight text-truncate" style="display: block;"
-                              href="https://store.steampowered.com/app/{{ .Int "id" }}/">
-                              {{ .String "name" }}
-                          </a>
-                          <ul class="list-horizontal-text">
-                              <li>{{ div (.Int "final_price" | toFloat) 100 | printf "$%.2f" }}</li>
-                              {{ $discount := .Int "discount_percent" }}
-                              {{ if gt $discount 0 }}
-                              <li{{ if ge $discount 40 }} class="color-positive" {{ end }}>
-                                  {{ $discount }}% off
-                  </li>
-                  {{ end }}
-              </ul>
-              </div>
-              </li>
-              {{ end }}
-              {{ end }}
-              </ul>
-
+          - type: bookmarks
+            groups:
+              - title: Uni
+                color: 354 44 57
+                links:
+                  - title: ISIS
+                    url: https://isis.tu-berlin.de/my/
+                  - title: Moses
+                    url: https://moseskonto.tu-berlin.de/moses/index.html
+                  - title: TUPort
+                    url: https://tuport.sap.tu-berlin.de/
+                  - title: Github Repo
+                    url: https://github.com/comboomPunkTsucht/TU-Berlin-repo-aps
+                  - title: Gitlab
+                    url: https://git.tu-berlin.de
+                  - title: Gitlab Repo
+                    url: https://git.tu-berlin.de/mahd/TU-Berlin-repo-aps
+                  - title: E-Mails
+                    url: https://mail.tu-berlin.de
+                  - title: Elements Web (matrix)
+                    url: https://chat.tu-berlin.de
+                  - title: Zoom IntroProg-WiSe2025/26
+                    url: https://s.fhg.de/VL-Introprog-2025
+              - title: Entertainment
+                color: 15 53 63
+                links:
+                  - title: YouTube
+                    url: https://www.youtube.com/
+                  - title: S.to
+                    url: https://s.to/
+                  - title: Disney+
+                    url: https://www.disneyplus.com/
+                  - title: Netflix
+                    url: https://www.netflix.com/
+                  - title: Twitch
+                    url: https://twitch.tv
+                  - title: Filmpalast.to
+                    url: https://filmpalast.to/
+                  - title: Prime Video DE
+                    url: https://www.amazon.de/gp/video/storefront
+              - title: Dev
+                color: 221 17 36
+                links:
+                  - title: Local Dev Site
+                    url: https://dev.localhost/
+                  - title: Github
+                    url: https://github.com
+              - title: Meine Webseiten
+                color: 93 29 65
+                links:
+                  - title: Meine Webseite
+                    url: https://mcpeapsunterstrichhd.dev/
+                  - title: Linkhub
+                    url: https://mcpeapsunterstrichhd.dev/linkhub/
+                  - title: comboom.sucht
+                    url: https://comboompunktsucht.app/
+              - title: Social
+                color: 311 21 63
+                links:
+                  - title: Reddit
+                    url: https://www.reddit.com/
+                  - title: Twitter
+                    url: https://twitter.com/
+                  - title: Instagram
       - size: full
         widgets:
           - type: search
@@ -239,51 +141,6 @@ pages:
               # otherwise it will just use the background hue for
               # 0 commits and the foreground hue for all others
               transition-hue: true
-          - type: group
-            title: Repositories
-            widgets:
-              - type: releases
-                cache: 1d
-                # Without authentication the Github API allows for up to 60 requests per hour. You can create a
-                # read-only token from your Github account settings and use it here to increase the limit.
-                token: ${GITHUB_TOKEN}
-                show-source-icon: true
-                repositories:
-                  - searxng/searxng
-                  - NginxProxyManager/nginx-proxy-manager
-                  - phpmyadmin/docker
-                  - sharevb/it-tools
-                  - Stirling-Tools/Stirling-PDF
-                  - glanceapp/glance
-                  - MariaDB/mariadb-docker
-              - type: repository
-                title: SearXNG
-                token: ${GITHUB_TOKEN}
-                repository: searxng/searxng
-              - type: repository
-                title: Nginx Proxy Manager
-                token: ${GITHUB_TOKEN}
-                repository: NginxProxyManager/nginx-proxy-manager
-              - type: repository
-                title: phpMyAdmin
-                token: ${GITHUB_TOKEN}
-                repository: phpmyadmin/docker
-              - type: repository
-                title: IT Tools
-                token: ${GITHUB_TOKEN}
-                repository: sharevb/it-tools
-              - type: repository
-                title: Stirling-PDF
-                token: ${GITHUB_TOKEN}
-                repository: Stirling-Tools/Stirling-PDF
-              - type: repository
-                title: Glance | Dashboard
-                token: ${GITHUB_TOKEN}
-                repository: glanceapp/glance
-              - type: repository
-                title: MariaDB
-                token: ${GITHUB_TOKEN}
-                repository: MariaDB/mariadb-docker
           - type: custom-api
             title: Uptime Kumas
             title-url: ${UPTIME_KUMA_URL}
@@ -444,19 +301,6 @@ pages:
               {{ else }}
                 <p class='color-negative'>Failed to get token: {{ .JSON.String "error.message" }} ({{ $.Response.Status }}) </p>
               {{ end }}
-          - type: group
-            widgets:
-              - type: reddit
-                show-thumbnails: true
-                subreddit: pcgaming
-                style: grid-cards
-              - type: reddit
-                subreddit: games
-                style: grid-cards
-              - type: reddit
-                subreddit: gamingnews
-                limit: 7
-                style: grid-cards
       - size: small
         title: Infos
         widgets:
@@ -477,69 +321,112 @@ pages:
             hour-format: 24h # alternatively "24h"
             # Optionally hide the location from being displayed in the widget
             # hide-location: true
-          - type: bookmarks
-            groups:
-              - title: Uni
-                color: 354 44 57
-                links:
-                  - title: ISIS
-                    url: https://isis.tu-berlin.de/my/
-                  - title: Moses
-                    url: https://moseskonto.tu-berlin.de/moses/index.html
-                  - title: TUPort
-                    url: https://tuport.sap.tu-berlin.de/
-                  - title: Github Repo
-                    url: https://github.com/comboomPunkTsucht/TU-Berlin-repo-aps
-                  - title: Gitlab
-                    url: https://git.tu-berlin.de
-                  - title: Gitlab Repo
-                    url: https://git.tu-berlin.de/mahd/TU-Berlin-repo-aps
-                  - title: E-Mails
-                    url: https://mail.tu-berlin.de
-                  - title: Elements Web (matrix)
-                    url: https://chat.tu-berlin.de
-                  - title: Zoom IntroProg-WiSe2025/26
-                    url: https://s.fhg.de/VL-Introprog-2025
-              - title: Entertainment
-                color: 15 53 63
-                links:
-                  - title: YouTube
-                    url: https://www.youtube.com/
-                  - title: S.to
-                    url: https://s.to/
-                  - title: Disney+
-                    url: https://www.disneyplus.com/
-                  - title: Netflix
-                    url: https://www.netflix.com/
-                  - title: Twitch
-                    url: https://www.primevideo.com/
-                  - title: Filmpalast.to
-                    url: https://filmpalast.to/
-              - title: Dev
-                color: 221 17 36
-                links:
-                  - title: Local Dev Site
-                    url: https://dev.localhost/
-                  - title: Github
-                    url: https://github.com
-              - title: Meine Webseiten
-                color: 93 29 65
-                links:
-                  - title: Meine Webseite
-                    url: https://mcpeapsunterstrichhd.dev/
-                  - title: Linkhub
-                    url: https://mcpeapsunterstrichhd.dev/linkhub/
-                  - title: comboom.sucht
-                    url: https://comboompunktsucht.app/
-              - title: Social
-                color: 311 21 63
-                links:
-                  - title: Reddit
-                    url: https://www.reddit.com/
-                  - title: Twitter
-                    url: https://twitter.com/
-                  - title: Instagram
-                    url: https://www.instagram.com/
+  #############################################################################################
+  - name: Social
+    # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
+    # hide-desktop-navigation: true
+    slug: social
+    title: Social
+    center-vertically: true
+    expand-mobile-page-navigation: true
+    show-mobile-header: true
+    columns:
+      - size: full
+        widgets:
+          - type: search
+            search-engine: https://search.localhost/search?q={QUERY}
+            new-tab: true
+            autofocus: true
+            placeholder: Search the web...
+            bangs:
+              - title: Youtube
+                shortcut: "!yt"
+                url: https://www.youtube.com/results?search_query={QUERY}
+              - title: Github
+                shortcut: "!gh"
+                url: https://github.com/search?q={QUERY}
+              - title: Technische Universität Berlin
+                shortcut: "!tub"
+                url: https://www.tu.berlin/suche?tx_solr[q]={QUERY}
+              - title: Technische Universität Berlin Go Code
+                shortcut: "!tub-go"
+                url: https://www.tu.berlin/go{QUERY}
+              - title: Technische Universität Berlin ISIS
+                shortcut: "!tub-isis"
+                url: https://isis.tu-berlin.de/local/coursemanager/search.php?search={QUERY}
+              - title: Technische Universität Berlin Moses Veranstaltungsverzeichnis
+                shortcut: "!tub-moses-v"
+                url: https://moseskonto.tu-berlin.de/moses/verzeichnis/veranstaltungen/volltextsuche.html?query={QUERY}&search=true
+              - title: Technische Universität Berlin Moses Studiengang
+                shortcut: "!tub-moses-s"
+                url: https://moseskonto.tu-berlin.de/moses/modultransfersystem/studiengaenge/suchen.html?text={QUERY}
+          - type: twitch-channels
+            channels:
+              - tsoding
+              - christitustech
+          - type: videos
+            channels:
+              - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
+              - UCEbYhDd6c6vngsF5PQpFVWg # Tsoding
+              - UCrqM0Ym_NbK1fqeQG2VIohg # Tsoding Daily
+              - UCqwGaUvq_l0RKszeHhZ5leA # PietSmiet
+              - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
+            style: grid-cards
+  #############################################################################################
+  - name: DEV
+    # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
+    # hide-desktop-navigation: true
+    slug: dev
+    title: DEV
+    center-vertically: true
+    expand-mobile-page-navigation: true
+    show-mobile-header: true
+    columns:
+      - size: full
+        widgets:
+          - type: search
+            search-engine: https://search.localhost/search?q={QUERY}
+            new-tab: true
+            autofocus: true
+            placeholder: Search the web...
+            bangs:
+              - title: Youtube
+                shortcut: "!yt"
+                url: https://www.youtube.com/results?search_query={QUERY}
+              - title: Github
+                shortcut: "!gh"
+                url: https://github.com/search?q={QUERY}
+              - title: Technische Universität Berlin
+                shortcut: "!tub"
+                url: https://www.tu.berlin/suche?tx_solr[q]={QUERY}
+              - title: Technische Universität Berlin Go Code
+                shortcut: "!tub-go"
+                url: https://www.tu.berlin/go{QUERY}
+              - title: Technische Universität Berlin ISIS
+                shortcut: "!tub-isis"
+                url: https://isis.tu-berlin.de/local/coursemanager/search.php?search={QUERY}
+              - title: Technische Universität Berlin Moses Veranstaltungsverzeichnis
+                shortcut: "!tub-moses-v"
+                url: https://moseskonto.tu-berlin.de/moses/verzeichnis/veranstaltungen/volltextsuche.html?query={QUERY}&search=true
+              - title: Technische Universität Berlin Moses Studiengang
+                shortcut: "!tub-moses-s"
+                url: https://moseskonto.tu-berlin.de/moses/modultransfersystem/studiengaenge/suchen.html?text={QUERY}
+          - type: extension
+            url: http://192.168.1.10:8080/graph/${GITHUB_USERNAME}
+            allow-potentially-dangerous-html: true
+            parameters:
+              background-color: "#2E3440" # cell background
+              primary-color: "#A2BF8A" # cell foreground
+              svg-height: 150 # height for graph svg
+              show-months: true # show months on the graph
+              show-weekdays: true # show weekdays on the graph
+              font-size: 9 # size of weekdays & months text on graph
+
+              # if true, it will transition the hue from background
+              # to primary color per the number of commits.
+              # otherwise it will just use the background hue for
+              # 0 commits and the foreground hue for all others
+              transition-hue: true
           - type: extension
             url: http://192.168.1.10:8080/stats/${GITHUB_USERNAME}
             allow-potentially-dangerous-html: true
@@ -740,30 +627,12 @@ pages:
                   {{ end }}
                 </ul>
               </div>
-          - type: group
-            title: Services
-            widgets:
-              - type: monitor
-                cache: 1m
-                title: Services
-                sites:
-                  - title: SearXNG
-                    url: http://search.localhost/
-                  - title: IT Tools
-                    url: http://it-tools.localhost/
-                  - title: Stirling PDF
-                    url: http://stirling-pdf.localhost/
-                  - title: phpMyAdmin
-                    url: http://phpmyadmin.localhost/
-              - type: docker-containers
-                title: Docker Containers
-                hide-by-default: true
   #############################################################################################
-  - name: Social
+  - name: Gaming
     # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
     # hide-desktop-navigation: true
-    slug: social
-    title: Social
+    slug: gaming
+    title: Gaming
     center-vertically: true
     expand-mobile-page-navigation: true
     show-mobile-header: true
@@ -771,23 +640,194 @@ pages:
       - size: full
         widgets:
           - type: search
-            search-engine: http://search.localhost/search?q={QUERY}
+            search-engine: https://search.localhost/search?q={QUERY}
             new-tab: true
             autofocus: true
             placeholder: Search the web...
-          - type: twitch-channels
-            channels:
-              - tsoding
-              - christitustech
-          - type: videos
-            channels:
-              - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
-              - UCEbYhDd6c6vngsF5PQpFVWg # Tsoding
-              - UCrqM0Ym_NbK1fqeQG2VIohg # Tsoding Daily
-              - UCqwGaUvq_l0RKszeHhZ5leA # PietSmiet
-              - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
-            style: grid-cards
-
+            bangs:
+              - title: Youtube
+                shortcut: "!yt"
+                url: https://www.youtube.com/results?search_query={QUERY}
+              - title: Github
+                shortcut: "!gh"
+                url: https://github.com/search?q={QUERY}
+              - title: Technische Universität Berlin
+                shortcut: "!tub"
+                url: https://www.tu.berlin/suche?tx_solr[q]={QUERY}
+              - title: Technische Universität Berlin Go Code
+                shortcut: "!tub-go"
+                url: https://www.tu.berlin/go{QUERY}
+              - title: Technische Universität Berlin ISIS
+                shortcut: "!tub-isis"
+                url: https://isis.tu-berlin.de/local/coursemanager/search.php?search={QUERY}
+              - title: Technische Universität Berlin Moses Veranstaltungsverzeichnis
+                shortcut: "!tub-moses-v"
+                url: https://moseskonto.tu-berlin.de/moses/verzeichnis/veranstaltungen/volltextsuche.html?query={QUERY}&search=true
+              - title: Technische Universität Berlin Moses Studiengang
+                shortcut: "!tub-moses-s"
+                url: https://moseskonto.tu-berlin.de/moses/modultransfersystem/studiengaenge/suchen.html?text={QUERY}
+          - type: custom-api
+            title: Epic Games
+            cache: 1h
+            url: https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions?locale=en&country=DE&allowCountries=DE
+            template: |
+              <div>
+                {{ if eq .Response.StatusCode 200 }}
+                  <div class="horizontal-cards-2">
+                    {{ range .JSON.Array "data.Catalog.searchStore.elements" }}
+                      {{ $price := .String "price.totalPrice.discountPrice" }}
+                      {{ $hasPromo := gt (len (.Array "promotions.promotionalOffers")) 0 }}
+                      {{ if and $hasPromo (eq $price "0") }}
+                        {{ $gamePage := .String "productSlug" }}
+                        {{ if gt (len (.Array "offerMappings")) 0 }}
+                          {{ $gamePage = .String "offerMappings.0.pageSlug" }}
+                        {{end }}
+                        <a href="https://store.epicgames.com/en-US/p/{{ $gamePage }}" target="_blank" class="card">
+                          {{ $title := .String "title" }}
+                          {{ range .Array "keyImages" }}
+                            {{ if eq (.String "type") "OfferImageWide" }}
+                              <img src="{{ .String "url" }}" alt="{{ $title }}" style="width: 100%; max-width: 300px; height: 150px; object-fit: cover; border-radius: var(--border-radius);">
+                            {{ end }}
+                          {{ end }}
+                          <div class="card-content">
+                            <span class="size-base color-primary">{{ $title }}</span><br>
+                            <span class="size-h5 color-subdue">
+                              {{ if $hasPromo }}
+                                {{ $promotions := .Array "promotions.promotionalOffers" }}
+                                {{ if gt (len $promotions) 0 }}
+                                  {{ $firstPromo := index $promotions 0 }}
+                                  {{ $offers := $firstPromo.Array "promotionalOffers" }}
+                                  {{ if gt (len $offers) 0 }}
+                                    {{ $firstOffer := index $offers 0 }}
+                                    Free until {{ slice ($firstOffer.String "endDate") 0 10 }}
+                                  {{ else }}
+                                    Free this week!
+                                  {{ end }}
+                                {{ else }}
+                                  Free this week!
+                                {{ end }}
+                              {{ end }}
+                            </span>
+                          </div>
+                        </a>
+                      {{ end }}
+                    {{ end }}
+                  </div>
+                {{ else }}
+                  <p class="color-negative">Error fetching Epic Games data.</p>
+                {{ end }}
+              </div>
+          - type: custom-api
+            title: Recently Played Games
+            cache: 1h
+            url: http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${STEAM_API_KEY}&steamid=${STEAM_USER}&format=json
+            template: |
+              <div>
+                {{ if eq .Response.StatusCode 200 }}
+                  {{ $games := .JSON.Array "response.games" }}
+                  {{ if gt (len $games) 0 }}
+                    <ul class="list list-gap-10 collapsible-container" data-collapse-after="5">
+                      {{ range $games }}
+                        <li style="display: flex; align-items: center;">
+                          <a href="https://store.steampowered.com/app/{{ .Int "appid" }}" target="_blank">
+                            <img
+                              src="http://media.steampowered.com/steamcommunity/public/images/apps/{{ .Int "appid" }}/{{ .String "img_icon_url" }}.jpg"
+                              alt="{{ .String "name" }}"
+                              style="width: 32px; border-radius: var(--border-radius); margin-right: 10px;">
+                          </a>
+                          <div>
+                            <a
+                              href="https://store.steampowered.com/app/{{ .Int "appid" }}"
+                              class="size-base color-primary"
+                              target="_blank"
+                            >
+                              {{ .String "name" }}
+                            </a>
+                            <br>
+                            <span class="size-h5 color-subdue">
+                              Last 2 weeks:
+                              {{ if gt (toFloat (.Int "playtime_2weeks")) 60.0 }}
+                                {{ printf "%.2f hrs" (div (toFloat (.Int "playtime_2weeks")) 60.0) }}
+                              {{ else }}
+                                {{ .Int "playtime_2weeks" }} mins
+                              {{ end }}
+                            </span>
+                          </div>
+                        </li>
+                      {{ end }}
+                    </ul>
+                  {{ else }}
+                    <p class="color-negative">No recently played games found.</p>
+                  {{ end }}
+                {{ else }}
+                  <p class="color-negative">An unexpected error occurred. Please try again later.</p>
+                {{ end }}
+              </div>
+          - type: custom-api
+            title: Steam Specials
+            cache: 12h
+            url: https://store.steampowered.com/api/featuredcategories?cc=de
+            template: |
+              <ul class="list list-gap-10 collapsible-container" data-collapse-after="5">
+              {{ range .JSON.Array "specials.items" }}
+                {{ $header := .String "header_image" }}
+                {{ $urlPrefix := "https://store.steampowered.com/sub/" }}
+                {{ if findMatch "/steam/apps/" $header }}
+                  {{ $urlPrefix = "https://store.steampowered.com/app/" }}
+                {{ end }}
+                <li>
+                  <a class="size-h4 color-highlight block text-truncate" href="{{ $urlPrefix }}{{ .Int "id" }}/">{{ .String "name" }}</a>
+                  <ul class="list-horizontal-text">
+                    <li>{{ .Int "final_price" | toFloat | mul 0.01 | printf "$%.2f" }}</li>
+                    {{ $discount := .Int "discount_percent" }}
+                    <li{{ if ge $discount 40 }} class="color-positive"{{ end }}>{{ $discount }}% off</li>
+                  </ul>
+                </li>
+              {{ end }}
+              </ul>
+          - type: custom-api
+            title: Steam Top Sellers
+            cache: 12h
+            url: https://store.steampowered.com/api/featuredcategories?cc=us
+            template: |
+              <ul class="list list-gap-10 collapsible-contain" data-collapse-after="15">
+                  {{ range .JSON.Array "top_sellers.items" }}
+                  {{ if ne (.String "name") "Steam Deck" }}
+                  <li style="display: flex; align-items: center; gap: 1rem;">
+                      <img src="{{ .String "small_capsule_image" }}" alt="{{ .String "name" }}"
+                          style="width: 120px; height: auto; border-radius: 4px; flex-shrink: 0;">
+                      <div style="min-width: 0;">
+                          <a class="size-h4 color-highlight text-truncate" style="display: block;"
+                              href="https://store.steampowered.com/app/{{ .Int "id" }}/">
+                              {{ .String "name" }}
+                          </a>
+                          <ul class="list-horizontal-text">
+                              <li>{{ div (.Int "final_price" | toFloat) 100 | printf "$%.2f" }}</li>
+                              {{ $discount := .Int "discount_percent" }}
+                              {{ if gt $discount 0 }}
+                              <li{{ if ge $discount 40 }} class="color-positive" {{ end }}>
+                                  {{ $discount }}% off
+                  </li>
+                  {{ end }}
+              </ul>
+              </div>
+              </li>
+              {{ end }}
+              {{ end }}
+              </ul>
+          - type: group
+            widgets:
+              - type: reddit
+                show-thumbnails: true
+                subreddit: pcgaming
+                style: grid-cards
+              - type: reddit
+                subreddit: games
+                style: grid-cards
+              - type: reddit
+                subreddit: gamingnews
+                limit: 7
+                style: grid-cards
 branding:
   custom-footer: |
     <a href="/home">2025 &copy; Fabian Aps</a>

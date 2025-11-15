@@ -111,7 +111,8 @@ services:
     ports:
       - "8082:8080"
     volumes:
-      - ./searxng:/etc/searxng:rw
+      - ./searxng/conf:/etc/searxng:rw
+      - ./searxng/themes:/usr/local/searxng/searx/static/themes
       - /etc/localtime:/etc/localtime
     restart: always
     labels:
