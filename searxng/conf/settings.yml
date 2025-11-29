@@ -111,7 +111,7 @@ valkey:
   # URL to connect valkey database. Is overwritten by ${SEARXNG_VALKEY_URL}.
   # https://docs.searxng.org/admin/settings/settings_valkey.html#settings-valkey
   # url: valkey://localhost:6379/0
-  url: false
+  url: redis://192.168.1.8:6379
 
 ui:
   # Custom static path - leave it blank if you didn't change
@@ -169,7 +169,7 @@ ui:
 #
 outgoing:
   # default timeout in seconds, can be override by engine
-  request_timeout: 3.0
+  request_timeout: 1.0
   # the maximum timeout in seconds
   # max_request_timeout: 10.0
   # suffix of searxng_useragent, could contain information like an email address
@@ -361,7 +361,7 @@ engines:
     # https://docs.searxng.org/dev/engines/online/adobe_stock.html
     adobe_order: relevance
     adobe_content_types: ["photo", "illustration", "zip_vector", "template", "3d", "image"]
-    timeout: 6
+    #timeout: 6
 
 
   - name: adobe stock video
@@ -371,7 +371,7 @@ engines:
     categories: ["videos"]
     adobe_order: relevance
     adobe_content_types: ["video"]
-    timeout: 6
+    #timeout: 6
 
 
   - name: adobe stock audio
@@ -381,7 +381,7 @@ engines:
     categories: ["music"]
     adobe_order: relevance
     adobe_content_types: ["audio"]
-    timeout: 6
+    #timeout: 6
 
 
   - name: astrophysics data system
@@ -398,9 +398,8 @@ engines:
 
   - name: annas archive
     engine: annas_archive
-
     shortcut: aa
-    timeout: 5
+    #timeout: 5
 
   - name: ansa
     engine: ansa
@@ -417,7 +416,7 @@ engines:
 
   - name: apk mirror
     engine: apkmirror
-    timeout: 4.0
+    #timeout: 4.0
     shortcut: apkm
 
 
@@ -462,7 +461,7 @@ engines:
   - name: artic
     engine: artic
     shortcut: arc
-    timeout: 4.0
+    #timeout: 4.0
 
   - name: arxiv
     engine: arxiv
@@ -555,7 +554,7 @@ engines:
     title_xpath: //article[@class="repo-summary"]//a[@class="repo-link"]
     content_xpath: //article[@class="repo-summary"]/p
     categories: [it, repos]
-    timeout: 4.0
+    #timeout: 4.0
 
     shortcut: bb
     about:
@@ -641,7 +640,7 @@ engines:
     # cf_ai_model_display_name: 'Cloudflare AI'
     # cf_ai_model_assistant: 'prompts_for_assistant_role'
     # cf_ai_model_system: 'prompts_for_system_role'
-    timeout: 30
+    #timeout: 30
 
 
   - name: core.ac.uk
@@ -654,7 +653,7 @@ engines:
   - name: crossref
     engine: crossref
     shortcut: cr
-    timeout: 30
+    #timeout: 30
 
 
   - name: crowdview
@@ -678,7 +677,7 @@ engines:
     shortcut: yep
     categories: general
     search_type: web
-    timeout: 5
+    #timeout: 5
 
 
   - name: yep images
@@ -712,7 +711,7 @@ engines:
   - name: deviantart
     engine: deviantart
     shortcut: da
-    timeout: 3.0
+    #timeout: 3.0
 
   - name: devicons
     engine: devicons
@@ -730,7 +729,7 @@ engines:
   - name: digbt
     engine: digbt
     shortcut: dbt
-    timeout: 6.0
+    #timeout: 6.0
 
 
   - name: docker hub
@@ -794,7 +793,7 @@ engines:
   - name: wikidata
     engine: wikidata
     shortcut: wd
-    timeout: 3.0
+    #timeout: 3.0
     weight: 2
     # add "list" to the array to get results in the results list
     display_type: ["infobox"]
@@ -834,19 +833,18 @@ engines:
   - name: apple maps
     engine: apple_maps
     shortcut: apm
-
-    timeout: 5.0
+    #timeout: 5.0
 
   - name: emojipedia
     engine: emojipedia
-    timeout: 4.0
+    #timeout: 4.0
     shortcut: em
 
 
   - name: tineye
     engine: tineye
     shortcut: tin
-    timeout: 9.0
+    #timeout: 9.0
 
 
   - name: etymonline
@@ -871,13 +869,12 @@ engines:
     engine: ebay
     shortcut: eb
     base_url: 'https://www.ebay.com'
-
     timeout: 5
 
   - name: 1x
     engine: www1x
     shortcut: 1x
-    timeout: 3.0
+    #timeout: 3.0
 
 
   - name: fdroid
@@ -906,7 +903,7 @@ engines:
     categories: [it, software wikis]
     base_url: https://directory.fsf.org/
     search_type: title
-    timeout: 5.0
+    #timeout: 5.0
 
     about:
       website: https://directory.fsf.org/
@@ -928,7 +925,7 @@ engines:
   - name: fyyd
     engine: fyyd
     shortcut: fy
-    timeout: 8.0
+    #timeout: 8.0
 
 
   - name: geizhals
@@ -947,7 +944,7 @@ engines:
     base_url: "https://wiki.gentoo.org/"
     api_path: "api.php"
     search_type: text
-    timeout: 10
+    #timeout: 10
 
   - name: gitlab
     engine: gitlab
@@ -990,7 +987,7 @@ engines:
     ghc_highlight_matching_lines: true
     ghc_strip_new_lines: true
     ghc_strip_whitespace: false
-    timeout: 10.0
+    #timeout: 10.0
 
   - name: codeberg
     # https://docs.searxng.org/dev/engines/online/gitea.html
@@ -1008,7 +1005,7 @@ engines:
   - name: goodreads
     engine: goodreads
     shortcut: good
-    timeout: 4.0
+    #timeout: 4.0
 
 
   - name: google
@@ -1079,7 +1076,7 @@ engines:
     title_xpath: .//a[@class="tm-title__link"]
     content_xpath: .//div[contains(@class, "article-formatted-body")]
     categories: it
-    timeout: 4.0
+    #timeout: 4.0
 
     shortcut: habr
     about:
@@ -1107,7 +1104,7 @@ engines:
     engine: crates
     shortcut: crates
 
-    timeout: 6.0
+    #timeout: 6.0
 
   - name: hoogle
     engine: xpath
@@ -1152,7 +1149,7 @@ engines:
   - name: imdb
     engine: imdb
     shortcut: imdb
-    timeout: 6.0
+    #timeout: 6.0
 
 
   - name: imgur
@@ -1163,7 +1160,7 @@ engines:
   - name: ina
     engine: ina
     shortcut: in
-    timeout: 6.0
+    #timeout: 6.0
 
 
   # - name: invidious
@@ -1189,7 +1186,7 @@ engines:
   - name: jisho
     engine: jisho
     shortcut: js
-    timeout: 3.0
+    #timeout: 3.0
 
 
   - name: kickass
@@ -1201,7 +1198,7 @@ engines:
       - https://kickass.sx
       - https://kat.am
     shortcut: kc
-    timeout: 4.0
+    #timeout: 4.0
 
   - name: lemmy communities
     engine: lemmy
@@ -1234,7 +1231,7 @@ engines:
     title_xpath: //a[contains(@href,"book/")]/text()[1]
     content_xpath: //td/a[1][contains(@href,"=author")]/text()
     categories: files
-    timeout: 7.0
+    #timeout: 7.0
 
     shortcut: lg
     about:
@@ -1248,7 +1245,7 @@ engines:
   - name: z-library
     engine: zlibrary
     shortcut: zlib
-    timeout: 7.0
+    #timeout: 7.0
 
     # https://github.com/searxng/searxng/issues/3610
     inactive: true
@@ -1283,7 +1280,7 @@ engines:
     content_xpath: .//a[@class="domain"]
     categories: it
     shortcut: lo
-    timeout: 5.0
+    #timeout: 5.0
 
     about:
       website: https://lobste.rs/
@@ -1384,7 +1381,7 @@ engines:
       - https://translate.bus-hit.me
       - https://nyc1.mz.ggtyler.dev
     # mozhi_engine: google - see https://mozhi.aryak.me for supported engines
-    timeout: 4.0
+    #timeout: 4.0
     shortcut: mz
 
 
@@ -1402,7 +1399,7 @@ engines:
   - name: npm
     engine: npm
     shortcut: npm
-    timeout: 5.0
+    #timeout: 5.0
 
 
   - name: nyaa
@@ -1447,7 +1444,7 @@ engines:
     content_html_to_text: true
     categories: "science"
     shortcut: oad
-    timeout: 5.0
+    #timeout: 5.0
     about:
       website: https://www.openaire.eu/
       wikidata_id: Q25106053
@@ -1467,7 +1464,7 @@ engines:
     content_html_to_text: true
     categories: science
     shortcut: oap
-    timeout: 5.0
+    #timeout: 5.0
     about:
       website: https://www.openaire.eu/
       wikidata_id: Q25106053
@@ -1482,7 +1479,7 @@ engines:
     # https://docs.searxng.org/dev/engines/online/openalex.html
     # Recommended by OpenAlex: join the polite pool with an email address
     # mailto: "[email protected]"
-    timeout: 5.0
+    #timeout: 5.0
 
 
   - name: openclipart
@@ -1490,12 +1487,12 @@ engines:
     shortcut: ocl
     inactive: true
 
-    timeout: 30
+    #timeout: 30
 
   - name: openlibrary
     engine: openlibrary
     shortcut: ol
-    timeout: 10
+    #timeout: 10
 
 
   - name: openmeteo
@@ -1520,7 +1517,7 @@ engines:
     title_xpath: //li[@class="search-result"]//h3[@class="title"]/a
     content_xpath: //li[@class="search-result"]//div[@class="search-snippet-info"]//p[@class="search-snippet"]
     categories: files
-    timeout: 4.0
+    #timeout: 4.0
 
     shortcut: or
     about:
@@ -1541,7 +1538,7 @@ engines:
     content_query: description
     categories: [it, packages]
 
-    timeout: 5.0
+    #timeout: 5.0
     shortcut: pack
     about:
       website: https://packagist.org
@@ -1570,7 +1567,7 @@ engines:
     shortcut: ppd
     categories: videos
     piped_filter: videos
-    timeout: 3.0
+    #timeout: 3.0
     inactive: true
 
     # URL to use as link and for embeds
@@ -1586,7 +1583,7 @@ engines:
     shortcut: ppdm
     categories: music
     piped_filter: music_songs
-    timeout: 3.0
+    #timeout: 3.0
     inactive: true
 
   - name: piratebay
@@ -1595,7 +1592,7 @@ engines:
     # You may need to change this URL to a proxy if piratebay is blocked in your
     # country
     url: https://thepiratebay.org/
-    timeout: 3.0
+    #timeout: 3.0
 
   - name: pixabay images
     engine: pixabay
@@ -1655,7 +1652,7 @@ engines:
     search_type: search
     categories: [general, web]
     shortcut: ps
-    timeout: 4.0
+    #timeout: 4.0
 
 
   - name: presearch images
@@ -1663,7 +1660,7 @@ engines:
     network: presearch
     search_type: images
     categories: [images, web]
-    timeout: 4.0
+    #timeout: 4.0
     shortcut: psimg
 
 
@@ -1672,7 +1669,7 @@ engines:
     network: presearch
     search_type: videos
     categories: [general, web]
-    timeout: 4.0
+    #timeout: 4.0
     shortcut: psvid
 
 
@@ -1681,7 +1678,7 @@ engines:
     network: presearch
     search_type: news
     categories: [news, web]
-    timeout: 4.0
+    #timeout: 4.0
     shortcut: psnews
 
 
@@ -1695,7 +1692,7 @@ engines:
     title_xpath: ./div/h3/a
     content_xpath: ./div/div/div[contains(@class,"packages-description")]/span
     categories: [packages, it]
-    timeout: 3.0
+    #timeout: 3.0
 
     first_page_num: 1
     about:
@@ -1965,7 +1962,7 @@ engines:
   - name: springer nature
     engine: springer
     shortcut: springer
-    timeout: 5
+    #timeout: 5
     # read https://docs.searxng.org/dev/engines/online/springer.html
     api_key: ""
     inactive: true
@@ -1998,13 +1995,13 @@ engines:
   - name: tokyotoshokan
     engine: tokyotoshokan
     shortcut: tt
-    timeout: 6.0
+    #timeout: 6.0
 
 
   - name: solidtorrents
     engine: solidtorrents
     shortcut: solid
-    timeout: 4.0
+    #timeout: 4.0
     base_url:
       - https://solidtorrents.to
       - https://bitsearch.to
@@ -2305,7 +2302,7 @@ engines:
     #
     # Or you can use the html non-stable engine, activated by default
     engine: wolframalpha_noapi
-    timeout: 6.0
+    #timeout: 6.0
     categories: general
 
 
@@ -2316,7 +2313,7 @@ engines:
   - name: mymemory translated
     engine: translated
     shortcut: tl
-    timeout: 5.0
+    #timeout: 5.0
     # You can use without an API key, but you are limited to 1000 words/day
     # See: https://mymemory.translated.net/doc/usagelimits.php
     # api_key: ''
@@ -2448,7 +2445,7 @@ engines:
     # base_url: https://tube.4aem.com
     categories: videos
 
-    timeout: 6.0
+    #timeout: 6.0
 
   - name: mediathekviewweb
     engine: mediathekviewweb
@@ -2469,7 +2466,7 @@ engines:
     # enable_http: false
     search_mode: 'global'
     # timeout can be reduced in 'local' search mode
-    timeout: 5.0
+    #timeout: 5.0
 
   - name: yacy images
     engine: yacy
@@ -2479,7 +2476,7 @@ engines:
     shortcut: yai
 
     # timeout can be reduced in 'local' search mode
-    timeout: 5.0
+    #timeout: 5.0
 
   - name: rumble
     engine: rumble
@@ -2500,18 +2497,18 @@ engines:
     shortcut: ls
     categories: videos
 
-    timeout: 5.0
+    #timeout: 5.0
 
   - name: wordnik
     engine: wordnik
     shortcut: wnik
-    timeout: 5.0
+    #timeout: 5.0
 
   - name: woxikon.de synonyme
     engine: xpath
     shortcut: woxi
     categories: [dictionaries]
-    timeout: 5.0
+    #timeout: 5.0
 
     search_url: https://synonyme.woxikon.de/synonyme/{query}.php
     url_xpath: //div[@class="upper-synonyms"]/a/@href
@@ -2557,7 +2554,7 @@ engines:
   - name: svgrepo
     engine: svgrepo
     shortcut: svg
-    timeout: 10.0
+    #timeout: 10.0
 
 
   - name: tootfinder
@@ -2603,7 +2600,7 @@ engines:
   - name: wttr.in
     engine: wttr
     shortcut: wttr
-    timeout: 9.0
+    #timeout: 9.0
 
   - name: brave
     engine: brave
@@ -2669,7 +2666,7 @@ engines:
   - name: senscritique
     engine: senscritique
     shortcut: scr
-    timeout: 4.0
+    #timeout: 4.0
 
 
   - name: minecraft wiki

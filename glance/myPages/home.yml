@@ -6,11 +6,12 @@
   center-vertically: true
   expand-mobile-page-navigation: true
   show-mobile-header: true
+  head-widgets:
+    $include: /myWidgets/search.yml
   columns:
     $include: /myColumns/left.yml
     - size: full
       widgets:
-        $include: /myWidgets/search.yml
         $include: /myWidgets/serverStats.yml
         $include: /myWidgets/dnsStats.yml
         $include: /myWidgets/uptimeKuma.yml
