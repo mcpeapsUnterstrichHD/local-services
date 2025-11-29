@@ -1,20 +1,20 @@
-name: DEV
-# Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
-# hide-desktop-navigation: true
-slug: dev
-title: DEV
-center-vertically: true
-expand-mobile-page-navigation: true
-show-mobile-header: true
-columns:
-  - $include: /myColumns/left.yml
-  - size: full
-    widgets:
-      - $include: /myWidgets/search.yml
-      - $include: /myWidgets/githubCommitGraph.yml
-      - $include: /myWidgets/githubStats.yml
-      - $include: /myWidgets/githubNotifications.yml
-      - $include: /myWidgets/leetCodeDailyQuestions.yml
-      - $include: /myWidgets/githubRepositories.yml
-      - $include: /myWidgets/hackerNews.yml
-  - $include: /myColumns/right.yml
+- name: DEV
+  # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
+  # hide-desktop-navigation: true
+  slug: dev
+  title: DEV
+  center-vertically: true
+  expand-mobile-page-navigation: true
+  show-mobile-header: true
+  columns:
+    $include: /myColumns/left.yml
+    - size: full
+      widgets:
+        $include: /myWidgets/search.yml
+        $include: /myWidgets/githubCommitGraph.yml
+        $include: /myWidgets/githubStats.yml
+        $include: /myWidgets/githubNotifications.yml
+        $include: /myWidgets/leetCodeDailyQuestions.yml
+        $include: /myWidgets/githubRepositories.yml
+        $include: /myWidgets/hackerNews.yml
+    $include: /myColumns/right.yml

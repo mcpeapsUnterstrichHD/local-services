@@ -1,64 +1,65 @@
-type: bookmarks
-groups:
-  - title: Uni
-    color: 354 44 57
-    links:
-      - title: ISIS
-        url: https://isis.tu-berlin.de/my/
-      - title: Moses
-        url: https://moseskonto.tu-berlin.de/moses/index.html
-      - title: TUPort
-        url: https://tuport.sap.tu-berlin.de/
-      - title: Github Repo
-        url: https://github.com/comboomPunkTsucht/TU-Berlin-repo-aps
-      - title: Gitlab
-        url: https://git.tu-berlin.de
-      - title: Gitlab Repo
-        url: https://git.tu-berlin.de/mahd/TU-Berlin-repo-aps
-      - title: E-Mails
-        url: https://mail.tu-berlin.de
-      - title: Elements Web (matrix)
-        url: https://chat.tu-berlin.de
-      - title: Zoom IntroProg-WiSe2025/26
-        url: https://s.fhg.de/VL-Introprog-2025
-  - title: Entertainment
-    color: 15 53 63
-    links:
-      - title: YouTube
-        url: https://www.youtube.com/
-      - title: S.to
-        url: https://s.to/
-      - title: Disney+
-        url: https://www.disneyplus.com/
-      - title: Netflix
-        url: https://www.netflix.com/
-      - title: Twitch
-        url: https://twitch.tv
-      - title: Filmpalast.to
-        url: https://filmpalast.to/
-      - title: Prime Video DE
-        url: https://www.amazon.de/gp/video/storefront
-  - title: Dev
-    color: 221 17 36
-    links:
-      - title: Local Dev Site
-        url: https://dev.localhost/
-      - title: Github
-        url: https://github.com
-  - title: Meine Webseiten
-    color: 93 29 65
-    links:
-      - title: Meine Webseite
-        url: https://mcpeapsunterstrichhd.dev/
-      - title: Linkhub
-        url: https://mcpeapsunterstrichhd.dev/linkhub/
-      - title: comboom.sucht
-        url: https://comboompunktsucht.app/
-  - title: Social
-    color: 311 21 63
-    links:
-      - title: Reddit
-        url: https://www.reddit.com/
-      - title: Twitter
-        url: https://twitter.com/
-      - title: Instagram
+- type: bookmarks
+  groups:
+    - title: Uni
+      color: 354 44 57
+      links:
+        - title: ISIS
+          url: https://isis.tu-berlin.de/my/
+        - title: Moses
+          url: https://moseskonto.tu-berlin.de/moses/index.html
+        - title: TUPort
+          url: https://tuport.sap.tu-berlin.de/
+        - title: Github Repo
+          url: https://github.com/comboomPunkTsucht/TU-Berlin-repo-aps
+        - title: Gitlab
+          url: https://git.tu-berlin.de
+        - title: Gitlab Repo
+          url: https://git.tu-berlin.de/mahd/TU-Berlin-repo-aps
+        - title: E-Mails
+          url: https://mail.tu-berlin.de
+        - title: Elements Web (matrix)
+          url: https://chat.tu-berlin.de
+        - title: Zoom IntroProg-WiSe2025/26
+          url: https://s.fhg.de/VL-Introprog-2025
+    - title: Entertainment
+      color: 15 53 63
+      links:
+        - title: YouTube
+          url: https://www.youtube.com/
+        - title: S.to
+          url: https://s.to/
+        - title: Disney+
+          url: https://www.disneyplus.com/
+        - title: Netflix
+          url: https://www.netflix.com/
+        - title: Twitch
+          url: https://twitch.tv
+        - title: Filmpalast.to
+          url: https://filmpalast.to/
+        - title: Prime Video DE
+          url: https://www.amazon.de/gp/video/storefront
+    - title: Dev
+      color: 221 17 36
+      links:
+        - title: Local Dev Site
+          url: https://dev.localhost/
+        - title: Github
+          url: https://github.com
+    - title: Meine Webseiten
+      color: 93 29 65
+      links:
+        - title: Meine Webseite
+          url: https://mcpeapsunterstrichhd.dev/
+        - title: Linkhub
+          url: https://mcpeapsunterstrichhd.dev/linkhub/
+        - title: comboom.sucht
+          url: https://comboompunktsucht.app/
+    - title: Social
+      color: 311 21 63
+      links:
+        - title: Reddit
+          url: https://www.reddit.com/
+        - title: Twitter
+          url: https://twitter.com/
+        - title: Instagram
+          url: https://www.instagram.com/

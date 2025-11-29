@@ -1,24 +1,24 @@
-type: videos
-title: YouTube Videos
-channels:
-  - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
-  - UCdBK94H6oZT2Q7l0-b0xmMg # ShortCircit
-  - UCEbYhDd6c6vngsF5PQpFVWg # Tsoding
-  - UCrqM0Ym_NbK1fqeQG2VIohg # Tsoding Daily
-  - UCqwGaUvq_l0RKszeHhZ5leA # PietSmiet
-  - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
-  - UC8Mt0oI0zRj35ZwYjImUOgg # Zerobrain
-  - UCjUrZyueysuEQ1a5qntzI9Q # KasaiSora
-  - UCKGMHVipEvuZudhHD05FOYA # Simplicissimus
-  - UCODHrzPMGbNv67e84WDZhQQ # fern
-  - UCZX6LAAGQM1s0_UtBws270Q # Shalz
-  - UCOzqhzAIw4JTJIMkDTfLnkg # Paluten
-  - UCQ6fPy9wr7qnMxAbFOGBaLw # Computer Clan
-  - UCzH549YlZhdhIqhtvz7XHmQ # AlexiBexi
-  - UC3I6QRuE34QZPGWhxj5cjng # xanderlein
-  - UCu5jfQcpRLm9xhmlSd5S8xw # Armin van Burren
-  - UCS-WzPVpAAli-1IfEG2lN8A # Michael MJD
-  - UCjOUYph-KNEMFPeT9dvlKUw # LET'S SKIP THE BLA a+s DialogGroup
-  - UCoL8olX-259lS1N6QPyP4IQ # Action Retro
-  - UCxaaULLk6UCnRl5VKRc7G0A # No Text To Speech
-style: grid-cards
+- type: videos
+  title: YouTube Videos
+  channels:
+    - UCXuqSBlHAE6Xw-yeJA0Tunw # Linus Tech Tips
+    - UCdBK94H6oZT2Q7l0-b0xmMg # ShortCircit
+    - UCEbYhDd6c6vngsF5PQpFVWg # Tsoding
+    - UCrqM0Ym_NbK1fqeQG2VIohg # Tsoding Daily
+    - UCqwGaUvq_l0RKszeHhZ5leA # PietSmiet
+    - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
+    - UC8Mt0oI0zRj35ZwYjImUOgg # Zerobrain
+    - UCjUrZyueysuEQ1a5qntzI9Q # KasaiSora
+    - UCKGMHVipEvuZudhHD05FOYA # Simplicissimus
+    - UCODHrzPMGbNv67e84WDZhQQ # fern
+    - UCZX6LAAGQM1s0_UtBws270Q # Shalz
+    - UCOzqhzAIw4JTJIMkDTfLnkg # Paluten
+    - UCQ6fPy9wr7qnMxAbFOGBaLw # Computer Clan
+    - UCzH549YlZhdhIqhtvz7XHmQ # AlexiBexi
+    - UC3I6QRuE34QZPGWhxj5cjng # xanderlein
+    - UCu5jfQcpRLm9xhmlSd5S8xw # Armin van Burren
+    - UCS-WzPVpAAli-1IfEG2lN8A # Michael MJD
+    - UCjOUYph-KNEMFPeT9dvlKUw # LET'S SKIP THE BLA a+s DialogGroup
+    - UCoL8olX-259lS1N6QPyP4IQ # Action Retro
+    - UCxaaULLk6UCnRl5VKRc7G0A # No Text To Speech
+  style: grid-cards

@@ -1,30 +1,30 @@
-type: search
-search-engine: https://search.localhost/search?q={QUERY}
-new-tab: true
-autofocus: true
-placeholder: Search the web...
-bangs:
-  - title: Youtube
-    shortcut: "!yt"
-    url: https://www.youtube.com/results?search_query={QUERY}
-  - title: Youtube Watch
-    shortcut: "!ytw"
-    url: https://www.youtube.com/watch?v={QUERY}
-  - title: Github
-    shortcut: "!gh"
-    url: https://github.com/search?q={QUERY}
-  - title: Technische Universität Berlin
-    shortcut: "!tub"
-    url: https://www.tu.berlin/suche?tx_solr[q]={QUERY}
-  - title: Technische Universität Berlin Go Code
-    shortcut: "!tub-go"
-    url: https://www.tu.berlin/go{QUERY}
-  - title: Technische Universität Berlin ISIS
-    shortcut: "!tub-isis"
-    url: https://isis.tu-berlin.de/local/coursemanager/search.php?search={QUERY}
-  - title: Technische Universität Berlin Moses Veranstaltungsverzeichnis
-    shortcut: "!tub-moses-v"
-    url: https://moseskonto.tu-berlin.de/moses/verzeichnis/veranstaltungen/volltextsuche.html?query={QUERY}&search=true
-  - title: Technische Universität Berlin Moses Studiengang
-    shortcut: "!tub-moses-s"
-    url: https://moseskonto.tu-berlin.de/moses/modultransfersystem/studiengaenge/suchen.html?text={QUERY}
+- type: search
+  search-engine: https://search.localhost/search?q={QUERY}
+  new-tab: true
+  autofocus: true
+  placeholder: Search the web...
+  bangs:
+    - title: Youtube
+      shortcut: "!yt"
+      url: https://www.youtube.com/results?search_query={QUERY}
+    - title: Youtube Watch
+      shortcut: "!ytw"
+      url: https://www.youtube.com/watch?v={QUERY}
+    - title: Github
+      shortcut: "!gh"
+      url: https://github.com/search?q={QUERY}
+    - title: Technische Universität Berlin
+      shortcut: "!tub"
+      url: https://www.tu.berlin/suche?tx_solr[q]={QUERY}
+    - title: Technische Universität Berlin Go Code
+      shortcut: "!tub-go"
+      url: https://www.tu.berlin/go{QUERY}
+    - title: Technische Universität Berlin ISIS
+      shortcut: "!tub-isis"
+      url: https://isis.tu-berlin.de/local/coursemanager/search.php?search={QUERY}
+    - title: Technische Universität Berlin Moses Veranstaltungsverzeichnis
+      shortcut: "!tub-moses-v"
+      url: https://moseskonto.tu-berlin.de/moses/verzeichnis/veranstaltungen/volltextsuche.html?query={QUERY}&search=true
+    - title: Technische Universität Berlin Moses Studiengang
+      shortcut: "!tub-moses-s"
+      url: https://moseskonto.tu-berlin.de/moses/modultransfersystem/studiengaenge/suchen.html?text={QUERY}

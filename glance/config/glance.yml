@@ -17,15 +17,15 @@ theme:
   disable-picker: true
 
 pages:
-  - $include: /myPages/home.yml
-  - $include: /myPages/social.yml
-  - $include: /myPages/dev.yml
-  - $include: /myPages/gaming.yml
+  $include: /myPages/home.yml
+  $include: /myPages/social.yml
+  $include: /myPages/dev.yml
+  $include: /myPages/gaming.yml
 
 branding:
   custom-footer: |
     <a href="/home">2025 &copy; Fabian Aps</a>
-  #logo-url: /assets/logo.png
+  logo-url: /assets/logo.png
   favicon-url: /assets/logo.png
   app-name: "My Dashboard"
   app-icon-url: "/assets/logo.png"
