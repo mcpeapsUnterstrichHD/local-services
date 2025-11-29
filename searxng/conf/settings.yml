@@ -73,6 +73,9 @@ search:
   # formats: [html, csv, json, rss]
   formats:
     - html
+    - csv
+    - json
+    - rss
 
 server:
   # Is overwritten by ${SEARXNG_PORT} and ${SEARXNG_BIND_ADDRESS}
@@ -133,7 +136,7 @@ ui:
   # use codes from the 'locales' config section
   default_locale: "en"
   # Open result links in a new tab by default
-  # results_on_new_tab: false
+  results_on_new_tab: true
   theme_args:
     # style of simple theme: auto, light, dark, black
     simple_style: black
