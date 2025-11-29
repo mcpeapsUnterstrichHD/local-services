@@ -1,0 +1,7 @@
+type: dns-stats
+service: adguard
+url: ${DNS_URL}
+username: ${DNS_USERNAME}
+password: ${DNS_PASSWORD}
+hour-format: 24h
+allow-insecure: true

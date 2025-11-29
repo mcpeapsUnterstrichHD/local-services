@@ -1,0 +1,16 @@
+type: extension
+title: GitHub Commit Graph
+url: http://192.168.1.10:8080/graph/${GITHUB_USERNAME}
+allow-potentially-dangerous-html: true
+parameters:
+  background-color: "#2E3440" # cell background
+  primary-color: "#A2BF8A" # cell foreground
+  svg-height: 150 # height for graph svg
+  show-months: true # show months on the graph
+  show-weekdays: true # show weekdays on the graph
+  font-size: 9 # size of weekdays & months text on grap
+  # if true, it will transition the hue from background
+  # to primary color per the number of commits.
+  # otherwise it will just use the background hue for
+  # 0 commits and the foreground hue for all others
+  transition-hue: true

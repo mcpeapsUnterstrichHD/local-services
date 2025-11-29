@@ -1,0 +1,5 @@
+size: small
+widgets:
+  - $include: ../myWidgets/clock.yml
+  - $include: ../myWidgets/calender.yml
+  - $include: ../myWidgets/weather.yml

@@ -1,0 +1,12 @@
+type: rss
+title: RSS Feed
+style: detailed-list
+feeds:
+  - title: Technische Universität Berlin - Aktuelle Pressemitteilungen
+    url: https://www.tu.berlin/news/pressemitteilungen-1?type=9818
+  - title: Technische Universität Berlin - Aktuelle Nachichten
+    url: https://www.tu.berlin/news/nachrichten-der-tu-berlin?type=9818
+  - title: Vivaldi Browser Blog
+    url: https://vivaldi.com/feed/
+  - title: comboom.sucht
+    url: https://blog.comboompunktsucht.app/rss.xml

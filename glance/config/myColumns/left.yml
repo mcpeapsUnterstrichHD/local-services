@@ -1,0 +1,3 @@
+size: small
+widgets:
+  - $include: ../myWidgets/bookmarks.yml

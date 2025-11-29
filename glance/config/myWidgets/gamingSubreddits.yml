@@ -1,0 +1,14 @@
+type: group
+title: Gaming Subreddits
+widgets:
+  - type: reddit
+    show-thumbnails: true
+    subreddit: pcgaming
+    style: grid-cards
+  - type: reddit
+    subreddit: games
+    style: grid-cards
+  - type: reddit
+    subreddit: gamingnews
+    limit: 7
+    style: grid-cards

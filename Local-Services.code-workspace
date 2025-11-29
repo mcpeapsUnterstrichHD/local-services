@@ -1,10 +1,13 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"nuxt.isNuxtApp": false
-	}
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "nuxt.isNuxtApp": false,
+    "piny.project_settings": {
+      "open-pages": ["pinyfakepage.html"]
+    }
+  }
 }
