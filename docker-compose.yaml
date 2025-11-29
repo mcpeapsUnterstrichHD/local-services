@@ -2,7 +2,7 @@ services:
   npmplus:
     container_name: npmplus-comboom.sucht
     image: docker.io/zoeyvid/npmplus:latest # or ghcr.io/zoeyvid/npmplus:latest
-    pull_policy: always
+    #pull_policy: always
     restart: always
     network_mode: host
     ipc: host # required when you want to use the openappsec attachment module
@@ -101,7 +101,7 @@ services:
   searxng:
     container_name: searxng-comboom.sucht
     image: searxng/searxng:2025.9.10-a9b088d
-    pull_policy: always
+    #pull_policy: always
     networks:
       local-services:
         ipv4_address: 192.168.1.3
@@ -126,7 +126,7 @@ services:
   it-tools:
     container_name: it-tools-comboom.sucht
     image: ghcr.io/sharevb/it-tools:nightly
-    pull_policy: always
+    #pull_policy: always
     ports:
       - "8083:8080"
     environment:
@@ -147,7 +147,7 @@ services:
   stirling-pdf:
     container_name: stirling-pdf-comboom.sucht
     image: stirlingtools/stirling-pdf:latest-fat
-    pull_policy: always
+    #pull_policy: always
     ports:
       - "8081:8081"
       - "8080:8080"
@@ -182,7 +182,7 @@ services:
 
   mariadb:
     image: mariadb:latest
-    pull_policy: always
+    #pull_policy: always
     container_name: mariadb-comboom.sucht
     restart: always
     environment:
@@ -207,7 +207,7 @@ services:
       glance.hide: false
 
   phpmyadmin:
-    pull_policy: always
+    #pull_policy: always
     container_name: phpmyadmin-comboom.sucht
     links:
       - mariadb:db
@@ -237,12 +237,15 @@ services:
   glance:
     container_name: glance-comboom.sucht
     image: glanceapp/glance
-    pull_policy: always
+    #pull_policy: always
     network_mode: host
     restart: always
     volumes:
       - ./glance/config:/app/config
       - ./glance/assets:/app/assets
+      - ./glance/myPages:/myPages
+      - ./glance/myColumns:/myColumns
+      - ./glance/myWidgets:/myWidgets
       # Optionally, also mount docker socket if you want to use the docker containers widget
       - /var/run/docker.sock:/var/run/docker.sock:ro
     env_file: ./glance/.env
@@ -258,7 +261,7 @@ services:
   glance-github-graph:
     image: haumea/glance-github-graph:latest
     container_name: glance-github-graph-comboom.sucht
-    pull_policy: always
+    #pull_policy: always
     restart: always
     ports:
       - 8084:8080
@@ -273,7 +276,7 @@ services:
   glance-agent:
     container_name: glance-agent-comboom.sucht
     image: glanceapp/agent
-    pull_policy: always
+    #pull_policy: always
     restart: always
     # command: /app/agent --config /opt/glance-agent/agent.yml
     # environment:
@@ -293,7 +296,7 @@ services:
 
   redis:
     image: redis:latest
-    pull_policy: always
+    #pull_policy: always
     container_name: redis-comboom.sucht
     restart: always
     volumes:
@@ -355,7 +358,7 @@ services:
   adguardhome:
     image: adguard/adguardhome:edge
     container_name: adguardhome-comboom.sucht
-    pull_policy: always
+    #pull_policy: always
     restart: always
     volumes:
       - ./adguardhome/work:/opt/adguardhome/work
@@ -390,7 +393,7 @@ services:
 
   uptime-kuma:
     image: "louislam/uptime-kuma"
-    pull_policy: always
+    #pull_policy: always
     container_name: uptime-kuma-comboom.sucht
     volumes:
       - "./uptime-kuma:/app/data"

@@ -3,4 +3,4 @@ title: GitHub Stats
 url: http://192.168.1.10:8080/stats/${GITHUB_USERNAME}
 allow-potentially-dangerous-html: true
 parameters:
-show_quartiles: true # whether to include "quartiles" in the stats
+  show_quartiles: true # whether to include "quartiles" in the stats

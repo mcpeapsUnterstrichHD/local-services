@@ -1,5 +1,5 @@
 type: custom-api
-title: Uptime Kumas
+title: Uptime Kuma
 title-url: ${UPTIME_KUMA_URL}
 url: ${UPTIME_KUMA_URL}/api/status-page/${UPTIME_KUMA_STATUS_SLUG}
 subrequests:
@@ -7,21 +7,21 @@ subrequests:
     url: ${UPTIME_KUMA_URL}/api/status-page/heartbeat/${UPTIME_KUMA_STATUS_SLUG}
 cache: 10m
 template: |
-  {{ $hb := .Subrequest "heartbeat
+  {{ $hb := .Subrequest "heartbeats" }}
   {{ if not (.JSON.Exists "publicGroupList") }}
   <p class="color-negative">Error reading response</p>
   {{ else if eq (len (.JSON.Array "publicGroupList")) 0 }}
   <p>No monitors found</p>
-  {{ el
+  {{ else }}
   <ul class="dynamic-columns list-gap-8">
     {{ range .JSON.Array "publicGroupList" }}
     {{ range .Array "monitorList" }}
     {{ $id := .String "id" }}
     {{ $hbArray := $hb.JSON.Array (print "heartbeatList." $id) }}
     <div class="flex items-center gap-12">
-      < class="size-title-dynamic color-highlight text-truncate block grow" href="${UPTIME_KUMA_URL}/dashboard/{{ $id }}"
+      <a class="size-title-dynamic color-highlight text-truncate block grow" href="${UPTIME_KUMA_URL}/dashboard/{{ $id }}"
         target="_blank" rel="noreferrer">
-        {{ .String "name" }}
+        {{ .String "name" }} </a>
       {{ if gt (len $hbArray) 0 }}
         {{ $latest := index $hbArray (sub (len $hbArray) 1) }}
         {{ if eq ($latest.Int "status") 1 }}

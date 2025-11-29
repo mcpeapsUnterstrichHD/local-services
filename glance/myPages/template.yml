@@ -1,0 +1,15 @@
+name: Template
+# Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
+# hide-desktop-navigation: true
+slug: template
+title: Template
+center-vertically: true
+expand-mobile-page-navigation: true
+show-mobile-header: true
+columns:
+  - $include: /myColumns/left.yml
+  - size: full
+    widgets:
+      - $include: /myWidgets/search.yml
+
+  - $include: /myColumns/right.yml
