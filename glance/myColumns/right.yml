@@ -3,3 +3,4 @@
     $include: /myWidgets/clock.yml
     $include: /myWidgets/calender.yml
     $include: /myWidgets/weather.yml
+    $include: /myWidgets/randomFact.yml

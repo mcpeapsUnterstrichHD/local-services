@@ -11,6 +11,7 @@
     - size: full
       widgets:
         $include: /myWidgets/search.yml
+        $include: /myWidgets/shouldIDeployToday.yml
         $include: /myWidgets/githubCommitGraph.yml
         $include: /myWidgets/githubStats.yml
         $include: /myWidgets/githubNotifications.yml
