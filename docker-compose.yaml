@@ -114,6 +114,7 @@ services:
       - ./searxng/conf:/etc/searxng:rw
       - ./searxng/themes:/usr/local/searxng/searx/static/themes
       - /etc/localtime:/etc/localtime
+      - /opt/homebrew/opt/tor/bin/tor:/usr/local/bin/tor:ro
     restart: always
     labels:
       glance.name: SearXNG
