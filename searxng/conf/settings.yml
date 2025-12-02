@@ -98,7 +98,7 @@ server:
   # Proxy image results through SearXNG. Is overwritten by ${SEARXNG_IMAGE_PROXY}
   image_proxy: false
   # 1.0 and 1.1 are supported
-  http_protocol_version: "1.0"
+  http_protocol_version: "1.1"
   # POST queries are "more secure!" but are also the source of hard-to-locate
   # annoyances, which is why GET may be better for end users and their browsers.
   # see https://github.com/searxng/searxng/pull/3619
@@ -118,9 +118,9 @@ valkey:
 
 ui:
   # Custom static path - leave it blank if you didn't change
-  static_path: ""
+  # static_path: "/usr/local/cbps/static/"
   # Custom templates path - leave it blank if you didn't change
-  templates_path: ""
+  # templates_path: "/usr/local/cbps/templates/"
   # query_in_title: When true, the result page's titles contains the query
   # it decreases the privacy, since the browser can records the page titles.
   query_in_title: true
@@ -494,25 +494,25 @@ engines:
     shortcut: bc
     categories: music
 
-  - name: baidu
-    baidu_category: general
-    categories: [general]
-    engine: baidu
-    shortcut: bd
+  #  - name: baidu
+  #    baidu_category: general
+  #    categories: [general]
+  #    engine: baidu
+  #    shortcut: bd
 
 
-  - name: baidu images
-    baidu_category: images
-    categories: [images]
-    engine: baidu
-    shortcut: bdi
+  #  - name: baidu images
+  #    baidu_category: images
+  #    categories: [images]
+  #    engine: baidu
+  #    shortcut: bdi
 
 
-  - name: baidu kaifa
-    baidu_category: it
-    categories: [it]
-    engine: baidu
-    shortcut: bdk
+  #  - name: baidu kaifa
+  #    baidu_category: it
+  #    categories: [it]
+  #    engine: baidu
+  #    shortcut: bdk
 
 
   - name: wikipedia
@@ -629,21 +629,21 @@ engines:
 
     inactive: true
 
-  - name: cloudflareai
-    engine: cloudflareai
-    shortcut: cfai
-    # get api token and accont id from https://developers.cloudflare.com/workers-ai/get-started/rest-api/
-    cf_account_id: 'your_cf_accout_id'
-    cf_ai_api: 'your_cf_api'
-    # create your ai gateway by https://developers.cloudflare.com/ai-gateway/get-started/creating-gateway/
-    cf_ai_gateway: 'your_cf_ai_gateway_name'
-    # find the model name from https://developers.cloudflare.com/workers-ai/models/#text-generation
-    cf_ai_model: 'ai_model_name'
-    # custom your preferences
-    # cf_ai_model_display_name: 'Cloudflare AI'
-    # cf_ai_model_assistant: 'prompts_for_assistant_role'
-    # cf_ai_model_system: 'prompts_for_system_role'
-    timeout: 30
+  #  - name: cloudflareai
+  #    engine: cloudflareai
+  #    shortcut: cfai
+  #    # get api token and accont id from https://developers.cloudflare.com/workers-ai/get-started/rest-api/
+  #    cf_account_id: 'your_cf_accout_id'
+  #    cf_ai_api: 'your_cf_api'
+  #    # create your ai gateway by https://developers.cloudflare.com/ai-gateway/get-started/creating-gateway/
+  #    cf_ai_gateway: 'your_cf_ai_gateway_name'
+  #    # find the model name from https://developers.cloudflare.com/workers-ai/models/#text-generation
+  #    cf_ai_model: 'ai_model_name'
+  #    # custom your preferences
+  #    # cf_ai_model_display_name: 'Cloudflare AI'
+  #    # cf_ai_model_assistant: 'prompts_for_assistant_role'
+  #    # cf_ai_model_system: 'prompts_for_system_role'
+  #    timeout: 30
 
 
   - name: core.ac.uk
@@ -675,26 +675,26 @@ engines:
     about:
       website: https://crowdview.ai/
 
-  - name: yep
-    engine: yep
-    shortcut: yep
-    categories: general
-    search_type: web
-    timeout: 5
+  #  - name: yep
+  #    engine: yep
+  #    shortcut: yep
+  #    categories: general
+  #    search_type: web
+  #    timeout: 5
 
 
-  - name: yep images
-    engine: yep
-    shortcut: yepi
-    categories: images
-    search_type: images
+  #  - name: yep images
+  #    engine: yep
+  #    shortcut: yepi
+  #    categories: images
+  #    search_type: images
 
 
-  - name: yep news
-    engine: yep
-    shortcut: yepn
-    categories: news
-    search_type: news
+  #  - name: yep news
+  #    engine: yep
+  #    shortcut: yepn
+  #    categories: news
+  #    search_type: news
 
 
   - name: currency
@@ -803,34 +803,34 @@ engines:
     tests: *tests_infobox
     categories: [general]
 
-  - name: duckduckgo
-    engine: duckduckgo
-    shortcut: ddg
+  #  - name: duckduckgo
+  #    engine: duckduckgo
+  #    shortcut: ddg
 
-  - name: duckduckgo images
-    engine: duckduckgo_extra
-    categories: [images, web]
-    ddg_category: images
-    shortcut: ddi
-
-
-  - name: duckduckgo videos
-    engine: duckduckgo_extra
-    categories: [videos, web]
-    ddg_category: videos
-    shortcut: ddv
+  #  - name: duckduckgo images
+  #    engine: duckduckgo_extra
+  #    categories: [images, web]
+  #    ddg_category: images
+  #    shortcut: ddi
 
 
-  - name: duckduckgo news
-    engine: duckduckgo_extra
-    categories: [news, web]
-    ddg_category: news
-    shortcut: ddn
+  #  - name: duckduckgo videos
+  #    engine: duckduckgo_extra
+  #    categories: [videos, web]
+  #    ddg_category: videos
+  #    shortcut: ddv
 
 
-  - name: duckduckgo weather
-    engine: duckduckgo_weather
-    shortcut: ddw
+  #  - name: duckduckgo news
+  #    engine: duckduckgo_extra
+  #    categories: [news, web]
+  #    ddg_category: news
+  #    shortcut: ddn
+
+
+  #  - name: duckduckgo weather
+  #    engine: duckduckgo_weather
+  #    shortcut: ddw
 
 
   - name: apple maps
@@ -1733,35 +1733,34 @@ engines:
     shortcut: qki
 
 
-  - name: qwant
-    qwant_categ: web
-    engine: qwant
-    shortcut: qw
-    categories: [general, web]
+  #  - name: qwant
+  #    qwant_categ: web
+  #    engine: qwant
+  #    shortcut: qw
+  #    categories: [general, web]
+  #    additional_tests:
+  #      rosebud: *test_rosebud
 
-    additional_tests:
-      rosebud: *test_rosebud
+  #  - name: qwant news
+  #    qwant_categ: news
+  #    engine: qwant
+  #    shortcut: qwn
+  #    categories: news
+  #    network: qwant
 
-  - name: qwant news
-    qwant_categ: news
-    engine: qwant
-    shortcut: qwn
-    categories: news
-    network: qwant
+  #  - name: qwant images
+  #    qwant_categ: images
+  #    engine: qwant
+  #    shortcut: qwi
+  #    categories: [images, web]
+  #    network: qwant
 
-  - name: qwant images
-    qwant_categ: images
-    engine: qwant
-    shortcut: qwi
-    categories: [images, web]
-    network: qwant
-
-  - name: qwant videos
-    qwant_categ: videos
-    engine: qwant
-    shortcut: qwv
-    categories: [videos, web]
-    network: qwant
+  #  - name: qwant videos
+  #    qwant_categ: videos
+  #    engine: qwant
+  #    shortcut: qwv
+  #    categories: [videos, web]
+  #    network: qwant
 
   # - name: library
   #   engine: recoll
@@ -2105,25 +2104,25 @@ engines:
     engine: unsplash
     shortcut: us
 
-  - name: yandex
-    engine: yandex
-    categories: general
-    search_type: web
-    shortcut: yd
+  #  - name: yandex
+  #    engine: yandex
+  #    categories: general
+  #    search_type: web
+  #    shortcut: yd
 
 
-  - name: yandex images
-    engine: yandex
-    network: yandex
-    categories: images
-    search_type: images
-    shortcut: ydi
+  #  - name: yandex images
+  #    engine: yandex
+  #    network: yandex
+  #    categories: images
+  #    search_type: images
+  #    shortcut: ydi
 
 
-  - name: yandex music
-    engine: yandex_music
-    network: yandex
-    shortcut: ydm
+  #  - name: yandex music
+  #    engine: yandex_music
+  #    network: yandex
+  #    shortcut: ydm
 
     # https://yandex.com/support/music/access.html
 
@@ -2456,28 +2455,27 @@ engines:
     shortcut: mvw
 
 
-  - name: yacy
-    # https://docs.searxng.org/dev/engines/online/yacy.html
-    engine: yacy
-    categories: general
-    search_type: text
-    # see https://github.com/searxng/searxng/pull/3631#issuecomment-2240903027
-    base_url:
-      - https://yacy.searchlab.eu
-    shortcut: ya
+  #  - name: yacy
+  #    # https://docs.searxng.org/dev/engines/online/yacy.html
+  #    engine: yacy
+  #    categories: general
+  #    search_type: text
+  #    # see https://github.com/searxng/searxng/pull/3631#issuecomment-2240903027
+  #    base_url:
+  #      - https://yacy.searchlab.eu
+  #    shortcut: ya
+  #    # if you aren't using HTTPS for your local yacy instance disable https
+  #    # enable_http: false
+  #    search_mode: 'global'
+  #    # timeout can be reduced in 'local' search mode
+  #    timeout: 5.0
 
-    # if you aren't using HTTPS for your local yacy instance disable https
-    # enable_http: false
-    search_mode: 'global'
-    # timeout can be reduced in 'local' search mode
-    timeout: 5.0
-
-  - name: yacy images
-    engine: yacy
-    network: yacy
-    categories: images
-    search_type: image
-    shortcut: yai
+  #  - name: yacy images
+  #    engine: yacy
+  #    network: yacy
+  #    categories: images
+  #    search_type: image
+  #    shortcut: yai
 
     # timeout can be reduced in 'local' search mode
     timeout: 5.0

@@ -112,7 +112,8 @@ services:
       - "8082:8080"
     volumes:
       - ./searxng/conf:/etc/searxng:rw
-      - ./searxng/themes:/usr/local/searxng/searx/static/themes
+      - ./searxng/static:/usr/local/cbps/static
+      - ./searxng/templates:/usr/local/cbps/templates
       - /etc/localtime:/etc/localtime
       - /opt/homebrew/opt/tor/bin/tor:/usr/local/bin/tor:ro
     restart: always
@@ -349,7 +350,7 @@ services:
   #       ipv4_address: 192.168.1.14
   #       ipv6_address: fd07:b51a:cc66:d001::000E
   #   ports:
-  #     - "8089:8080"
+  #     - "8089:8080
   #     - "8090:8443"
   #   restart: always
   #   pull_policy: always
