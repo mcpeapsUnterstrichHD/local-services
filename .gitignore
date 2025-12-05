@@ -48,3 +48,4 @@ uptime-kuma/kuma.db
 searxng/conf/faviconcache.db-shm
 searxng/conf/faviconcache.db
 searxng/conf/faviconcache.db-wal
+phpmyadmin/save/

@@ -83,7 +83,8 @@ server:
   bind_address: "0.0.0.0"
   # public URL of the instance, to ensure correct inbound links. Is overwritten
   # by ${SEARXNG_BASE_URL}.
-  base_url: false  # "http://example.com/location"
+  base_url: false
+  # "http://example.com/location"
   # rate limit the number of request on the instance, block some bots.
   # Is overwritten by ${SEARXNG_LIMITER}
   limiter: false
@@ -103,7 +104,7 @@ server:
   # annoyances, which is why GET may be better for end users and their browsers.
   # see https://github.com/searxng/searxng/pull/3619
   # Is overwritten by ${SEARXNG_METHOD}
-  method: "POST"
+  method: "GET"
   default_http_headers:
     X-Content-Type-Options: nosniff
     X-Download-Options: noopen
@@ -139,7 +140,7 @@ ui:
   results_on_new_tab: true
   theme_args:
     # style of simple theme: auto, light, dark, black
-    simple_style: black
+    simple_style: nord
   # Perform search immediately if a category selected.
   # Disable to select multiple categories at once and start the search manually.
   search_on_category_select: true
@@ -152,7 +153,7 @@ ui:
 #
 preferences:
   lock:
-    - categories
+#    - categories
     - language
     - autocomplete
     - favicon
@@ -395,6 +396,7 @@ engines:
     api_key: ""
     inactive: true
 
+
   - name: alpine linux packages
     engine: alpinelinux
     shortcut: alp
@@ -434,6 +436,7 @@ engines:
     categories: onions
     enable_http: true
     shortcut: ah
+
 
   - name: anaconda
     engine: xpath
@@ -483,7 +486,6 @@ engines:
   #   azure_client_id: "your_client_id"
   #   azure_client_secret: "your_client_secret"
   #   disabled: true
-
   # tmp suspended:  dh key too small
   # - name: base
   #   engine: base
@@ -494,25 +496,31 @@ engines:
     shortcut: bc
     categories: music
 
-  #  - name: baidu
-  #    baidu_category: general
-  #    categories: [general]
-  #    engine: baidu
-  #    shortcut: bd
+  - name: baidu
+    baidu_category: general
+    categories: [general]
+    engine: baidu
+    shortcut: bd
+    disabled: true
 
 
-  #  - name: baidu images
-  #    baidu_category: images
-  #    categories: [images]
-  #    engine: baidu
-  #    shortcut: bdi
+
+  - name: baidu images
+    baidu_category: images
+    categories: [images]
+    engine: baidu
+    shortcut: bdi
+    disabled: true
 
 
-  #  - name: baidu kaifa
-  #    baidu_category: it
-  #    categories: [it]
-  #    engine: baidu
-  #    shortcut: bdk
+
+  - name: baidu kaifa
+    baidu_category: it
+    categories: [it]
+    engine: baidu
+    shortcut: bdk
+    disabled: true
+
 
 
   - name: wikipedia
@@ -558,7 +566,6 @@ engines:
     content_xpath: //article[@class="repo-summary"]/p
     categories: [it, repos]
     timeout: 4.0
-
     shortcut: bb
     about:
       website: https://bitbucket.org/
@@ -597,6 +604,8 @@ engines:
     # to show premium or plus results too:
     # skip_premium: false
 
+
+
   # WARNING: links from chinaso.com voilate users privacy
   # Before activate these engines its mandatory to read
   # - https://github.com/searxng/searxng/issues/4694
@@ -608,7 +617,6 @@ engines:
     categories: [news]
     chinaso_category: news
     chinaso_news_source: all
-
     inactive: true
 
   - name: chinaso images
@@ -617,7 +625,6 @@ engines:
     shortcut: chinasoi
     categories: [images]
     chinaso_category: images
-
     inactive: true
 
   - name: chinaso videos
@@ -626,24 +633,24 @@ engines:
     shortcut: chinasov
     categories: [videos]
     chinaso_category: videos
-
     inactive: true
 
-  #  - name: cloudflareai
-  #    engine: cloudflareai
-  #    shortcut: cfai
-  #    # get api token and accont id from https://developers.cloudflare.com/workers-ai/get-started/rest-api/
-  #    cf_account_id: 'your_cf_accout_id'
-  #    cf_ai_api: 'your_cf_api'
-  #    # create your ai gateway by https://developers.cloudflare.com/ai-gateway/get-started/creating-gateway/
-  #    cf_ai_gateway: 'your_cf_ai_gateway_name'
-  #    # find the model name from https://developers.cloudflare.com/workers-ai/models/#text-generation
-  #    cf_ai_model: 'ai_model_name'
-  #    # custom your preferences
-  #    # cf_ai_model_display_name: 'Cloudflare AI'
-  #    # cf_ai_model_assistant: 'prompts_for_assistant_role'
-  #    # cf_ai_model_system: 'prompts_for_system_role'
-  #    timeout: 30
+  - name: cloudflareai
+    engine: cloudflareai
+    shortcut: cfai
+    # get api token and accont id from https://developers.cloudflare.com/workers-ai/get-started/rest-api/
+    cf_account_id: 'your_cf_accout_id'
+    cf_ai_api: 'your_cf_api'
+    # create your ai gateway by https://developers.cloudflare.com/ai-gateway/get-started/creating-gateway/
+    cf_ai_gateway: 'your_cf_ai_gateway_name'
+    # find the model name from https://developers.cloudflare.com/workers-ai/models/#text-generation
+    cf_ai_model: 'ai_model_name'
+    # custom your preferences
+    # cf_ai_model_display_name: 'Cloudflare AI'
+    # cf_ai_model_assistant: 'prompts_for_assistant_role'
+    # cf_ai_model_system: 'prompts_for_system_role'
+    timeout: 30
+    disabled: true
 
 
   - name: core.ac.uk
@@ -652,6 +659,7 @@ engines:
     # read https://docs.searxng.org/dev/engines/online/core.html
     api_key: ""
     inactive: true
+
 
   - name: crossref
     engine: crossref
@@ -671,30 +679,35 @@ engines:
     content_query: snippet
     title_html_to_text: true
     content_html_to_text: true
-
     about:
       website: https://crowdview.ai/
 
-  #  - name: yep
-  #    engine: yep
-  #    shortcut: yep
-  #    categories: general
-  #    search_type: web
-  #    timeout: 5
+  - name: yep
+    engine: yep
+    shortcut: yep
+    categories: general
+    search_type: web
+    timeout: 5
+    disabled: true
 
 
-  #  - name: yep images
-  #    engine: yep
-  #    shortcut: yepi
-  #    categories: images
-  #    search_type: images
+
+  - name: yep images
+    engine: yep
+    shortcut: yepi
+    categories: images
+    search_type: images
+    disabled: true
 
 
-  #  - name: yep news
-  #    engine: yep
-  #    shortcut: yepn
-  #    categories: news
-  #    search_type: news
+
+  - name: yep news
+    engine: yep
+    shortcut: yepn
+    categories: news
+    search_type: news
+    disabled: true
+
 
 
   - name: currency
@@ -725,7 +738,6 @@ engines:
     engine: duckduckgo_definitions
     shortcut: ddd
     weight: 2
-
     tests: *tests_infobox
 
   # cloudflare protected
@@ -803,34 +815,39 @@ engines:
     tests: *tests_infobox
     categories: [general]
 
-  #  - name: duckduckgo
-  #    engine: duckduckgo
-  #    shortcut: ddg
-
-  #  - name: duckduckgo images
-  #    engine: duckduckgo_extra
-  #    categories: [images, web]
-  #    ddg_category: images
-  #    shortcut: ddi
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: ddg
 
 
-  #  - name: duckduckgo videos
-  #    engine: duckduckgo_extra
-  #    categories: [videos, web]
-  #    ddg_category: videos
-  #    shortcut: ddv
+  - name: duckduckgo images
+    engine: duckduckgo_extra
+    categories: [images, web]
+    ddg_category: images
+    shortcut: ddi
 
 
-  #  - name: duckduckgo news
-  #    engine: duckduckgo_extra
-  #    categories: [news, web]
-  #    ddg_category: news
-  #    shortcut: ddn
+
+  - name: duckduckgo videos
+    engine: duckduckgo_extra
+    categories: [videos, web]
+    ddg_category: videos
+    shortcut: ddv
 
 
-  #  - name: duckduckgo weather
-  #    engine: duckduckgo_weather
-  #    shortcut: ddw
+
+  - name: duckduckgo news
+    engine: duckduckgo_extra
+    categories: [news, web]
+    ddg_category: news
+    shortcut: ddn
+
+
+
+  - name: duckduckgo weather
+    engine: duckduckgo_weather
+    shortcut: ddw
+    disabled: true
 
 
   - name: apple maps
@@ -1063,7 +1080,6 @@ engines:
   - name: grokipedia
     engine: grokipedia
     shortcut: gp
-
     inactive: true
 
   - name: material icons
@@ -1081,7 +1097,6 @@ engines:
     content_xpath: .//div[contains(@class, "article-formatted-body")]
     categories: it
     timeout: 4.0
-
     shortcut: habr
     about:
       website: https://habr.com/
@@ -1099,7 +1114,6 @@ engines:
   - name: hex
     engine: hex
     shortcut: hex
-
     # Valid values: name inserted_at updated_at total_downloads recent_downloads
     sort_criteria: "recent_downloads"
     page_size: 10
@@ -1107,7 +1121,6 @@ engines:
   - name: crates.io
     engine: crates
     shortcut: crates
-
     timeout: 6.0
 
   - name: hoogle
@@ -1250,7 +1263,6 @@ engines:
     engine: zlibrary
     shortcut: zlib
     timeout: 7.0
-
     # https://github.com/searxng/searxng/issues/3610
     inactive: true
 
@@ -1300,7 +1312,6 @@ engines:
     # To get an API key, please follow the instructions at
     # - https://about.marginalia-search.com/article/api/
     # api_key: ...
-
     inactive: true
 
   - name: mastodon users
@@ -1522,7 +1533,6 @@ engines:
     content_xpath: //li[@class="search-result"]//div[@class="search-snippet-info"]//p[@class="search-snippet"]
     categories: files
     timeout: 4.0
-
     shortcut: or
     about:
       website: https://openrepos.net/
@@ -1615,7 +1625,6 @@ engines:
   - name: pixiv
     shortcut: pv
     engine: pixiv
-
     inactive: true
     pixiv_image_proxies:
       - https://pximg.example.org
@@ -1636,6 +1645,7 @@ engines:
       # - https://pixiv.ducks.party
       # image proxy of https://pixiv.perennialte.ch
       # - https://pximg.perennialte.ch
+    disabled: true
 
   - name: podcastindex
     engine: podcastindex
@@ -1733,34 +1743,42 @@ engines:
     shortcut: qki
 
 
-  #  - name: qwant
-  #    qwant_categ: web
-  #    engine: qwant
-  #    shortcut: qw
-  #    categories: [general, web]
-  #    additional_tests:
-  #      rosebud: *test_rosebud
+  - name: qwant
+    qwant_categ: web
+    engine: qwant
+    shortcut: qw
+    categories: [general, web]
+    additional_tests:
+      rosebud: *test_rosebud
+    disabled: true
 
-  #  - name: qwant news
-  #    qwant_categ: news
-  #    engine: qwant
-  #    shortcut: qwn
-  #    categories: news
-  #    network: qwant
 
-  #  - name: qwant images
-  #    qwant_categ: images
-  #    engine: qwant
-  #    shortcut: qwi
-  #    categories: [images, web]
-  #    network: qwant
+  - name: qwant news
+    qwant_categ: news
+    engine: qwant
+    shortcut: qwn
+    categories: news
+    network: qwant
+    disabled: true
 
-  #  - name: qwant videos
-  #    qwant_categ: videos
-  #    engine: qwant
-  #    shortcut: qwv
-  #    categories: [videos, web]
-  #    network: qwant
+
+  - name: qwant images
+    qwant_categ: images
+    engine: qwant
+    shortcut: qwi
+    categories: [images, web]
+    network: qwant
+    disabled: true
+
+
+  - name: qwant videos
+    qwant_categ: videos
+    engine: qwant
+    shortcut: qwv
+    categories: [videos, web]
+    network: qwant
+    disabled: true
+
 
   # - name: library
   #   engine: recoll
@@ -1811,7 +1829,6 @@ engines:
     content_xpath: .
     categories: general
     shortcut: rd
-
     about:
       website: https://rightdao.com/
       use_official_api: false
@@ -1850,7 +1867,6 @@ engines:
     url_xpath: .//a[contains(@class,'result-link')]/@href
     title_xpath: .//span[contains(@class,'result-title-txt')]/text()
     content_xpath: ./p[@id='result-hightlight']
-
     about:
       website: https://searchmysite.net
 
@@ -1929,7 +1945,6 @@ engines:
   - name: searchcode code
     engine: searchcode_code
     shortcut: scc
-
     inactive: true
 
   # - name: searx
@@ -2063,6 +2078,7 @@ engines:
     enable_http: true
     shortcut: tch
 
+
   # TubeArchivist is a self-hosted Youtube archivist software.
   # https://docs.searxng.org/dev/engines/online/tubearchivist.html
   #
@@ -2104,25 +2120,27 @@ engines:
     engine: unsplash
     shortcut: us
 
-  #  - name: yandex
-  #    engine: yandex
-  #    categories: general
-  #    search_type: web
-  #    shortcut: yd
+  - name: yandex
+    engine: yandex
+    categories: general
+    search_type: web
+    shortcut: yd
 
 
-  #  - name: yandex images
-  #    engine: yandex
-  #    network: yandex
-  #    categories: images
-  #    search_type: images
-  #    shortcut: ydi
+
+  - name: yandex images
+    engine: yandex
+    network: yandex
+    categories: images
+    search_type: images
+    shortcut: ydi
 
 
-  #  - name: yandex music
-  #    engine: yandex_music
-  #    network: yandex
-  #    shortcut: ydm
+
+  - name: yandex music
+    engine: yandex_music
+    network: yandex
+    shortcut: ydm
 
     # https://yandex.com/support/music/access.html
 
@@ -2163,7 +2181,6 @@ engines:
     content_query: Snippet
     categories: [general, web]
     shortcut: wib
-
     about:
       website: https://wiby.me/
 
@@ -2174,7 +2191,6 @@ engines:
     categories: [general, wikimedia]
     base_url: "https://{language}.wikibooks.org/"
     search_type: text
-
     about:
       website: https://www.wikibooks.org/
       wikidata_id: Q367
@@ -2266,7 +2282,6 @@ engines:
     categories: [general, wikimedia]
     base_url: "https://{language}.wikivoyage.org/"
     search_type: text
-
     about:
       website: https://www.wikivoyage.org/
       wikidata_id: Q373
@@ -2431,7 +2446,6 @@ engines:
     suggestion_xpath: /html/body/main/div/div[@class="search__suggestions"]/p/a
     first_page_num: 1
     categories: [it, packages]
-
     about:
       website: https://rubygems.org/
       wikidata_id: Q1853420
@@ -2447,7 +2461,6 @@ engines:
     # alternatives see: https://instances.joinpeertube.org/instances
     # base_url: https://tube.4aem.com
     categories: videos
-
     timeout: 6.0
 
   - name: mediathekviewweb
@@ -2455,27 +2468,30 @@ engines:
     shortcut: mvw
 
 
-  #  - name: yacy
-  #    # https://docs.searxng.org/dev/engines/online/yacy.html
-  #    engine: yacy
-  #    categories: general
-  #    search_type: text
-  #    # see https://github.com/searxng/searxng/pull/3631#issuecomment-2240903027
-  #    base_url:
-  #      - https://yacy.searchlab.eu
-  #    shortcut: ya
-  #    # if you aren't using HTTPS for your local yacy instance disable https
-  #    # enable_http: false
-  #    search_mode: 'global'
-  #    # timeout can be reduced in 'local' search mode
-  #    timeout: 5.0
+  - name: yacy
+    # https://docs.searxng.org/dev/engines/online/yacy.html
+    engine: yacy
+    categories: general
+    search_type: text
+    # see https://github.com/searxng/searxng/pull/3631#issuecomment-2240903027
+    base_url:
+      - https://yacy.searchlab.eu
+    shortcut: ya
+    # if you aren't using HTTPS for your local yacy instance disable https
+    # enable_http: false
+    search_mode: 'global'
+    # timeout can be reduced in 'local' search mode
+    timeout: 5.0
+    disabled: true
 
-  #  - name: yacy images
-  #    engine: yacy
-  #    network: yacy
-  #    categories: images
-  #    search_type: image
-  #    shortcut: yai
+
+  - name: yacy images
+    engine: yacy
+    network: yacy
+    categories: images
+    search_type: image
+    shortcut: yai
+    disabled: true
 
     # timeout can be reduced in 'local' search mode
     timeout: 5.0
@@ -2491,14 +2507,12 @@ engines:
   - name: repology
     engine: repology
     shortcut: rep
-
     inactive: true
 
   - name: livespace
     engine: livespace
     shortcut: ls
     categories: videos
-
     timeout: 5.0
 
   - name: wordnik
@@ -2590,7 +2604,6 @@ engines:
     title_xpath: //li//div[@class="mw-search-result-heading"]/a
     content_xpath: //li/div[@class="searchresult"]
     categories: general
-
     about:
       website: https://wikimini.org/
       wikidata_id: Q3568032

@@ -6,7 +6,8 @@ services:
     restart: always
     network_mode: host
     ipc: host # required when you want to use the openappsec attachment module
-    cap_add: # required if you set NGINX_QUIC_BPF to true
+    cap_add:
+      # required if you set NGINX_QUIC_BPF to true
       - BPF # required if you set NGINX_QUIC_BPF to true
       - PERFMON # required if you set NGINX_QUIC_BPF to true
       - NET_ADMIN # required if you set NGINX_QUIC_BPF to true
@@ -100,7 +101,7 @@ services:
 
   searxng:
     container_name: searxng-comboom.sucht
-    image: searxng/searxng:latest
+    image: ghcr.io/privau/searxng:latest
     pull_policy: always
     networks:
       local-services:
@@ -112,8 +113,8 @@ services:
       - "8082:8080"
     volumes:
       - ./searxng/conf:/etc/searxng:rw
-      - ./searxng/static:/usr/local/cbps/static
-      - ./searxng/templates:/usr/local/cbps/templates
+      # - ./searxng/static:/usr/local/cbps/static
+      # - ./searxng/templates:/usr/local/cbps/templates
       - /etc/localtime:/etc/localtime
       - /opt/homebrew/opt/tor/bin/tor:/usr/local/bin/tor:ro
     restart: always
@@ -162,8 +163,6 @@ services:
       - /opt/homebrew/bin/fontforge:/usr/local/bin/fontforge:ro
     env_file:
       - ./pdf/.env
-
-
     deploy:
       resources:
         limits:
@@ -222,6 +221,7 @@ services:
     volumes:
       - ./phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
       - ./phpmyadmin/themes:/var/www/html/themes
+      - ./phpmyadmin/save:/etc/phpmyadmin/save
     environment:
       PMA_ARBITRARY: "1"
     networks:
@@ -310,7 +310,7 @@ services:
     ports:
       - "6379:6379"
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
       start_period: 20s
       interval: 30s
       retries: 5
@@ -410,7 +410,7 @@ services:
 
   whatsupdocker:
     image: getwud/wud
-    restart:  always
+    restart: always
     container_name: wud-comboom.sucht
     pull_policy: always
     volumes:
