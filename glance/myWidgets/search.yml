@@ -28,3 +28,6 @@
     - title: Technische Universität Berlin Moses Studiengang
       shortcut: "!tub-moses-s"
       url: https://moseskonto.tu-berlin.de/moses/modultransfersystem/studiengaenge/suchen.html?text={QUERY}
+    - title: Arch User Repository
+      shortcut: "!aur"
+      url: https://aur.archlinux.org/packages?O=0&K={QUERY}
