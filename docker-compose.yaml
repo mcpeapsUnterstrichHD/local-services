@@ -1,9 +1,10 @@
 services:
   npmplus:
+
     container_name: npmplus-comboom.sucht
     image: docker.io/zoeyvid/npmplus:latest # or ghcr.io/zoeyvid/npmplus:latest
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     network_mode: host
     ipc: host # required when you want to use the openappsec attachment module
     cap_add:
@@ -11,6 +12,8 @@ services:
       - BPF # required if you set NGINX_QUIC_BPF to true
       - PERFMON # required if you set NGINX_QUIC_BPF to true
       - NET_ADMIN # required if you set NGINX_QUIC_BPF to true
+    # dns: # Not allowed with network_mode: host - uses host's DNS instead
+    #   - '192.168.66.2'
     volumes:
       - "./npmplus/data:/data"
       - "./npmplus/www:/var/www" # optional, if you want to use NPMplus directly as webserver for html/php
@@ -85,6 +88,7 @@ services:
     #      NGINX_LOAD_VHOST_TRAFFIC_STATUS_MODULE: "true" # loads the virtual host traffic status module, you need to configure this yourself, default false
     extra_hosts:
       - "host.docker.internal:host-gateway"
+
     deploy:
       resources:
         limits:
@@ -100,12 +104,15 @@ services:
       glance.hide: false
 
   searxng:
+    dns:
+      - '192.168.66.2'
+      - fd07:b51a:cc66:d001::0002
     container_name: searxng-comboom.sucht
     image: ghcr.io/privau/searxng:latest
     pull_policy: always
     networks:
       local-services:
-        ipv4_address: 192.168.1.3
+        ipv4_address: 192.168.66.3
         ipv6_address: fd07:b51a:cc66:d001::0003
     environment:
       TZ: "Europe/Berlin"
@@ -117,7 +124,7 @@ services:
       # - ./searxng/templates:/usr/local/cbps/templates
       - /etc/localtime:/etc/localtime
       - /opt/homebrew/opt/tor/bin/tor:/usr/local/bin/tor:ro
-    restart: always
+    restart: unless-stopped
     labels:
       glance.name: SearXNG
       glance.icon: si:searxng
@@ -127,6 +134,9 @@ services:
       glance.tags: "type:search, type:service, type:web, type:gui"
       glance.hide: false
   it-tools:
+    dns:
+      - '192.168.66.2'
+      - fd07:b51a:cc66:d001::0002
     container_name: it-tools-comboom.sucht
     image: ghcr.io/sharevb/it-tools:nightly
     pull_policy: always
@@ -136,9 +146,9 @@ services:
       NODE_ENV: production
     networks:
       local-services:
-        ipv4_address: 192.168.1.4
+        ipv4_address: 192.168.66.4
         ipv6_address: fd07:b51a:cc66:d001::0004
-    restart: always
+    restart: unless-stopped
     labels:
       glance.name: IT Tools
       glance.icon: di:it-tools
@@ -148,6 +158,9 @@ services:
       glance.tags: "type:it,type:tools, type:service, type:web, type:gui"
       glance.hide: false
   stirling-pdf:
+    dns:
+      - '192.168.66.2'
+      - fd07:b51a:cc66:d001::0002
     container_name: stirling-pdf-comboom.sucht
     image: stirlingtools/stirling-pdf:latest-fat
     pull_policy: always
@@ -169,9 +182,9 @@ services:
           cpus: "4.0"
     networks:
       local-services:
-        ipv4_address: 192.168.1.5
+        ipv4_address: 192.168.66.5
         ipv6_address: fd07:b51a:cc66:d001::0005
-    restart: always
+    restart: unless-stopped
     labels:
       glance.name: Sirling PDF
       glance.icon: di:stirling-pdf
@@ -182,16 +195,19 @@ services:
       glance.hide: false
 
   mariadb:
+    dns:
+      - '192.168.66.2'
+      - fd07:b51a:cc66:d001::0002
     image: mariadb:latest
     pull_policy: always
     container_name: mariadb-comboom.sucht
-    restart: always
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: "fabian66"
       MYSQL_INITDB_SKIP_TZINFO: "1"
     networks:
       local-services:
-        ipv4_address: 192.168.1.6
+        ipv4_address: 192.168.66.6
         ipv6_address: fd07:b51a:cc66:d001::0006
     volumes:
       - ./all-databases.sql:/all-databases.sql
@@ -208,6 +224,9 @@ services:
       glance.hide: false
 
   phpmyadmin:
+    dns:
+      - '192.168.66.2'
+      - fd07:b51a:cc66:d001::0002
     pull_policy: always
     container_name: phpmyadmin-comboom.sucht
     links:
@@ -215,7 +234,7 @@ services:
     depends_on:
       - mariadb
     image: phpmyadmin
-    restart: always
+    restart: unless-stopped
     ports:
       - 8085:80
     volumes:
@@ -226,7 +245,7 @@ services:
       PMA_ARBITRARY: "1"
     networks:
       local-services:
-        ipv4_address: 192.168.1.7
+        ipv4_address: 192.168.66.7
         ipv6_address: fd07:b51a:cc66:d001::0007
     labels:
       glance.name: phpMyAdmin
@@ -241,7 +260,7 @@ services:
     image: glanceapp/glance
     pull_policy: always
     network_mode: host
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./glance/config:/app/config
       - ./glance/assets:/app/assets
@@ -261,10 +280,13 @@ services:
       glance.hide: false
 
   glance-github-graph:
+    dns:
+      - '192.168.66.2'
+      - fd07:b51a:cc66:d001::0002
     image: haumea/glance-github-graph:latest
     container_name: glance-github-graph-comboom.sucht
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     ports:
       - 8084:8080
     environment:
@@ -273,39 +295,45 @@ services:
       - CACHE_DURATION_SECS=3600
     networks:
       local-services:
-        ipv4_address: 192.168.1.10
+        ipv4_address: 192.168.66.10
         ipv6_address: fd07:b51a:cc66:d001::000A
   glance-agent:
+    dns:
+      - '192.168.66.2'
+      - fd07:b51a:cc66:d001::0002
     container_name: glance-agent-comboom.sucht
     image: glanceapp/agent
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     # command: /app/agent --config /opt/glance-agent/agent.yml
     # environment:
     # Optional, leave empty or comment out for no authentication
     # TOKEN: your_auth_token_here
     volumes:
       # Add your mount points below in the format host_path:container_path with :ro suffix for read-only
-      - "/:/Volumes/Macintosh HD/:ro"
-      # - "/Volumes/Macintosh HD/:/storage/Macintosh HD/:ro"
+      # - "/:/Volumes/Macintosh HD/:ro"
+      - "/Volumes/Macintosh HD/:/storage/Macintosh HD/:ro"
       - ./glance/agent:/app/config/
     ports:
       - 27973:27973
     networks:
       local-services:
-        ipv4_address: 192.168.1.11
+        ipv4_address: 192.168.66.11
         ipv6_address: fd07:b51a:cc66:d001::000B
 
   redis:
+    dns:
+      - '192.168.66.2'
+      - fd07:b51a:cc66:d001::0002
     image: redis:latest
     pull_policy: always
     container_name: redis-comboom.sucht
-    restart: always
+    restart: unless-stopped
     volumes:
       - redis-data:/data
     networks:
       local-services:
-        ipv4_address: 192.168.1.8
+        ipv4_address: 192.168.66.8
         ipv6_address: fd07:b51a:cc66:d001::0008
     ports:
       - "6379:6379"
@@ -347,12 +375,12 @@ services:
   #     #WORDPRESS_SMTP_PASSWORD: ${WORDPRESS_SMTP_PASSWORD}
   #   networks:
   #     local-services:
-  #       ipv4_address: 192.168.1.14
+  #       ipv4_address: 192.168.66.14
   #       ipv6_address: fd07:b51a:cc66:d001::000E
   #   ports:
   #     - "8089:8080
   #     - "8090:8443"
-  #   restart: always
+  #   restart: unless-stopped
   #   pull_policy: always
   #   depends_on:
   #     - mariadb
@@ -361,29 +389,33 @@ services:
     image: adguard/adguardhome:edge
     container_name: adguardhome-comboom.sucht
     pull_policy: always
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./adguardhome/work:/opt/adguardhome/work
       - ./adguardhome/conf:/opt/adguardhome/conf
       - /etc/localtime:/etc/localtime
     #ports:
-    #  - 5353:53/tcp
-    #  - 5353:53/udp
-    #  - 6767:67/udp
-    #  - 6868:68/udp
+    #  - 53:53/tcp
+    #  - 53:53/udp
+    #  - 67:67/udp
+    #  - 68:68/udp
     #  - 8096:80/tcp
     #  - 8098:443/tcp
     #  - 8098:443/udp
     #  - 8099:3000/tcp
     #  - 9853:853/tcp
-    #  - 9784:784/udp
-    #  - 9853:853/udp
-    #  - 8953:8853/udp
-    #  - 7443:5443/tcp
-    #  - 7443:5443/udp
-    #extra_hosts:
-    #  - host.docker.internal:host-gateway
+    #  - 784:784/udp
+    #  - 853:853/udp
+    #  - 8853:8853/udp
+    #  - 5443:5443/tcp
+    #  - 5443:5443/udp
+    extra_hosts:
+      - host.docker.internal:host-gateway
     network_mode: host
+    #networks:
+    #  local-services:
+    #    ipv4_address: 192.168.66.16
+    #    ipv6_address: fd07:b51a:cc66:d001::0010
     labels:
       glance.name: Adguard Home
       glance.description: Adguard Home
@@ -394,6 +426,9 @@ services:
       glance.hide: false
 
   uptime-kuma:
+    dns:
+      - '192.168.66.2'
+      - fd07:b51a:cc66:d001::0002
     image: "louislam/uptime-kuma"
     pull_policy: always
     container_name: uptime-kuma-comboom.sucht
@@ -402,15 +437,18 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - "8106:3001"
-    restart: always
+    restart: unless-stopped
     networks:
       local-services:
-        ipv4_address: 192.168.1.9
-        ipv6_address: fd07:b51a:cc66:d001::009
+        ipv4_address: 192.168.66.9
+        ipv6_address: fd07:b51a:cc66:d001::0009
 
   whatsupdocker:
+    dns:
+      - '192.168.66.2'
+      - fd07:b51a:cc66:d001::0002
     image: getwud/wud
-    restart: always
+    restart: unless-stopped
     container_name: wud-comboom.sucht
     pull_policy: always
     volumes:
@@ -419,7 +457,7 @@ services:
       - 8089:3000
     networks:
       local-services:
-        ipv4_address: 192.168.1.12
+        ipv4_address: 192.168.66.12
         ipv6_address: fd07:b51a:cc66:d001::000C
     environment:
       - WUD_WATCHER_LOCAL_WATCHALL=true
@@ -427,12 +465,15 @@ services:
 networks:
   local-services:
     name: local-services
+    driver_opts:
+      # Note: dns cannot be set in IPAM config, set it per-service instead
+      com.docker.network.bridge.name: local-services
     ipam:
       driver: default
       config:
-        - subnet: 192.168.1.0/24
-          gateway: 192.168.1.2
-          ip_range: 192.168.1.0/24
+        - subnet: 192.168.66.0/24
+          gateway: 192.168.66.2
+          ip_range: 192.168.66.0/24
         - subnet: fd07:b51a:cc66:d001::/64
           gateway: fd07:b51a:cc66:d001::02
           ip_range: fd07:b51a:cc66:d001::/64

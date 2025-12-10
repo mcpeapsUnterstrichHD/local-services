@@ -1,6 +1,6 @@
 - type: extension
   title: GitHub Commit Graph
-  url: http://192.168.1.10:8080/graph/${GITHUB_USERNAME}
+  url: http://192.168.66.10:8080/graph/${GITHUB_USERNAME}
   allow-potentially-dangerous-html: true
   parameters:
     background-color: "#2E3440" # cell background

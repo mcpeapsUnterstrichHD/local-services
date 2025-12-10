@@ -115,7 +115,7 @@ valkey:
   # URL to connect valkey database. Is overwritten by ${SEARXNG_VALKEY_URL}.
   # https://docs.searxng.org/admin/settings/settings_valkey.html#settings-valkey
   # url: valkey://localhost:6379/0
-  url: redis://192.168.1.8:6379
+  url: redis://192.168.66.8:6379
 
 ui:
   # Custom static path - leave it blank if you didn't change
