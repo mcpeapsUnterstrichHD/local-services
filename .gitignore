@@ -49,3 +49,9 @@ searxng/conf/faviconcache.db-shm
 searxng/conf/faviconcache.db
 searxng/conf/faviconcache.db-wal
 phpmyadmin/save/
+termix/data/
+teamspeak/logs
+teamspeak/query_ip_allowlist.txt
+teamspeak/query_ip_denylist.txt
+teamspeak/ssh_host_rsa_key
+netbird/

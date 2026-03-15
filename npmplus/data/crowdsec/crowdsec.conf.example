@@ -1,11 +1,15 @@
 ENABLED=false
 API_URL=http://127.0.0.1:8080
+# Authentication options, either using an API key or TLS client certificate.
 API_KEY=
+USE_TLS_AUTH=false
+TLS_CLIENT_CERT=/path/to/client.crt
+TLS_CLIENT_KEY=/path/to/client.key
 CACHE_EXPIRATION=1
 # bounce for all type of remediation that the bouncer can receive from the local API
 BOUNCING_ON_TYPE=all
 FALLBACK_REMEDIATION=ban
-REQUEST_TIMEOUT=2500
+REQUEST_TIMEOUT=3000
 UPDATE_FREQUENCY=10
 # By default internal requests are ignored, such as any path affected by rewrite rule.
 # set ENABLE_INTERNAL=true to allow checking on these internal requests.
@@ -31,8 +35,8 @@ CAPTCHA_EXPIRATION=3600
 
 APPSEC_URL=http://127.0.0.1:7422
 APPSEC_FAILURE_ACTION=deny
-APPSEC_CONNECT_TIMEOUT=1000
-APPSEC_SEND_TIMEOUT=30000
-APPSEC_PROCESS_TIMEOUT=10000
+APPSEC_CONNECT_TIMEOUT=
+APPSEC_SEND_TIMEOUT=1000
+APPSEC_PROCESS_TIMEOUT=30000
 ALWAYS_SEND_TO_APPSEC=false
 SSL_VERIFY=true

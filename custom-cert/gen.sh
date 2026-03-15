@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /usr/bin/env sh
 
 #openssl genrsa -out localhost.key 4096
 #openssl req -x509 \
@@ -41,6 +41,24 @@ fi
 
 # Generate certificate
 echo "📄 Zertifikat wird erstellt..."
-mkcert -key-file localhost.key -cert-file localhost.crt -p12-file localhost.p12 -install localhost "*.localhost" 127.0.0.1 ::1
+  TRUST_STORES="system,nss" \
+    mkcert -key-file localhost.key \
+           -cert-file localhost.crt \
+           -p12-file localhost.p12 \
+           -install \
+           localhost \
+           "*.localhost" \
+           dashboard.localhost \
+           dev.localhost \
+           it-tools.localhost \
+           npmplus.localhost \
+           phpmyadmin.localhost \
+           search.localhost \
+           uptime-kuma.localhost \
+           wud.localhost \
+           127.0.0.1 \
+           ::1 \
+           mahd-mbp.snowy-chromatic.ts.net \
+           mahd-mbp
 
 echo "✅ Zertifikat erfolgreich erstellt."

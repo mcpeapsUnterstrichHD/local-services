@@ -15,7 +15,7 @@
         $include: /myWidgets/serverStats.yml
         #$include: /myWidgets/dnsStats.yml
         $include: /myWidgets/uptimeKuma.yml
-        $include: /myWidgets/nginxProxyManager.yml
+        #$include: /myWidgets/nginxProxyManager.yml
         $include: /myWidgets/tailscaleDevices.yml
         $include: /myWidgets/rssFeed.yml
     $include: /myColumns/right.yml

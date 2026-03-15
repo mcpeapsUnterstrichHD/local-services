@@ -1,12 +1,13 @@
 - type: custom-api
   title: Nginx Proxy Manager
   url: ${NGINX_PROXY_URL}/api/tokens
+  allow-insecure: true
   method: POST
   body-type: json
   body:
     identity: ${NGINX_EMAIL_ID}
     secret: ${NGINX_PASSWORD}
-  cache: 12h
+  #cache: 12h
   options:
     collapse-after: -1
     show-icons: true

@@ -1,6 +1,5 @@
 services:
   npmplus:
-
     container_name: npmplus-comboom.sucht
     image: docker.io/zoeyvid/npmplus:latest # or ghcr.io/zoeyvid/npmplus:latest
     pull_policy: always
@@ -54,8 +53,8 @@ services:
       #      DISABLE_H3_QUIC: "true" # disables nginx to listen on port 443 udp for default host and all your hosts, this will fully disable HTTP/3 and QUIC, even if you enable it inside the UI, not recommended, default false
       NGINX_QUIC_BPF: "true" # enables nginxs quic_bpf (https://nginx.org/en/docs/http/ngx_http_v3_module.html#quic_bpf), you also need to add caps to the NPMplus container (see cap_add of this compose file) to use this, recommended, default false
       NGINX_LOG_NOT_FOUND: "true" # Log 404 errors to the docker logs, unrelated to access logs, default false
-      NGINX_404_REDIRECT: "true" # Redirect to / instead of showing a 404 error page, default false
-      NGINX_HSTS_SUBDOMAINS: "true" # when enabling security headers, also enable hsts for subdomains, recommended, default true
+      #NGINX_404_REDIRECT: "true" # Redirect to / instead of showing a 404 error page, default false
+      #NGINX_HSTS_SUBDOMAINS: "true" # when enabling security headers, also enable hsts for subdomains, recommended, default true
       #      X_FRAME_OPTIONS: "deny" # value to use for the X-Frame-Options header when enabling security headers, valid is "deny", "sameorigin" and "none" (means unset), default sameorigin, since this applies to all hosts I recommend you to instead keep the default and only change it for hosts which need it using the advanced config and more_set_headers
       #      NGINX_DISABLE_PROXY_BUFFERING: "true" # Disables the proxy_buffering/proxy_request_buffering options of nginx by default for all hosts, default false, may not work if you use crowdsec/appsec
       #      NGINX_WORKER_PROCESSES: "8" # value of worker_processes, default and recommended: auto
@@ -64,7 +63,8 @@ services:
       #      FULLCLEAN: "true" # Clean unused config folders, default false
       #      LOGROTATE: "true" # Enables writing http access logs to /opt/npmplus/nginx/access.log, stream access logs to /opt/npmplus/nginx/stream.log and enables daily logrotation, default false
       #      LOGROTATIONS: "7" # Set how often the access.log should be rotated until it is deleted, default 3
-      SKIP_IP_RANGES: "false" # Skip feteching/whitelisting ip ranges from cloudflare, default true
+    #  SKIP_IP_RANGES: "false" # Skip feteching/whitelisting ip ranges from cloudflare, default true
+      TRUST_CLOUDFLARE: "true" # Trust cloudflare headers and set real ip accordingly, default false, ignored when SKIP_IP_RANGES is true
     #      IPRT: "3" # Set how many hours should be between updating ip ranges from aws and cloudflare, default 1, ignored when SKIP_IP_RANGES is true
     #      CRT: "72" # Set how many hours should be between certbot trying to renew your certs, default 23
     #      GOA: "true" # Enables goaccess (and overrides LOGROTATE to true), default false --- if you download the GeoLite2-Country.mmdb, GeoLite2-City.mmdb AND GeoLite2-ASN.mmdb file from MaxMind and place them in /opt/npmplus/goaccess/geoip it will automatically enable GeoIP in goaccess after restarting NPMplus (no need to change GOACLA below), you may also enable the geoipupdate container below (please change the timezone)
@@ -88,7 +88,6 @@ services:
     #      NGINX_LOAD_VHOST_TRAFFIC_STATUS_MODULE: "true" # loads the virtual host traffic status module, you need to configure this yourself, default false
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
     deploy:
       resources:
         limits:
@@ -104,9 +103,6 @@ services:
       glance.hide: false
 
   searxng:
-    dns:
-      - '192.168.66.2'
-      - fd07:b51a:cc66:d001::0002
     container_name: searxng-comboom.sucht
     image: ghcr.io/privau/searxng:latest
     pull_policy: always
@@ -134,9 +130,6 @@ services:
       glance.tags: "type:search, type:service, type:web, type:gui"
       glance.hide: false
   it-tools:
-    dns:
-      - '192.168.66.2'
-      - fd07:b51a:cc66:d001::0002
     container_name: it-tools-comboom.sucht
     image: ghcr.io/sharevb/it-tools:nightly
     pull_policy: always
@@ -158,9 +151,6 @@ services:
       glance.tags: "type:it,type:tools, type:service, type:web, type:gui"
       glance.hide: false
   stirling-pdf:
-    dns:
-      - '192.168.66.2'
-      - fd07:b51a:cc66:d001::0002
     container_name: stirling-pdf-comboom.sucht
     image: stirlingtools/stirling-pdf:latest-fat
     pull_policy: always
@@ -195,9 +185,6 @@ services:
       glance.hide: false
 
   mariadb:
-    dns:
-      - '192.168.66.2'
-      - fd07:b51a:cc66:d001::0002
     image: mariadb:latest
     pull_policy: always
     container_name: mariadb-comboom.sucht
@@ -224,9 +211,6 @@ services:
       glance.hide: false
 
   phpmyadmin:
-    dns:
-      - '192.168.66.2'
-      - fd07:b51a:cc66:d001::0002
     pull_policy: always
     container_name: phpmyadmin-comboom.sucht
     links:
@@ -280,9 +264,6 @@ services:
       glance.hide: false
 
   glance-github-graph:
-    dns:
-      - '192.168.66.2'
-      - fd07:b51a:cc66:d001::0002
     image: haumea/glance-github-graph:latest
     container_name: glance-github-graph-comboom.sucht
     pull_policy: always
@@ -298,9 +279,6 @@ services:
         ipv4_address: 192.168.66.10
         ipv6_address: fd07:b51a:cc66:d001::000A
   glance-agent:
-    dns:
-      - '192.168.66.2'
-      - fd07:b51a:cc66:d001::0002
     container_name: glance-agent-comboom.sucht
     image: glanceapp/agent
     pull_policy: always
@@ -322,9 +300,6 @@ services:
         ipv6_address: fd07:b51a:cc66:d001::000B
 
   redis:
-    dns:
-      - '192.168.66.2'
-      - fd07:b51a:cc66:d001::0002
     image: redis:latest
     pull_policy: always
     container_name: redis-comboom.sucht
@@ -430,9 +405,6 @@ services:
   #    - NET_ADMIN
 
   uptime-kuma:
-    dns:
-      - '192.168.66.2'
-      - fd07:b51a:cc66:d001::0002
     image: "louislam/uptime-kuma"
     pull_policy: always
     container_name: uptime-kuma-comboom.sucht
@@ -448,9 +420,6 @@ services:
         ipv6_address: fd07:b51a:cc66:d001::0009
 
   whatsupdocker:
-    dns:
-      - '192.168.66.2'
-      - fd07:b51a:cc66:d001::0002
     image: getwud/wud
     restart: unless-stopped
     container_name: wud-comboom.sucht
@@ -465,6 +434,80 @@ services:
         ipv6_address: fd07:b51a:cc66:d001::000C
     environment:
       - WUD_WATCHER_LOCAL_WATCHALL=true
+  termix:
+    image: bugattiguy527/termix:latest
+    container_name: termix-comboom.sucht
+    restart: unless-stopped
+    #ports:
+    #  - '8099:8099'
+    volumes:
+      - ./termix/data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      PORT: '8099'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    network_mode: host
+    #networks:
+    #  local-services:
+    #    ipv4_address: 192.168.66.13
+    #    ipv6_address: fd07:b51a:cc66:d001::000D
+  teamspeak:
+    image: teamspeaksystems/teamspeak6-server:latest
+    container_name: teamspeak-comboom.sucht
+    restart: unless-stopped
+    ports:
+      - "9987:9987/udp"   # Voice Port
+      - "30033:30033/tcp" # File Transfer
+      # - "10080:10080/tcp" # Web Query
+    environment:
+      - TSSERVER_LICENSE_ACCEPTED=accept
+      - TSSERVER_DEFAULT_PORT=9987
+      - TSSERVER_VOICE_IP=0.0.0.0
+      - TSSERVER_FILE_TRANSFER_PORT=30033
+      - TSSERVER_FILE_TRANSFER_IP=0.0.0.0
+      - TSSERVER_QUERY_HTTP_ENABLED=true
+      - TSSERVER_QUERY_SSH_ENABLED=true
+
+      # Database settings
+      - TSSERVER_DATABASE_PLUGIN=mariadb
+      - TSSERVER_DATABASE_SQL_CREATE_PATH=create_mariadb
+      - TSSERVER_DATABASE_HOST=192.168.66.6
+      - TSSERVER_DATABASE_PORT=3306
+      - TSSERVER_DATABASE_NAME=teamspeak
+      - TSSERVER_DATABASE_USERNAME=teamspeak
+      - TSSERVER_DATABASE_PASSWORD=teamspeak
+    volumes:
+      - ./teamspeak:/var/tsserver
+    networks:
+      local-services:
+        ipv4_address: 192.168.66.14
+        ipv6_address: fd07:b51a:cc66:d001::000E
+#  netbird:
+#    cap_add:
+#      - NET_ADMIN
+#      - SYS_ADMIN
+#      - SYS_RESOURCE
+#    hostname: nb-local-services
+#    environment:
+#      - NB_SETUP_KEY=3779310E-5DA2-415F-B855-064E58FEDD2E
+#      - NB_ALLOW_SERVER_SSH=true
+#      - NB_ENABLE_SSH_LOCAL_PORT_FORWARDING=true
+#      - NB_ENABLE_SSH_REMOTE_PORT_FORWARDING=true
+#      - NB_ENABLE_SSH_ROOT=true
+#      - NB_ENABLE_SSH_SFTP=true
+#      - NB_ENABLE_ROSENPASS=true
+#      - HOSTNAME=netbird-comboom.sucht
+#    volumes:
+#      - ./netbird:/var/lib/netbird
+#    image: netbirdio/netbird:latest
+#    restart: unless-stopped
+#    container_name: netbird-comboom.sucht
+#    pull_policy: always
+#    networks:
+#      local-services:
+#        ipv4_address: 192.168.66.15
+#        ipv6_address: fd07:b51a:cc66:d001::000F
 
 networks:
   local-services:

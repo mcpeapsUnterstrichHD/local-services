@@ -207,3 +207,8 @@
   sql: undefined,
   bindings: undefined
 }
+[2026-02-06 12:28:24] Error: Unable to acquire a connection
+    at Client_SQLite3.acquireConnection (/app/node_modules/knex/lib/client.js:303:13)
+    at Runner.ensureConnection (/app/node_modules/knex/lib/execution/runner.js:287:46)
+    at Runner.run (/app/node_modules/knex/lib/execution/runner.js:30:30)
+    at Target.then (/app/node_modules/knex/lib/builder-interface-augmenter.js:24:43)
