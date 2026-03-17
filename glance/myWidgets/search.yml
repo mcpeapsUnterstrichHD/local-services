@@ -34,3 +34,9 @@
     - title: ProtonDB
       shortcut: "!protondb"
       url: https://www.protondb.com/search?q={QUERY}
+    - title: SteamDB
+      shortcut: "!steamdb"
+      url: https://steamdb.info/search/?q={QUERY}
+    - title: Steam
+      shortcut: "!steam"
+      url: https://store.steampowered.com/search/?term={QUERY}
