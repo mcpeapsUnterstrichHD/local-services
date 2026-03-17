@@ -31,3 +31,6 @@
     - title: Arch User Repository
       shortcut: "!aur"
       url: https://aur.archlinux.org/packages?O=0&K={QUERY}
+    - title: ProtonDB
+      shortcut: "!protondb"
+      url: https://www.protondb.com/search?q={QUERY}
